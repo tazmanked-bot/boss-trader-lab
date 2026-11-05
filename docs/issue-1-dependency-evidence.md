@@ -1,3 +1,9 @@
+# Issue #1 dependency evidence
+
+Assignment 005 adds a complete runtime hash-lock definition and a prepared manual integrity runner. **New installed-identity, notice and security evidence remains HOLD until owner execution and review.** See [CLOSEOUT-005](BOSS-TRADER-CLOSEOUT-005.md) for exact artifacts, commands, source pins and the owner action. Audit-004 verified owner parity #4 and dependency #2 at correction commit `1d5452f98d509d0de602e3cc30a4929493a37038`; these validate the corrected indicators but did not enforce the new lock.
+
+## Historical proposal and evidence (retained for traceability)
+
 # Issue #1 dependency evidence and proposed enforceable lock
 
 **HOLD: evidence is historical; this is not vulnerability clearance or a lock.**
