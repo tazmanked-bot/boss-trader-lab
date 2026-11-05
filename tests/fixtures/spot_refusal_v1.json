@@ -1,0 +1,428 @@
+{
+  "as_of": 1899997200,
+  "payload": {
+    "symbol": "BTC/USD",
+    "venue": "kraken",
+    "market": "spot",
+    "quote": "USD",
+    "timeframe": "1h",
+    "rules": {
+      "require_spot": true,
+      "require_non_spot": false
+    },
+    "bars": [
+      {
+        "open_time": 1899921600,
+        "open": 100,
+        "high": 102,
+        "low": 99,
+        "close": 101,
+        "volume": 1000
+      },
+      {
+        "open_time": 1899925200,
+        "open": 101,
+        "high": 103,
+        "low": 100,
+        "close": 102,
+        "volume": 1001
+      },
+      {
+        "open_time": 1899928800,
+        "open": 102,
+        "high": 104,
+        "low": 101,
+        "close": 103,
+        "volume": 1002
+      },
+      {
+        "open_time": 1899932400,
+        "open": 103,
+        "high": 105,
+        "low": 102,
+        "close": 104,
+        "volume": 1003
+      },
+      {
+        "open_time": 1899936000,
+        "open": 104,
+        "high": 106,
+        "low": 103,
+        "close": 105,
+        "volume": 1004
+      },
+      {
+        "open_time": 1899939600,
+        "open": 105,
+        "high": 107,
+        "low": 104,
+        "close": 106,
+        "volume": 1005
+      },
+      {
+        "open_time": 1899943200,
+        "open": 106,
+        "high": 108,
+        "low": 105,
+        "close": 107,
+        "volume": 1006
+      },
+      {
+        "open_time": 1899946800,
+        "open": 107,
+        "high": 109,
+        "low": 106,
+        "close": 108,
+        "volume": 1007
+      },
+      {
+        "open_time": 1899950400,
+        "open": 108,
+        "high": 110,
+        "low": 107,
+        "close": 109,
+        "volume": 1008
+      },
+      {
+        "open_time": 1899954000,
+        "open": 109,
+        "high": 111,
+        "low": 108,
+        "close": 110,
+        "volume": 1009
+      },
+      {
+        "open_time": 1899957600,
+        "open": 110,
+        "high": 112,
+        "low": 109,
+        "close": 111,
+        "volume": 1010
+      },
+      {
+        "open_time": 1899961200,
+        "open": 111,
+        "high": 113,
+        "low": 110,
+        "close": 112,
+        "volume": 1011
+      },
+      {
+        "open_time": 1899964800,
+        "open": 112,
+        "high": 114,
+        "low": 111,
+        "close": 113,
+        "volume": 1012
+      },
+      {
+        "open_time": 1899968400,
+        "open": 113,
+        "high": 115,
+        "low": 112,
+        "close": 114,
+        "volume": 1013
+      },
+      {
+        "open_time": 1899972000,
+        "open": 114,
+        "high": 116,
+        "low": 113,
+        "close": 115,
+        "volume": 1014
+      },
+      {
+        "open_time": 1899975600,
+        "open": 115,
+        "high": 117,
+        "low": 114,
+        "close": 116,
+        "volume": 1015
+      },
+      {
+        "open_time": 1899979200,
+        "open": 116,
+        "high": 118,
+        "low": 115,
+        "close": 117,
+        "volume": 1016
+      },
+      {
+        "open_time": 1899982800,
+        "open": 117,
+        "high": 119,
+        "low": 116,
+        "close": 118,
+        "volume": 1017
+      },
+      {
+        "open_time": 1899986400,
+        "open": 118,
+        "high": 120,
+        "low": 117,
+        "close": 119,
+        "volume": 1018
+      },
+      {
+        "open_time": 1899990000,
+        "open": 119,
+        "high": 121,
+        "low": 118,
+        "close": 120,
+        "volume": 1019
+      },
+      {
+        "open_time": 1899993600,
+        "open": 120,
+        "high": 122,
+        "low": 119,
+        "close": 121,
+        "volume": 1020
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "missing_envelope",
+      "path": [],
+      "value": null,
+      "reason": "DATA_UNAVAILABLE"
+    },
+    {
+      "name": "wrong_envelope",
+      "path": [],
+      "value": [],
+      "reason": "MALFORMED_DATA"
+    },
+    {
+      "name": "wrong_venue",
+      "path": [
+        "venue"
+      ],
+      "value": "other",
+      "reason": "MARKET_MISMATCH"
+    },
+    {
+      "name": "wrong_market",
+      "path": [
+        "market"
+      ],
+      "value": "perpetual",
+      "reason": "MARKET_MISMATCH"
+    },
+    {
+      "name": "wrong_quote",
+      "path": [
+        "quote"
+      ],
+      "value": "USDT",
+      "reason": "MARKET_MISMATCH"
+    },
+    {
+      "name": "wrong_symbol",
+      "path": [
+        "symbol"
+      ],
+      "value": "XRP/USD",
+      "reason": "MARKET_MISMATCH"
+    },
+    {
+      "name": "wrong_timeframe",
+      "path": [
+        "timeframe"
+      ],
+      "value": "15m",
+      "reason": "MARKET_MISMATCH"
+    },
+    {
+      "name": "unknown_field",
+      "path": [
+        "score"
+      ],
+      "value": 999999,
+      "reason": "MALFORMED_DATA"
+    },
+    {
+      "name": "unknown_row_field",
+      "path": [
+        "bars",
+        0,
+        "secret"
+      ],
+      "value": "DO_NOT_ECHO",
+      "reason": "MALFORMED_DATA"
+    },
+    {
+      "name": "bool_timestamp",
+      "path": [
+        "bars",
+        0,
+        "open_time"
+      ],
+      "value": true,
+      "reason": "TIMESTAMP_INVALID"
+    },
+    {
+      "name": "str_timestamp",
+      "path": [
+        "bars",
+        0,
+        "open_time"
+      ],
+      "value": "1899921600",
+      "reason": "TIMESTAMP_INVALID"
+    },
+    {
+      "name": "millisecond_timestamp",
+      "path": [
+        "bars",
+        0,
+        "open_time"
+      ],
+      "value": 1899921600000,
+      "reason": "TIME_UNIT_MISMATCH"
+    },
+    {
+      "name": "unaligned_timestamp",
+      "path": [
+        "bars",
+        0,
+        "open_time"
+      ],
+      "value": 1899921601,
+      "reason": "TIMESTAMP_INVALID"
+    },
+    {
+      "name": "negative_timestamp",
+      "path": [
+        "bars",
+        0,
+        "open_time"
+      ],
+      "value": -1,
+      "reason": "TIME_UNIT_MISMATCH"
+    },
+    {
+      "name": "negative_close",
+      "path": [
+        "bars",
+        0,
+        "close"
+      ],
+      "value": -1,
+      "reason": "INVALID_VALUE"
+    },
+    {
+      "name": "zero_close",
+      "path": [
+        "bars",
+        0,
+        "close"
+      ],
+      "value": 0,
+      "reason": "INVALID_VALUE"
+    },
+    {
+      "name": "bool_close",
+      "path": [
+        "bars",
+        0,
+        "close"
+      ],
+      "value": true,
+      "reason": "INVALID_VALUE"
+    },
+    {
+      "name": "string_close",
+      "path": [
+        "bars",
+        0,
+        "close"
+      ],
+      "value": "101",
+      "reason": "INVALID_VALUE"
+    },
+    {
+      "name": "null_close",
+      "path": [
+        "bars",
+        0,
+        "close"
+      ],
+      "value": null,
+      "reason": "INVALID_VALUE"
+    },
+    {
+      "name": "wrong_bounds",
+      "path": [
+        "bars",
+        0,
+        "high"
+      ],
+      "value": 100,
+      "reason": "INVALID_VALUE"
+    },
+    {
+      "name": "negative_volume",
+      "path": [
+        "bars",
+        0,
+        "volume"
+      ],
+      "value": -1,
+      "reason": "INVALID_VALUE"
+    },
+    {
+      "name": "conflict",
+      "path": [
+        "rules",
+        "require_non_spot"
+      ],
+      "value": true,
+      "reason": "RULE_CONFLICT"
+    },
+    {
+      "name": "non_spot_policy",
+      "path": [
+        "rules",
+        "require_spot"
+      ],
+      "value": false,
+      "reason": "POLICY_REJECTED"
+    },
+    {
+      "name": "unknown_rule",
+      "path": [
+        "rules",
+        "score"
+      ],
+      "value": 999999,
+      "reason": "CONFIG_INVALID"
+    },
+    {
+      "name": "non_boolean_rule",
+      "path": [
+        "rules",
+        "require_spot"
+      ],
+      "value": 1,
+      "reason": "CONFIG_INVALID"
+    },
+    {
+      "name": "no_bars",
+      "path": [
+        "bars"
+      ],
+      "value": [],
+      "reason": "WARMUP_INCOMPLETE"
+    },
+    {
+      "name": "wrong_bars",
+      "path": [
+        "bars"
+      ],
+      "value": {},
+      "reason": "MALFORMED_DATA"
+    }
+  ]
+}
