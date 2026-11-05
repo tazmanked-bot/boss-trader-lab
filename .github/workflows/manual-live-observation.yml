@@ -1,0 +1,40 @@
+name: BOSS Trader manual public-data observation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-market-observation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout research code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify offline safety tests before live requests
+        run: python -m unittest discover -s tests -v
+      - name: Observe BTC XRP SOL from public closed hourly candles
+        shell: bash
+        run: |
+          failed=0
+          for symbol in BTCUSDT XRPUSDT SOLUSDT; do
+            echo "::group::Public observation $symbol"
+            if python boss_trader_lab.py --live --symbol "$symbol"; then
+              echo "$symbol: OBSERVE_ONLY data request completed"
+            else
+              echo "::warning::$symbol: data unavailable or invalid; no observation approved"
+              failed=1
+            fi
+            echo "::endgroup::"
+          done
+          if [ "$failed" -ne 0 ]; then
+            echo "One or more public market data requests failed; workflow fails closed."
+            exit 1
+          fi
+          echo "All three observations completed; these are not entry signals."
