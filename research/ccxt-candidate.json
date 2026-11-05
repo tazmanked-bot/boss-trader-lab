@@ -1,0 +1,45 @@
+{
+  "name": "ccxt",
+  "version": "4.5.92",
+  "evaluation_python": "3.11.17",
+  "wheel_filename": "ccxt-4.5.92-py3-none-any.whl",
+  "wheel_sha256": "004c4a9176700df6c5d4f8f7b2fd4691743040b70a2818c7afe1ad93021e62d4",
+  "wheel_bytes": 6830983,
+  "sdist_sha256": "5faa74fe17168ad8c21f34cc6286c7d771b68d0bca67ff595dcced62b98b46d5",
+  "metadata": "https://pypi.org/pypi/ccxt/4.5.92/json",
+  "publisher_source_commit": "44cc05f2dea6d7778debb05899eb0351bc444c27",
+  "source_version_caveat": "Published workflow commit pyproject declares 4.5.91. Whole-source identity with 4.5.92 wheel is unverified; require exact Kraken module byte comparison.",
+  "reviewed_sources": {
+    "ccxt/kraken.py": {
+      "sha256": "269fab5a740efb061093454c75de87ea21738b90af456c7c452a574d9a5bc581",
+      "git_blob": "4da96f6c8d147398a1514fdc3e0cbed6a3f5ff56",
+      "url": "https://github.com/ccxt/ccxt/blob/44cc05f2dea6d7778debb05899eb0351bc444c27/python/ccxt/kraken.py"
+    }
+  },
+  "metadata_requirements": [
+    "certifi>=2026.6.17",
+    "requests>=2.32,<3",
+    "cryptography>=50,<51",
+    "typing_extensions==4.16.0",
+    "aiohttp>=3.14.3,<3.15",
+    "yarl>=1.20,<2",
+    "aiohttp-fast-zlib==0.3.0",
+    "zlib-ng==1.0.0",
+    "uvloop==0.22.1 (CPython non-Windows)",
+    "winloop==0.6.3 (supported Windows CPython only)",
+    "orjson>=3.11.9,<4 (supported CPython targets)",
+    "coincurve==21.0.0 (supported CPython targets)",
+    "aiohappyeyeballs==2.7.1",
+    "aiosignal==1.4.0",
+    "attrs==26.1.0",
+    "frozenlist==1.8.0",
+    "multidict==6.9.1",
+    "propcache==0.5.2",
+    "cffi==2.0.0",
+    "pycparser==3.0",
+    "charset_normalizer==3.4.7",
+    "idna==3.18",
+    "urllib3==2.8.0"
+  ],
+  "security": "Observed PyPI vulnerabilities=[] on 2026-11-05; no comprehensive clearance."
+}
