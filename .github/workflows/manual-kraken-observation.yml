@@ -1,0 +1,40 @@
+name: BOSS Trader manual Kraken USD observation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-kraken-observation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout read-only research code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run offline safety checks
+        run: python -m unittest discover -s tests -v
+      - name: Request Kraken spot BTC XRP SOL USD hourly closed candles
+        shell: bash
+        run: |
+          failed=0
+          for symbol in BTC XRP SOL; do
+            echo "::group::Kraken public observation ${symbol}/USD"
+            if python kraken_public_observer.py --symbol "$symbol"; then
+              echo "$symbol/USD: OBSERVE_ONLY completed"
+            else
+              echo "::warning::$symbol/USD: public data unavailable; fail closed"
+              failed=1
+            fi
+            echo "::endgroup::"
+          done
+          if [ "$failed" -ne 0 ]; then
+            echo "Public Kraken data test incomplete; no signals."
+            exit 1
+          fi
+          echo "All Kraken USD public observations completed. No trading authority."
