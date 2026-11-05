@@ -1,169 +1,82 @@
-"""Independent, offline numerical cross-check; diagnostics only, no trading.
-
-Formula definitions are deliberately separate from pandas-ta-classic. Differences
-remain review items rather than silently changing indicator definitions.
-"""
+"""Full-series, boundary-sensitive library comparisons. Synthetic data only."""
 from __future__ import annotations
 
+import importlib.metadata as metadata
 import json
-import math
+import platform
+import unittest
 
-import pandas_ta_classic as ta
-from research.indicator_parity import synthetic_ohlc, reference_ema
+from research.reference_indicators import (
+    reference_atr, reference_ema, reference_macd, reference_rsi, reference_sma,
+)
+from research.indicator_parity import synthetic_ohlc
+from research.validation import compare_series
 
-PERIOD = 14
-TAIL = 20
-TOLERANCE = 1e-6
-
-
-def adjusted_wilder(values: list[float], length: int) -> list[float]:
-    """Wilder alpha=1/length with normalized exponentially weighted history.
-
-    This is the adjusted-EWM convention; it is NOT asserted equivalent to
-    SMA-seeded Wilder smoothing without comparing actual results.
-    """
-    alpha = 1 / length
-    numerator = denominator = 0.0
-    result = []
-    for i, value in enumerate(values):
-        numerator = value + (1 - alpha) * numerator
-        denominator = 1 + (1 - alpha) * denominator
-        result.append(numerator / denominator if i >= length - 1 else float("nan"))
-    return result
+TOLERANCE = 1e-6  # Audit-002 tolerance retained, applied to every valid bar.
 
 
-def rma_with_native_nan_seed(values: list[float], length: int) -> list[float]:
-    """Independently reproduce SMA-seeded RMA with the leading diff NaN.
+def evaluate_case(kind):
+    import pandas_ta_classic as ta
 
-    pandas-ta-classic native rma() takes mean(values[:length]) skipping NaN,
-    puts that seed at index length-1, then uses alpha=1/length with adjust=False.
-    Thus the first RSI gain/loss seed averages length-1 changes, because the
-    first close.diff() value is NaN. This differs from textbook Wilder RSI.
-    """
-    if len(values) < length or length < 2:
-        raise ValueError("insufficient observations for RMA")
-    initial = [v for v in values[:length] if math.isfinite(v)]
-    if not initial:
-        raise ValueError("RMA has no seed values")
-    output = [float("nan")] * len(values)
-    output[length - 1] = sum(initial) / len(initial)
-    alpha = 1 / length
-    for i in range(length, len(values)):
-        current = values[i]
-        if not math.isfinite(current):
-            raise ValueError("nonfinite RMA observation")
-        output[i] = (1 - alpha) * output[i - 1] + alpha * current
-    return output
-
-
-def reference_rsi(closes: list[float], length: int = PERIOD) -> list[float]:
-    """Native RMA-convention RSI, separate from the library implementation."""
-    delta = [float("nan")] + [closes[i] - closes[i - 1] for i in range(1, len(closes))]
-    gains = [max(x, 0.0) if math.isfinite(x) else float("nan") for x in delta]
-    losses = [max(-x, 0.0) if math.isfinite(x) else float("nan") for x in delta]
-    avg_gains = rma_with_native_nan_seed(gains, length)
-    avg_losses = rma_with_native_nan_seed(losses, length)
-    result = []
-    for gain, loss in zip(avg_gains, avg_losses):
-        if not math.isfinite(gain) or not math.isfinite(loss):
-            result.append(float("nan"))
-        elif gain + loss == 0:
-            result.append(50.0)
-        else:
-            result.append(100.0 * gain / (gain + loss))
-    return result
+    frame = synthetic_ohlc(kind=kind)
+    close = frame["close"].tolist()
+    rsi = ta.rsi(frame["close"], length=14, talib=False)
+    atr = ta.atr(frame["high"], frame["low"], frame["close"],
+                 length=14, mamode="rma", talib=False)
+    macd = ta.macd(frame["close"], fast=12, slow=26, signal=9, talib=False)
+    if rsi is None or atr is None or macd is None:
+        raise AssertionError(f"{kind}: missing indicator output")
+    if list(macd.columns) != ["MACD_12_26_9", "MACDh_12_26_9", "MACDs_12_26_9"]:
+        raise AssertionError(f"{kind}: unexpected MACD columns {list(macd.columns)}")
+    line, signal, histogram = reference_macd(close)
+    comparisons = {
+        "SMA_20": (ta.sma(frame["close"], length=20, talib=False),
+                   reference_sma(close, 20), 19),
+        "EMA_20": (ta.ema(frame["close"], length=20, talib=False),
+                   reference_ema(close, 20), 19),
+        "RSI_14": (rsi.tolist(), reference_rsi(close), 14),
+        "ATR_14": (atr.tolist(), reference_atr(frame["high"].tolist(),
+                   frame["low"].tolist(), close), 14),
+        "MACD_LINE": (macd.iloc[:, 0].tolist(), line, 25),
+        "MACD_SIGNAL": (macd.iloc[:, 2].tolist(), signal, 33),
+        "MACD_HISTOGRAM": (macd.iloc[:, 1].tolist(), histogram, 33),
+    }
+    return {label: compare_series(actual, expected, first_valid=first,
+                                  tolerance=1e-8 if label in {"SMA_20", "EMA_20"}
+                                  else TOLERANCE, label=f"{kind} {label}")
+            for label, (actual, expected, first) in comparisons.items()}
 
 
-def adjusted_reference_rsi(closes: list[float], length: int = PERIOD) -> list[float]:
-    """Former adjusted-normalized EWM reference, retained for comparison only."""
-    delta = [closes[i] - closes[i - 1] for i in range(1, len(closes))]
-    gains = adjusted_wilder([max(x, 0.0) for x in delta], length)
-    losses = adjusted_wilder([max(-x, 0.0) for x in delta], length)
-    result = [float("nan")]
-    for gain, loss in zip(gains, losses):
-        if not math.isfinite(gain) or not math.isfinite(loss):
-            result.append(float("nan"))
-        elif gain + loss == 0:
-            result.append(50.0)
-        else:
-            result.append(100.0 * gain / (gain + loss))
-    return result
-
-
-def reference_atr(high: list[float], low: list[float],
-                  close: list[float], length: int = PERIOD) -> list[float]:
-    true_range = [float("nan")]
-    for i in range(1, len(close)):
-        true_range.append(max(high[i] - low[i],
-                              abs(high[i] - close[i - 1]),
-                              abs(low[i] - close[i - 1])))
-    # First bar excluded: TA true-range implementations may vary at boundary.
-    return [float("nan")] + adjusted_wilder(true_range[1:], length)
-
-
-def reference_macd(close: list[float]):
-    fast, slow, signal = 12, 26, 9
-    fast_ema = reference_ema(close, fast)
-    slow_ema = reference_ema(close, slow)
-    macd = [f - s if math.isfinite(f) and math.isfinite(s) else float("nan")
-            for f, s in zip(fast_ema, slow_ema)]
-    non_nan = macd[slow - 1:]
-    signal_line = [float("nan")] * (slow - 1) + reference_ema(non_nan, signal)
-    histogram = [m - s if math.isfinite(m) and math.isfinite(s) else float("nan")
-                 for m, s in zip(macd, signal_line)]
-    return macd, histogram, signal_line
-
-
-def discrepancy(actual, expected, label: str) -> dict:
-    if len(actual) != len(expected):
-        raise AssertionError(f"{label}: series length mismatch")
-    a = [float(x) for x in actual[-TAIL:]]
-    e = [float(x) for x in expected[-TAIL:]]
-    if not all(math.isfinite(x) for x in a + e):
-        raise AssertionError(f"{label}: non-finite value after warmup")
-    delta = max(abs(x - y) for x, y in zip(a, e))
-    return {"max_abs_diff_last_20": delta,
-            "within_tolerance": delta <= TOLERANCE,
-            "actual_last": a[-1],
-            "reference_last": e[-1]}
+def evaluate():
+    version = metadata.version("pandas-ta-classic")
+    if version != "0.9.0":
+        raise AssertionError(f"unreviewed pandas-ta-classic version: {version}")
+    checks = {kind: evaluate_case(kind) for kind in
+              ("oscillating", "flat", "rising", "falling", "gaps")}
+    packages = {name: metadata.version(name) for name in
+                ("pandas-ta-classic", "pandas", "numpy", "python-dateutil", "tzdata")}
+    return {"status": "FULL_SERIES_SYNTHETIC_PARITY_PASS",
+            "python_version": platform.python_version(), "packages": packages,
+            "checks": checks, "mode": "SYNTHETIC_ONLY", "orders": "DISABLED",
+            "owner_approval": "REQUIRED", "integration_readiness": "HOLD"}
 
 
 def main():
-    frame = synthetic_ohlc()
-    close = frame["close"].tolist()
-    high = frame["high"].tolist()
-    low = frame["low"].tolist()
-    rsi = ta.rsi(frame["close"], length=14, talib=False)
-    atr = ta.atr(frame["high"], frame["low"], frame["close"],
-                 length=14, talib=False)
-    macd = ta.macd(frame["close"], fast=12, slow=26, signal=9, talib=False)
-    if rsi is None or atr is None or macd is None:
-        raise AssertionError("missing indicator output")
-    ref_m, ref_h, ref_s = reference_macd(close)
-    columns = {str(column).split("_")[0]: column for column in macd.columns}
-    if set(columns) != {"MACD", "MACDh", "MACDs"}:
-        raise AssertionError(f"unexpected MACD column identifiers: {list(macd.columns)}")
-    reports = {
-        "RSI_14": discrepancy(rsi.to_list(), reference_rsi(close), "RSI"),
-        "ATR_14": discrepancy(atr.to_list(), reference_atr(high, low, close), "ATR"),
-        "MACD_12_26_9": discrepancy(macd[columns["MACD"]].to_list(), ref_m, "MACD"),
-        "MACD_HISTOGRAM": discrepancy(macd[columns["MACDh"]].to_list(), ref_h, "MACDh"),
-        "MACD_SIGNAL": discrepancy(macd[columns["MACDs"]].to_list(), ref_s, "MACDs"),
-    }
-    former_rsi = discrepancy(rsi.to_list(), adjusted_reference_rsi(close), "old_adjusted_RSI")
-    passed = all(row["within_tolerance"] for row in reports.values())
-    print(json.dumps({
-        "mode": "SYNTHETIC_ONLY",
-        "status": "CANDIDATE_PARITY" if passed else "DISCREPANCY_REQUIRES_REVIEW",
-        "reference_conventions": "RSI uses native SMA-seeded RMA and first-diff NaN; ATR uses adjusted Wilder; MACD uses SMA-seeded EMA",
-        "old_adjusted_rsi_diagnostic": former_rsi,
-        "warning": "Even matching values require independent warmup and library-version review.",
-        "checks": reports,
-        "owner_approval": "REQUIRED",
-        "orders": "DISABLED"
-    }, indent=2))
-    # Fail closed if any indicator disagrees; old adjusted-RSI is diagnostic only.
-    return 0 if passed else 1
+    # Existing owner launchers already invoke this entry point. Run negative
+    # tests here as well so they cannot accidentally omit the regression gate.
+    suite = unittest.defaultTestLoader.discover(
+        "tests", pattern="test_indicator_validation.py")
+    if suite.countTestCases() == 0:
+        raise AssertionError("validator regression tests were not discovered")
+    if not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful():
+        return 1
+    try:
+        result = evaluate()
+    except AssertionError as exc:
+        print(json.dumps({"status": "FAIL", "reason": str(exc)}, allow_nan=False))
+        return 1
+    print(json.dumps(result, indent=2, allow_nan=False))
+    return 0
 
 
 if __name__ == "__main__":
