@@ -1,0 +1,35 @@
+name: BOSS Trader isolated indicator parity research
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Record checked-out revision
+        run: git rev-parse HEAD
+      - name: Baseline and validator corruption regressions (no dependencies)
+        run: python -m unittest discover -s tests -v
+      - name: Install evaluation release (transitive lock review still required)
+        run: python -m pip install --disable-pip-version-check 'pandas-ta-classic==0.9.0'
+      - name: Dependency consistency and exact versions
+        run: |
+          python --version
+          python -m pip --version
+          python -m pip check
+          python -m pip freeze --all
+      - name: Compare all SMA and EMA values including initialization
+        run: python -m research.indicator_parity
+      - name: Compare RSI ATR and all MACD columns on five synthetic fixtures
+        run: python -m research.independent_indicator_review

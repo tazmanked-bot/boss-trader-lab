@@ -1,0 +1,60 @@
+name: BOSS Trader owner-run integrity closeout (Issue 6)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: boss-trader-integrity-closeout-manual
+  cancel-in-progress: false
+
+jobs:
+  closeout:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Define runner-local evidence directory
+        run: echo "CLOSEOUT_DIR=$RUNNER_TEMP/boss-trader-closeout" >> "$GITHUB_ENV"
+      - name: Checkout reviewed research revision without persisted credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # observed v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # observed v5
+        with:
+          python-version: '3.11.17'
+      - name: Record revision and test integrity guards without packages
+        run: |
+          git rev-parse HEAD
+          python --version
+          python -m pip --version
+          python -m unittest discover -s tests -v
+      - name: Verify exact wheels, source snapshots, licenses and advisory responses
+        run: python -m research.dependency_closeout prepare --output "$CLOSEOUT_DIR"
+      - name: Install offline into an empty runtime using all approved hashes
+        run: |
+          python -m venv --without-pip "$CLOSEOUT_DIR/venv"
+          python -m pip --isolated --python "$CLOSEOUT_DIR/venv/bin/python" install --no-index --find-links="$CLOSEOUT_DIR/wheelhouse" --require-hashes --only-binary=:all: --no-compile --report "$CLOSEOUT_DIR/install-report.json" -r research/requirements-cp311-linux-x86_64.lock
+          python -m pip --isolated --python "$CLOSEOUT_DIR/venv/bin/python" check
+      - name: Compare installed bytes and RECORD against verified wheels
+        run: '"$CLOSEOUT_DIR/venv/bin/python" -m research.dependency_closeout installed --output "$CLOSEOUT_DIR"'
+      - name: Rerun offline tests and full-series synthetic parity in locked runtime
+        run: |
+          "$CLOSEOUT_DIR/venv/bin/python" -m unittest discover -s tests -v
+          "$CLOSEOUT_DIR/venv/bin/python" -m research.indicator_parity
+          "$CLOSEOUT_DIR/venv/bin/python" -m research.independent_indicator_review
+      - name: Retain review evidence even on failure (no runtime or wheel binaries)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # observed v4
+        with:
+          name: boss-trader-closeout-${{ github.run_id }}
+          retention-days: 1
+          if-no-files-found: warn
+          path: |
+            ${{ runner.temp }}/boss-trader-closeout/*.json
+            ${{ runner.temp }}/boss-trader-closeout/pypi/
+            ${{ runner.temp }}/boss-trader-closeout/osv/
+            ${{ runner.temp }}/boss-trader-closeout/notices/
+            ${{ runner.temp }}/boss-trader-closeout/toolchain-notices/

@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "verified_metadata_date": "2026-11-05",
+  "target": "CPython 3.11.17 / Ubuntu 24.04 x86_64 / glibc >=2.28",
+  "reviewed_upstream_commit": "9c1e0ca16f1decf2cb39823f0e229e17d97bafb2",
+  "reviewed_sources": {
+    "pandas_ta_classic/momentum/rsi.py": {
+      "sha256": "3cb632636084287d46ed283217635115267daecac4d32c3b37a889ae77ae9843",
+      "git_blob": "ba97cf32d3ab0b52ccbc8a729da954ef052102a3",
+      "url": "https://github.com/xgboosted/pandas-ta-classic/blob/9c1e0ca16f1decf2cb39823f0e229e17d97bafb2/pandas_ta_classic/momentum/rsi.py"
+    },
+    "pandas_ta_classic/overlap/rma.py": {
+      "sha256": "f97e6c68980e778adbec4b3dcb6f685ffd0a57e8b468e84515e2e946083cfc6f",
+      "git_blob": "51a605ef9c06b5d70123e84ad218050d7946d592",
+      "url": "https://github.com/xgboosted/pandas-ta-classic/blob/9c1e0ca16f1decf2cb39823f0e229e17d97bafb2/pandas_ta_classic/overlap/rma.py"
+    },
+    "pandas_ta_classic/volatility/atr.py": {
+      "sha256": "37384ef2187038fae806dc9540a00060e4a275ca6cf4b9f8ca69d8624bdca5c1",
+      "git_blob": "e106c7ab06827b05890ecae8d34ec4c73b38bb12",
+      "url": "https://github.com/xgboosted/pandas-ta-classic/blob/9c1e0ca16f1decf2cb39823f0e229e17d97bafb2/pandas_ta_classic/volatility/atr.py"
+    }
+  },
+  "wheels": [
+    {
+      "name": "pandas-ta-classic",
+      "version": "0.9.0",
+      "filename": "pandas_ta_classic-0.9.0-py3-none-any.whl",
+      "sha256": "f9792bfc478e6ab20dc67008eea748fd5f7042a986f96dbef582b270b706cc57",
+      "authoritative_metadata": "https://pypi.org/project/pandas-ta-classic/0.9.0/#files"
+    },
+    {
+      "name": "numpy",
+      "version": "2.4.6",
+      "filename": "numpy-2.4.6-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "sha256": "89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93",
+      "authoritative_metadata": "https://pypi.org/project/numpy/2.4.6/#files"
+    },
+    {
+      "name": "pandas",
+      "version": "3.1.1",
+      "filename": "pandas-3.1.1-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl",
+      "sha256": "4f1602f614bb83f443381dbcbb94c4ac764b2e50c8d6c965614c5cd83e328c47",
+      "authoritative_metadata": "https://pypi.org/project/pandas/3.1.1/#files"
+    },
+    {
+      "name": "python-dateutil",
+      "version": "4.0.0",
+      "filename": "python_dateutil-4.0.0-py3-none-any.whl",
+      "sha256": "a5e246f79eb80475e691bf93862cead98decd8a498cf53ba0516fcdc0f50dc1c",
+      "authoritative_metadata": "https://pypi.org/project/python-dateutil/4.0.0/#files"
+    },
+    {
+      "name": "tzdata",
+      "version": "2026.6",
+      "filename": "tzdata-2026.6-py2.py3-none-any.whl",
+      "sha256": "0a10eec6e13ef16b627fabed9a5f2ba61a62b1c67f327305f4e7e412a70b4aec",
+      "authoritative_metadata": "https://pypi.org/project/tzdata/2026.6/#files"
+    }
+  ]
+}
