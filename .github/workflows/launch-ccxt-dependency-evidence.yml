@@ -1,0 +1,59 @@
+name: BOSS Trader owner-run CCXT dependency evidence (Issue 2)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: boss-trader-ccxt-dependency-evidence-manual
+  cancel-in-progress: false
+
+jobs:
+  ccxt-dependency-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout immutable Issue 2 research revision, no persisted credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: eb61536b5d824f581228c41ac0173071ba3c46fc
+          persist-credentials: false
+      - name: Set up exact Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.17'
+      - name: Record research revision and define runner-local evidence directory
+        run: |
+          echo "CCXT_EVIDENCE=$RUNNER_TEMP/boss-ccxt-issue-2" >> "$GITHUB_ENV"
+          git rev-parse HEAD
+          python --version
+          python -m pip --version
+      - name: Run offline tests and synthetic fixture before dependency collection
+        run: |
+          python -m unittest discover -s tests -v
+          python boss_trader_lab.py
+      - name: Collect wheels, verified hashes, notices, vulnerability responses and lock
+        run: python -m research.ccxt_dependency_evidence collect --output "$CCXT_EVIDENCE"
+      - name: Install reviewed wheel snapshot without network and verify installed bytes
+        run: |
+          python -m venv --without-pip "$CCXT_EVIDENCE/venv"
+          python -m pip --isolated --python "$CCXT_EVIDENCE/venv/bin/python" install --no-index --find-links="$CCXT_EVIDENCE/wheelhouse" --require-hashes --only-binary=:all: --no-compile --report "$CCXT_EVIDENCE/install-report.json" -r "$CCXT_EVIDENCE/runtime.lock"
+          python -m pip --isolated --python "$CCXT_EVIDENCE/venv/bin/python" check
+          "$CCXT_EVIDENCE/venv/bin/python" -m research.ccxt_dependency_evidence installed --output "$CCXT_EVIDENCE"
+          "$CCXT_EVIDENCE/venv/bin/python" -m unittest discover -s tests -v
+      # Intentionally NO Kraken public-data request or live comparison step.
+      - name: Upload review evidence even if prior steps fail
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: boss-ccxt-issue-2-dependency-${{ github.run_id }}
+          retention-days: 1
+          if-no-files-found: warn
+          path: |
+            ${{ runner.temp }}/boss-ccxt-issue-2/*.json
+            ${{ runner.temp }}/boss-ccxt-issue-2/runtime.lock
+            ${{ runner.temp }}/boss-ccxt-issue-2/notices/
+            ${{ runner.temp }}/boss-ccxt-issue-2/pypi/
+            ${{ runner.temp }}/boss-ccxt-issue-2/osv/
