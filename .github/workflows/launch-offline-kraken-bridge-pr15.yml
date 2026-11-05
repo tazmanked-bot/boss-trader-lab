@@ -1,0 +1,46 @@
+name: BOSS Trader owner-run offline Kraken bridge PR15
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: boss-trader-kraken-bridge-pr15-manual
+  cancel-in-progress: false
+
+jobs:
+  offline-kraken-bridge-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - name: Checkout exact reviewed research revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 96398d1f03bebc58a4429402c32f3a73f1b5ac76
+          persist-credentials: false
+      - name: Set up pinned Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.17'
+      - name: Verify pinned source identity
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "96398d1f03bebc58a4429402c32f3a73f1b5ac76"
+          git rev-parse HEAD
+          python --version
+          echo "Offline synthetic-only; no live Kraken request, secrets or orders"
+      - name: Run isolated Kraken bridge tests
+        run: python -B -m unittest discover -s tests -p test_kraken_spot_validation_bridge.py -v
+      - name: Run all offline repository tests
+        run: python -B -m unittest discover -s tests -v
+      - name: Verify research source syntax without imports or network
+        run: |
+          python - <<'PY'
+          import ast
+          from pathlib import Path
+          for name in ("research/kraken_spot_validation_bridge.py", "tests/test_kraken_spot_validation_bridge.py"):
+              ast.parse(Path(name).read_text(), filename=name)
+              print(f"SYNTAX_PASS: {name}")
+          PY
