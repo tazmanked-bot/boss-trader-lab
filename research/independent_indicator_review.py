@@ -32,14 +32,55 @@ def adjusted_wilder(values: list[float], length: int) -> list[float]:
     return result
 
 
+def rma_with_native_nan_seed(values: list[float], length: int) -> list[float]:
+    """Independently reproduce SMA-seeded RMA with the leading diff NaN.
+
+    pandas-ta-classic native rma() takes mean(values[:length]) skipping NaN,
+    puts that seed at index length-1, then uses alpha=1/length with adjust=False.
+    Thus the first RSI gain/loss seed averages length-1 changes, because the
+    first close.diff() value is NaN. This differs from textbook Wilder RSI.
+    """
+    if len(values) < length or length < 2:
+        raise ValueError("insufficient observations for RMA")
+    initial = [v for v in values[:length] if math.isfinite(v)]
+    if not initial:
+        raise ValueError("RMA has no seed values")
+    output = [float("nan")] * len(values)
+    output[length - 1] = sum(initial) / len(initial)
+    alpha = 1 / length
+    for i in range(length, len(values)):
+        current = values[i]
+        if not math.isfinite(current):
+            raise ValueError("nonfinite RMA observation")
+        output[i] = (1 - alpha) * output[i - 1] + alpha * current
+    return output
+
+
 def reference_rsi(closes: list[float], length: int = PERIOD) -> list[float]:
-    delta = [closes[i] - closes[i - 1] for i in range(1, len(closes))]
-    gains = [max(x, 0.0) for x in delta]
-    losses = [max(-x, 0.0) for x in delta]
-    avg_gains = adjusted_wilder(gains, length)
-    avg_losses = adjusted_wilder(losses, length)
-    result = [float("nan")]
+    """Native RMA-convention RSI, separate from the library implementation."""
+    delta = [float("nan")] + [closes[i] - closes[i - 1] for i in range(1, len(closes))]
+    gains = [max(x, 0.0) if math.isfinite(x) else float("nan") for x in delta]
+    losses = [max(-x, 0.0) if math.isfinite(x) else float("nan") for x in delta]
+    avg_gains = rma_with_native_nan_seed(gains, length)
+    avg_losses = rma_with_native_nan_seed(losses, length)
+    result = []
     for gain, loss in zip(avg_gains, avg_losses):
+        if not math.isfinite(gain) or not math.isfinite(loss):
+            result.append(float("nan"))
+        elif gain + loss == 0:
+            result.append(50.0)
+        else:
+            result.append(100.0 * gain / (gain + loss))
+    return result
+
+
+def adjusted_reference_rsi(closes: list[float], length: int = PERIOD) -> list[float]:
+    """Former adjusted-normalized EWM reference, retained for comparison only."""
+    delta = [closes[i] - closes[i - 1] for i in range(1, len(closes))]
+    gains = adjusted_wilder([max(x, 0.0) for x in delta], length)
+    losses = adjusted_wilder([max(-x, 0.0) for x in delta], length)
+    result = [float("nan")]
+    for gain, loss in zip(gains, losses):
         if not math.isfinite(gain) or not math.isfinite(loss):
             result.append(float("nan"))
         elif gain + loss == 0:
@@ -109,19 +150,20 @@ def main():
         "MACD_HISTOGRAM": discrepancy(macd[columns["MACDh"]].to_list(), ref_h, "MACDh"),
         "MACD_SIGNAL": discrepancy(macd[columns["MACDs"]].to_list(), ref_s, "MACDs"),
     }
+    former_rsi = discrepancy(rsi.to_list(), adjusted_reference_rsi(close), "old_adjusted_RSI")
     passed = all(row["within_tolerance"] for row in reports.values())
     print(json.dumps({
         "mode": "SYNTHETIC_ONLY",
         "status": "CANDIDATE_PARITY" if passed else "DISCREPANCY_REQUIRES_REVIEW",
-        "reference_conventions": "normalized adjusted-Wilder RSI/ATR; SMA-seeded EMA MACD",
+        "reference_conventions": "RSI uses native SMA-seeded RMA and first-diff NaN; ATR uses adjusted Wilder; MACD uses SMA-seeded EMA",
+        "old_adjusted_rsi_diagnostic": former_rsi,
         "warning": "Even matching values require independent warmup and library-version review.",
         "checks": reports,
         "owner_approval": "REQUIRED",
         "orders": "DISABLED"
     }, indent=2))
-    # Return success to record diagnostic discrepancies without blocking evidence capture.
-    # Discrepancy MUST NOT be interpreted as parity approval.
-    return 0
+    # Fail closed if any indicator disagrees; old adjusted-RSI is diagnostic only.
+    return 0 if passed else 1
 
 
 if __name__ == "__main__":
