@@ -34,3 +34,5 @@ jobs:
         run: python -m pip freeze
       - name: Run synthetic indicator comparison only
         run: python -m research.indicator_parity
+      - name: Independently review RSI MACD ATR on synthetic candles
+        run: python -m research.independent_indicator_review
