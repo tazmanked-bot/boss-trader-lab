@@ -1,0 +1,50 @@
+name: BOSS Trader owner-run dependency evidence (PR 4)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: boss-trader-dependency-evidence-manual
+  cancel-in-progress: false
+
+jobs:
+  dependency-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout research branch without write credentials
+        uses: actions/checkout@v4
+        with:
+          ref: research/issue-1-indicator-parity
+          persist-credentials: false
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Show exact research commit
+        run: git rev-parse HEAD
+      - name: Confirm offline safety tests
+        run: python -m unittest discover -s tests -v
+      - name: Install only the approved direct library release
+        run: python -m pip install --disable-pip-version-check 'pandas-ta-classic==0.9.0'
+      - name: Verify dependency consistency
+        run: python -m pip check
+      - name: Record exact installed versions
+        run: |
+          python --version
+          python -m pip --version
+          python -m pip freeze --all
+          python -m pip list --format=freeze
+      - name: Record primary distribution SHA256 (research evidence)
+        shell: bash
+        run: |
+          mkdir -p /tmp/boss-trader-dist
+          python -m pip download --no-deps --only-binary=:all: 'pandas-ta-classic==0.9.0' --dest /tmp/boss-trader-dist
+          sha256sum /tmp/boss-trader-dist/*
+      - name: Verify synthetic indicator parity again
+        run: |
+          python -m research.indicator_parity
+          python -m research.independent_indicator_review
