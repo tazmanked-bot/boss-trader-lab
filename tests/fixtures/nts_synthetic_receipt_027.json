@@ -1,0 +1,53 @@
+{
+  "association": {
+    "aead": "MODEL_AEAD_VERIFIED",
+    "anchor_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "authority": "synthetic-authority.invalid",
+    "bootstrap": "MODEL_INDEPENDENT_BOOTSTRAP",
+    "certificate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "cookie_lease_ns": 10000000000,
+    "cookie_ref": "2222222222222222222222222222222222222222222222222222222222222222",
+    "cookie_state": "MODEL_AVAILABLE",
+    "ntp_extensions": [
+      "UID",
+      "COOKIE",
+      "AUTHENTICATOR"
+    ],
+    "nts_ke": "MODEL_NTS_KE",
+    "plain_ntp_fallback": false,
+    "session_ref": "3333333333333333333333333333333333333333333333333333333333333333",
+    "tls": "MODEL_CHAIN_NAME_TIME_VERIFIED",
+    "unique_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "binding": {
+    "boot": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "nonce": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "run": "synthetic-027"
+  },
+  "bounds": {
+    "authority_error_ns": 50000000,
+    "drift_ppm": 100,
+    "lease_ns": 10000000000,
+    "local_capture_error_ns": 1000000,
+    "offset_ns": 10000000,
+    "reference_utc_ns": 1900000802000000000,
+    "root_delay_ns": 100000000,
+    "root_dispersion_ns": 50000000
+  },
+  "client": {
+    "binary_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "build_ref": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "name": "chronyd",
+    "nts_support": "MODEL_NTS_ENABLED",
+    "version": "4.6"
+  },
+  "origin": "STATIC_SYNTHETIC_NOT_AUTHENTIC_NTS",
+  "schema": "synthetic-nts-receipt-v1",
+  "window": {
+    "recv_boot": 2100000000,
+    "recv_mono": 1100000000,
+    "send_boot": 2000000000,
+    "send_mono": 1000000000
+  }
+}
