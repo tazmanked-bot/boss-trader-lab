@@ -1,0 +1,74 @@
+{
+  "kind": "SYNTHETIC_ONLY",
+  "clock_estimate": {
+    "record_kind": "SYNTHETIC_LOCAL_ESTIMATE",
+    "run_id": "demo-run-015",
+    "revision": "0000000000000000000000000000000000000000",
+    "runner_id": "demo-runner",
+    "boot_scope": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "captured_mono_ns": 100000000000,
+    "observed_mono_ns": 101000000000,
+    "lease_end_mono_ns": 160000000000,
+    "service_active": true,
+    "synchronized": true,
+    "leap_normal": true,
+    "offset_ns": 100000000,
+    "root_delay_ns": 50000000,
+    "root_dispersion_ns": 20000000,
+    "sampling_ns": 5000000,
+    "holdover_ns": 10000000000,
+    "drift_ppb": 100000
+  },
+  "mock_chrony_selected_fields": "System time     : 0.100000000 seconds slow of NTP time\nLast offset     : 0.020000000 seconds\nRMS offset      : 0.030000000 seconds\nSkew            : 100.000 ppm\nRoot delay      : 0.050000000 seconds\nRoot dispersion : 0.020000000 seconds\nLeap status     : Normal\n",
+  "mock_timesync_selected_fields": "System clock synchronized: yes\nRoot distance: 33ms (max: 5s)\nOffset: +4ms\nFrequency: +10ppm\n",
+  "runner_facts": {
+    "kind": "SYNTHETIC",
+    "python_version": "3.11.17",
+    "openssl_version": "synthetic-openssl",
+    "os_id": "ubuntu",
+    "os_version": "24.04",
+    "kernel_release": "synthetic-kernel",
+    "machine": "x86_64",
+    "image_os": "ubuntu24",
+    "image_version": "synthetic-image-015",
+    "start_method": "fork",
+    "ca_bundle_sha256": null
+  },
+  "worker_observations": [
+    {
+      "phase": "start",
+      "elapsed_ns": 2000000,
+      "outcome": "OK"
+    },
+    {
+      "phase": "start",
+      "elapsed_ns": 8000000,
+      "outcome": "OK"
+    },
+    {
+      "phase": "start",
+      "elapsed_ns": 5000000,
+      "outcome": "OK"
+    },
+    {
+      "phase": "terminate",
+      "elapsed_ns": 1000000,
+      "outcome": "OK"
+    },
+    {
+      "phase": "terminate",
+      "elapsed_ns": 3000000,
+      "outcome": "OK"
+    },
+    {
+      "phase": "reap",
+      "elapsed_ns": 2000000,
+      "outcome": "OK"
+    },
+    {
+      "phase": "reap",
+      "elapsed_ns": 4000000,
+      "outcome": "OK"
+    }
+  ]
+}
