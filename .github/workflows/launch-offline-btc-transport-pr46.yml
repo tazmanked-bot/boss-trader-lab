@@ -1,0 +1,57 @@
+name: BOSS Trader owner-run offline BTC transport PR46
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: boss-trader-btc-transport-pr46-owner
+  cancel-in-progress: false
+
+jobs:
+  offline-btc-transport-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout pinned reviewed Draft PR head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: fd642d14e5d88b67702d705ab468e12085552674
+          persist-credentials: false
+      - name: Set up pinned Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.17'
+      - name: Verify exact source and disabled research scope
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "fd642d14e5d88b67702d705ab468e12085552674"
+          git rev-parse HEAD
+          python --version
+          echo "OFFLINE TESTS ONLY; no Kraken network queries; B4 NO-GO; no orders"
+      - name: Focused BTC transport isolation and refusal tests
+        run: python -B -m unittest tests.test_kraken_btc_transport_025 -v
+      - name: Full offline regression suite
+        run: python -B -m unittest discover -s tests -v
+      - name: Verify disabled-by-default transport CLI
+        shell: bash
+        run: |
+          set +e
+          python -B -m research.kraken_btc_transport_025 > disabled.json
+          result=$?
+          set -e
+          test "$result" -eq 2
+          python - <<'PY'
+          import json
+          with open("disabled.json", encoding="utf-8") as f: x=json.load(f)
+          assert x["symbol"]=="BTC/USD"
+          assert x["decision"]=="BLOCKED" and x["overall"]=="HOLD"
+          assert x["reason"]=="AUTHORIZATION_MISSING"
+          assert x["source"]=="NOT_ADMITTED" and x["clock"]=="B4_NO_GO"
+          assert x["requests"]==0 and x["offline_attempts"]==0
+          assert x["live_source_admission"]=="HOLD"
+          assert x["policy"]=="NO ORDERS"
+          print("DISABLED_DEFAULT_PASS: zero requests; live HOLD; B4 NO-GO; NO ORDERS")
+          PY
