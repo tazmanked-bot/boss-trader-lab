@@ -1,0 +1,56 @@
+name: BOSS Trader owner-run offline probe corrections PR23
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: boss-trader-probe-corrections-pr23-manual
+  cancel-in-progress: false
+
+jobs:
+  offline-probe-corrections:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout immutable correction revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: b1572f7dff09a1cc8355ca89e067c2f1ef7bdd3d
+          persist-credentials: false
+      - name: Set up reviewed Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.17'
+      - name: Verify immutable commit and bounded runner identity
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "b1572f7dff09a1cc8355ca89e067c2f1ef7bdd3d"
+          git rev-parse HEAD
+          python - <<'PY'
+          import platform, ssl, sys
+          print("python:", sys.version.split()[0])
+          print("system:", platform.system(), platform.release(), platform.machine())
+          print("openssl:", ssl.OPENSSL_VERSION)
+          PY
+          echo "Offline tests only: NO live Kraken, DNS, HTTPS, orders, or clock attestation."
+      - name: Verify retained PR21 blocker characterization
+        run: python -B -m unittest discover -s tests -p test_kraken_public_probe_review.py -v
+      - name: Verify isolated B1-B3 corrections and unsafe-design sensitivity
+        run: python -B -m unittest discover -s tests -p test_kraken_probe_corrections.py -v
+      - name: Verify full offline regression
+        run: python -B -m unittest discover -s tests -v
+      - name: Verify BOTH normal CLI entry points remain disabled
+        shell: bash
+        run: |
+          set +e
+          first="$(python -B -m research.kraken_probe_corrections)"
+          c1=$?
+          second="$(python -B -m research.kraken_spot_diagnostic --live --authorize)"
+          c2=$?
+          set -e
+          test "$c1" -eq 2
+          test "$c2" -eq 2
+          python -c 'import json,sys; a,b=map(json.loads,sys.argv[1:]); assert all(x["reason"]=="AUTHORIZATION_MISSING" and x["requests"]==0 for x in (a,b)); print("BOTH_DISABLED_CLI_PASS")' "$first" "$second"
