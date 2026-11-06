@@ -1,0 +1,66 @@
+name: BOSS Trader owner-run offline replay PR33
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: boss-trader-replay-pr33-manual
+  cancel-in-progress: false
+
+jobs:
+  offline-spot-replay-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout exact reviewed replay commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 0a315bf52436f34f9761af7155583e5b33e421da
+          persist-credentials: false
+      - name: Set up pinned Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.17'
+      - name: Verify immutable research source and offline scope
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "0a315bf52436f34f9761af7155583e5b33e421da"
+          git rev-parse HEAD
+          python --version
+          echo "SYNTHETIC_ONLY; no exchange data, network calls, market-performance claims or orders"
+      - name: Run focused synthetic replay and leakage tests
+        run: python -B -m unittest discover -s tests -p test_spot_reversal_replay.py -v
+      - name: Run full offline regression suite
+        run: python -B -m unittest discover -s tests -v
+      - name: Verify synthetic replay output and operational HOLD
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from research import spot_reversal_replay as model
+          recipe = json.loads(Path("tests/fixtures/spot_reversal_replay_019.json").read_text())
+          result = model.run_experiment_json(json.dumps(recipe))
+          assert result["status"] == "SYNTHETIC_HARNESS_VALIDATION_ONLY"
+          assert result["operational_mode"] == "HOLD"
+          assert result["economic_outcomes"] == "NOT_COMPUTED"
+          assert len(result["snapshots"]) == 12
+          assert all(0 <= len(row["decision"]["candidates"]) <= 3 for row in result["snapshots"])
+          assert all(row["decision"]["label"] == "SYNTHETIC_ONLY" for row in result["snapshots"])
+          print("SYNTHETIC_REPLAY_PASS: 12 snapshots, no PNL, operational HOLD")
+          PY
+      - name: Confirm original gated diagnostic CLIs remain disabled
+        shell: bash
+        run: |
+          set +e
+          first="$(python -B -m research.kraken_spot_diagnostic --live --authorize)"
+          c1=$?
+          second="$(python -B -m research.kraken_probe_corrections)"
+          c2=$?
+          set -e
+          test "$c1" -eq 2
+          test "$c2" -eq 2
+          python -c 'import json,sys; a,b=map(json.loads,sys.argv[1:]); assert all(x["reason"]=="AUTHORIZATION_MISSING" and x["requests"]==0 for x in (a,b)); print("BOTH_DISABLED_CLI_PASS")' "$first" "$second"
