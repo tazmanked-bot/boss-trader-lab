@@ -12,6 +12,16 @@ Open-source, **research-only** crypto spot market observation prototype (MIT).
 - Dependency-free offline unit tests
 - Manually triggered GitHub Actions safety test (**not scheduled**)
 
+## Data-source responsibility (public repository)
+
+This MIT-licensed repository contains code, **not a license to third-party exchange data**. It is publicly available for independent use; each person who runs it is responsible for checking the applicable exchange/API/data-provider terms, local law, permitted purposes, rate limits, storage, retention and redistribution rules. Do not assume the maintainer has cleared data rights for other users.
+
+**Owner decision (2026-11-06):** Remove the additional repository-wide **data-licensing research approval gate** previously discussed for BOSS Trader Lab's private, personal, noncommercial use. Prior archive-rights reports are historical assessments, **not a mandatory permission-clearance or outreach prerequisite imposed on all users**. They do not certify any particular user's rights and do not prohibit legitimate public, read-only data observation merely because a separate historical archive's commercial or redistribution terms were unresolved.
+
+This decision **does not** make restricted data free to use, authorize redistribution of third-party candles, bypass provider limitations or override any applicable terms. Data-source responsibility belongs to the individual user.
+
+**Operational safety remains separate:** the existing technical refusal checks and HOLD/NO-GO gates for unapproved real-data integration, clock/transport qualification and automated trading are unchanged. No live orders, account-key collection, futures trading, unattended execution or new scheduled requests are enabled by this documentation change. Existing explicitly available manual public-data features retain their documented scope; any new runtime integration still requires independent technical review.
+
 ## Usage
 
 ```bash
