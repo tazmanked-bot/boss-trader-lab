@@ -1,0 +1,59 @@
+{
+  "recipe": {
+    "generator": "original-synthetic-regimes-v1",
+    "seed": 7,
+    "start_open": 1900000800,
+    "segments": [
+      {
+        "regime": "downtrend",
+        "hours": 21
+      },
+      {
+        "regime": "flat",
+        "hours": 21
+      },
+      {
+        "regime": "rebound",
+        "hours": 21
+      },
+      {
+        "regime": "whipsaw",
+        "hours": 21
+      },
+      {
+        "regime": "rally",
+        "hours": 21
+      },
+      {
+        "regime": "rebound",
+        "hours": 21
+      },
+      {
+        "regime": "flat",
+        "hours": 21
+      }
+    ],
+    "faults": []
+  },
+  "plan": {
+    "version": "spot-reversal-replay-v1",
+    "hypothesis": "fixed-016-four-feature-conjunction",
+    "event_rule": "synthetic-close-higher-and-low-held-v1",
+    "horizon_hours": 3,
+    "embargo_hours": 24,
+    "splits": {
+      "train": {
+        "start": 1900076400,
+        "end": 1900090800
+      },
+      "validation": {
+        "start": 1900220400,
+        "end": 1900234800
+      },
+      "test": {
+        "start": 1900447200,
+        "end": 1900461600
+      }
+    }
+  }
+}
