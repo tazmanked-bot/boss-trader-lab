@@ -1,0 +1,61 @@
+name: BOSS Trader owner-run offline source preview PR41
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: boss-trader-source-preview-pr41-manual
+  cancel-in-progress: false
+
+jobs:
+  offline-source-preview-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout exact reviewed preview head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 4e29ef0ef634bb0a821eacaa110656a25de1b7f9
+          persist-credentials: false
+      - name: Set up pinned Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.17'
+      - name: Verify exact immutable source
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "4e29ef0ef634bb0a821eacaa110656a25de1b7f9"
+          git rev-parse HEAD
+          python --version
+          echo "STATIC SYNTHETIC FIXTURE ONLY; live source admission HOLD; no trading"
+      - name: Focused source preview parity and refusal tests
+        run: python -B -m unittest discover -s tests -p test_spot_reversal_source_preview_023.py -v
+      - name: Full offline regression suite
+        run: python -B -m unittest discover -s tests -v
+      - name: Verify disabled default and --live flags are non-operational
+        shell: bash
+        run: |
+          set +e
+          python -B -m research.spot_reversal_source_preview_023 > default.json
+          c1=$?
+          python -B -m research.spot_reversal_source_preview_023 --live --authorize > flagged.json
+          c2=$?
+          set -e
+          test "$c1" -eq 2
+          test "$c2" -eq 2
+          python - <<'PY'
+          import json
+          for p in ("default.json", "flagged.json"):
+              with open(p, encoding="utf-8") as f: data=json.load(f)
+              assert data["preview_status"] == "BLOCKED"
+              assert data["preview_blocker"] == "AUTHORIZATION_MISSING"
+              assert data["mode"] == "STATIC_FIXTURE_EXPERIMENT_ONLY"
+              assert data["live_source_admission"] == "HOLD"
+              assert data["operational_mode"] == "HOLD"
+              assert data["trade_authority"] == "NONE"
+              assert data["requests"] == 0 and data["candidates"] == []
+          print("SOURCE_PREVIEW_DISABLED: zero requests; no candidates; no live admission or trading")
+          PY
