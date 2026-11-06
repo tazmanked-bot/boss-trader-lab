@@ -1,0 +1,47 @@
+{
+  "synthetic_only": true,
+  "identities": {
+    "BTC/USD": {
+      "error": [],
+      "result": {
+        "XXBTZUSD": {
+          "altname": "XBTUSD",
+          "wsname": "XBT/USD",
+          "base": "XXBT",
+          "quote": "ZUSD",
+          "aclass_base": "currency",
+          "aclass_quote": "currency",
+          "status": "online"
+        }
+      }
+    },
+    "XRP/USD": {
+      "error": [],
+      "result": {
+        "XXRPZUSD": {
+          "altname": "XRPUSD",
+          "wsname": "XRP/USD",
+          "base": "XXRP",
+          "quote": "ZUSD",
+          "aclass_base": "currency",
+          "aclass_quote": "currency",
+          "status": "online"
+        }
+      }
+    },
+    "SOL/USD": {
+      "error": [],
+      "result": {
+        "SOLUSD": {
+          "altname": "SOLUSD",
+          "wsname": "SOL/USD",
+          "base": "SOL",
+          "quote": "ZUSD",
+          "aclass_base": "currency",
+          "aclass_quote": "currency",
+          "status": "online"
+        }
+      }
+    }
+  }
+}
