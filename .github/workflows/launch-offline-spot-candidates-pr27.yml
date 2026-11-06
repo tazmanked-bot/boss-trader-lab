@@ -1,0 +1,55 @@
+name: BOSS Trader owner-run offline spot candidates PR27
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: boss-trader-spot-candidates-pr27-manual
+  cancel-in-progress: false
+
+jobs:
+  offline-spot-candidate-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout exact reviewed candidate revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 225f102bb59eae2d4d3b41349781264b681161ed
+          persist-credentials: false
+      - name: Set up pinned Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.17'
+      - name: Verify exact research revision and offline restrictions
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "225f102bb59eae2d4d3b41349781264b681161ed"
+          git rev-parse HEAD
+          python --version
+          echo "SYNTHETIC_ONLY; no market requests, time services, orders or operational approval."
+      - name: Run focused synthetic candidate tests
+        run: python -B -m unittest discover -s tests -p test_spot_reversal_candidates.py -v
+      - name: Run complete offline regression suite
+        run: python -B -m unittest discover -s tests -v
+      - name: Verify bounded synthetic fixture output
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from research import spot_reversal_candidates as model
+          from research import spot_refusal_registry as registry
+          fixture = json.loads(Path("tests/fixtures/spot_reversal_candidates_016.json").read_text())
+          assert fixture["label"] == "SYNTHETIC_ONLY"
+          output = model.evaluate(fixture)
+          encoded = registry.canonical_json(output).encode("ascii")
+          assert len(encoded) <= 16384
+          assert 0 <= len(output["candidates"]) <= 3
+          assert all(s in registry.SYMBOLS for s in output["candidates"])
+          assert "ENTRY READY" in output["warning"]
+          print("SYNTHETIC_OUTPUT_PASS; candidate_count=",len(output["candidates"]))
+          PY
