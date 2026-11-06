@@ -1,0 +1,72 @@
+name: BOSS Trader owner-run offline manual reversal PR44
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: boss-trader-manual-reversal-pr44-owner
+  cancel-in-progress: false
+
+jobs:
+  offline-manual-reversal-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout exact reviewed Draft PR head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 7c7eb18f92996d9a6b0f09de0f88d06e647883fa
+          persist-credentials: false
+      - name: Setup pinned Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.17'
+      - name: Verify pinned reviewed SHA and safe mode
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "7c7eb18f92996d9a6b0f09de0f88d06e647883fa"
+          git rev-parse HEAD
+          python --version
+          echo "OFFLINE STATIC SYNTHETIC FIXTURES ONLY; LIVE HOLD; NO ORDERS"
+      - name: Focused manual reversal integration tests
+        run: python -B -m unittest tests.test_manual_kraken_reversal_024 -v
+      - name: Full offline regression suite
+        run: python -B -m unittest discover -s tests -v
+      - name: Verify disabled default (exit 2, no requests or candidates)
+        shell: bash
+        run: |
+          set +e
+          python -B -m research.manual_kraken_reversal_024 > default.json
+          code=$?
+          set -e
+          test "$code" -eq 2
+          python - <<'PY'
+          import json
+          with open("default.json",encoding="utf-8") as f: x=json.load(f)
+          assert x["offline_status"]=="BLOCKED"
+          assert x["reason"]=="AUTHORIZATION_MISSING"
+          assert x["requests"]==0 and x["total_candidates"]==0 and x["candidates"]==[]
+          assert x["live_source_admission"]=="HOLD" and x["operational_mode"]=="HOLD"
+          assert x["warning"]=="STATIC SYNTHETIC DEMO; NOT LIVE; NO ORDERS"
+          print("DEFAULT_DISABLED_PASS; 0 requests; 0 candidates; no trading authority")
+          PY
+      - name: Verify explicit synthetic demo (6 fixture attempts, 0 real requests)
+        shell: bash
+        run: |
+          python -B -m research.manual_kraken_reversal_024 --offline-demo > demo.json
+          python - <<'PY'
+          import json
+          with open("demo.json",encoding="utf-8") as f: x=json.load(f)
+          assert x["offline_status"]=="PASS"
+          assert x["source"]=="STATIC_SYNTHETIC_KRAKEN_HTTP_FIXTURES"
+          assert x["requests"]==0 and x["fixture_attempts"]==6
+          assert x["total_candidates"]==3
+          assert x["candidates"]==["BTC/USD","SOL/USD","XRP/USD"]
+          assert x["live_source_admission"]=="HOLD" and x["operational_mode"]=="HOLD"
+          assert x["warning"]=="STATIC SYNTHETIC DEMO; NOT LIVE; NO ORDERS"
+          assert all(x["pairs"][s]["decision"]=="WATCH" for s in ("BTC/USD","SOL/USD","XRP/USD"))
+          print("OFFLINE_DEMO_PASS; 6 synthetic fixture attempts; 0 real requests; 3 SYNTHETIC WATCH; NO ORDERS")
+          PY
