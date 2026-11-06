@@ -4,6 +4,8 @@ Version: **archive-rights-review-v1**. Research/retrieval date: **2026-11-06 UTC
 Authority: [Issue #36](https://github.com/tazmanked-bot/boss-trader-lab/issues/36), documentation/rights clarification only.
 Verified baseline main: **`9d51d72489d40852d7ccf7362f4147c2d5c7460c`**, owner merge of PR #35.
 
+**Owner purpose correction (approved 2026-11-06): BOSS Trader Lab is a PRIVATE, PERSONAL, NONCOMMERCIAL spot-market research and experimentation project, separate from ZUMERAVO. Intended use is personal evaluation of historical and spot-market observations and potential future owner-supervised personal trading, not sales, customer research, commercial data exploitation, redistribution, or a commercial service.** Legal identity, Kraken account/contract terms, applicable regional provisions and explicit archive-specific rights remain unverified. This correction narrows the permissions question but does **not** grant dataset acquisition, storage or processing permission. Commercial uses below remain only as hypothetical rights categories for completeness, **not the owner's intended use**.
+
 **Judgment: HOLD / NO REAL DATA. Remain SYNTHETIC_ONLY.** Unambiguous applicable archive rights, source provenance and an officially documented bounded sample path have not all been established. The owner has not authorized acquisition, outreach, evaluation or a live run. Neither a technical download instruction nor a draft/merge is a data license.
 
 Only this new document is proposed. No archive, CSV, checksum file, market manifest, dataset preview, exchange response or actual historical record was retrieved. No GET/HEAD/range request to a data URL, provider message/form/email draft, payment/subscription, scanner change, network diagnostic, clock-service query, workflow dispatch, credentials, paper/live trading, VM or ZUMERAVO access. Public legal/support/developer documentation was read through the web tool; repository instructions/prior report were read through GitHub. No market values or fabricated dataset/rights record are included.
@@ -24,7 +26,7 @@ S3 §8 grants limited revocable use **“only for your own benefit”**. §9 con
 
 ### Taiwan-region investigation
 
-Owner legal identity, contracting entity, residence/domicile, account status and commercial/internal purpose are **UNKNOWN**. Asia/Taipei timezone, Chinese-language presentation, project name or personal GitHub ownership cannot fill these facts. Conditional on actual residence and service scope, S2 may point to Global; that inference does not select a contract on the owner's behalf.
+Owner legal identity, contracting entity, residence/domicile and Kraken account/contract status remain **UNKNOWN**. **Intended purpose is confirmed: private, personal, noncommercial research; no sale, sharing or commercial exploitation of datasets or derived signals.** Asia/Taipei timezone, Chinese-language presentation, project name or personal GitHub ownership cannot fill these facts. Conditional on actual residence and service scope, S2 may point to Global; that inference does not select a contract on the owner's behalf.
 
 Attempts to read `https://www.kraken.com/zh-tw/legal` and `https://www.kraken.com/zh-tw/legal/global-terms` returned web-tool **not accessible** errors. The accessible S3/S4 text had no Taiwan match. **Taiwan-specific terms/version or special archive permission: UNKNOWN**, not “none exists.” Search results about promotions, derivatives eligibility and general regulatory licenses were not used to grant spot-data rights. No alternate route/proxy or inaccessible account material was pursued.
 
@@ -36,16 +38,16 @@ The required vocabulary below distinguishes explicit published restrictions from
 
 | Proposed use | Classification on present evidence | Source anchor | Evidence needed to decide the actual archive use |
 | --- | --- | --- | --- |
-| Private personal research | **AMBIGUOUS** | S1 processing invitation; S3 §8 | Confirm archive scope, applicable owner agreement and permitted private analysis. |
-| Commercial internal research | **AMBIGUOUS** | S3 §§8–9 | Express coverage of the intended commercial purpose; private handling alone is not clearance. |
-| Commercial derived summary / strategy evaluation use | **AMBIGUOUS** | S3 §§8–9 | Define permissible aggregate/evaluation outputs, ownership and any commercial limitations; do not equate original code with data rights. |
+| Private personal research (**confirmed intended use**) | **AMBIGUOUS** | S1 processing invitation; S3 §8 | Confirm archive scope, applicable owner agreement and permitted private analysis. |
+| Commercial internal research (**outside current owner scope**) | **AMBIGUOUS** | S3 §§8–9 | Express coverage of the intended commercial purpose; private handling alone is not clearance. |
+| Commercial derived summary / strategy evaluation use (**outside current owner scope**) | **AMBIGUOUS** | S3 §§8–9 | Define permissible aggregate/evaluation outputs, ownership and any commercial limitations; do not equate original code with data rights. |
 | Storage / retention | **UNKNOWN** for archive-specific duration/conditions | S1 download mechanism; S3 §8 revocability | Lawful storage, backups, retention, deletion and revocation obligations. |
 | Redistributing raw data | **EXPLICITLY RESTRICTED** under general content terms absent applicable permission/exception | S3 §9 distribution clause | Archive-specific grant covering recipients/method and any conditions; none verified. |
 | Redistributing derived data / metrics | **AMBIGUOUS** | S3 §§8–9 | Distinguish non-reconstructive metrics from recoverable data and resolve scope of any grant/restriction. |
 | Automated / bulk acquisition | **EXPLICITLY RESTRICTED** by general extraction/automation clauses; archive-specific reconciliation **AMBIGUOUS** | S3 §9 versus S1 instructions | Approved lawful method and any necessary consent; technical instructions do not settle legal scope. |
 | Attribution / notices | **EXPLICITLY RESTRICTED**: general notice removal/obscuring; archive-specific attribution format **UNKNOWN** | S3 §9 notices | Required copyright/license/source/change notices and any attribution wording. Attribution alone cannot cure missing rights. |
 
-No unconditional **EXPLICITLY ALLOWED** classification for the complete proposed owner/project use is supported. This is not a conclusion that all internal research is inherently prohibited; it is insufficient evidence to clear this particular use. Exceptions, facts/database rights and whether non-reconstructive metrics fall within restricted material need independent review rather than speculative legal assumptions. No third-party summary, open-source code license or community rights label is applied to Kraken's archive.
+No unconditional **EXPLICITLY ALLOWED** classification for the owner's now-confirmed **private, personal, noncommercial research** use is supported. Commercial-rights rows remain contextual only, not an intended-use statement. This is not a conclusion that all internal research is inherently prohibited; it is insufficient evidence to clear this particular use. Exceptions, facts/database rights and whether non-reconstructive metrics fall within restricted material need independent review rather than speculative legal assumptions. No third-party summary, open-source code license or community rights label is applied to Kraken's archive.
 
 ## 3. Fixed pilot and bounded-access feasibility
 
@@ -93,7 +95,7 @@ The proposed week is a bounded QC/evaluation-design sample, not a statistically 
 
 Every item must have an independently reviewed source/reference; a general owner preference does not fill unknown facts:
 
-1. **Applicability:** actual owner/legal entity, relevant jurisdiction, account/contract status and internal/commercial intent. Identify exact governing terms, effective version, service/party scope and any archive-specific grant. Taiwan timezone is not evidence.
+1. **Applicability:** actual owner/legal entity, relevant jurisdiction and account/contract status; **purpose is already confirmed as private, personal, noncommercial research**. Identify exact governing terms, effective version, service/party scope and any archive-specific grant. Taiwan timezone is not evidence.
 2. **Use rights:** explicit permission or independently reviewed applicable basis for private/internal/commercial evaluation, derived summaries/strategy evaluation, storage/backup/retention/deletion, raw/derived redistribution and required notices. Resolve S1/S3 tension. If no adequate basis, remain HOLD; do not invent a rights affidavit or silently classify internal use as personal.
 3. **Bounded lawful source:** officially supported fixed sample or approved extraction from already lawfully held, versioned files, with proven rights. Exact immutable period/instruments/member identifiers and byte/compression/row caps; no implied full multi-GB acquisition. If no safe small path exists, remain SYNTHETIC_ONLY.
 4. **Provenance/integrity:** exact source release/build identity, independently sourced expected digest where possible, original/normalized hashes only after later authorization, metadata lineage and quality counts. Missing independent digest must be disclosed for review, not manufactured or substituted with a self-hash claimed independent.
@@ -108,7 +110,8 @@ Unfilled owner record:
 record_version: archive-owner-decision-021-v1
 status: PROPOSED/HOLD
 owner_and_BOSS_AI_review_refs: UNSET
-legal_identity_jurisdiction_contract_and_intended_purpose: UNSET
+legal_identity_jurisdiction_contract: UNSET
+intended_purpose: PRIVATE_PERSONAL_NONCOMMERCIAL_SPOT_RESEARCH_CONFIRMED_BY_OWNER_2026_11_06
 applicable_terms_and_archive_permission_version: UNSET
 eight_rights_categories_and_permission_evidence: UNSET
 official_small_sample_method_and_safe_limits: UNSET
@@ -127,13 +130,13 @@ No GO or applicable legal permission is recorded on the owner's behalf. No sampl
 
 ## 6. Optional clarification message — UNSENT TEXT ONLY
 
-This is a reusable question template **inside this document only**. It has not been sent, pasted into a support form or created as a draft in any external account. No recipient/channel is selected and no response or willingness to provide data is assumed. The owner must separately authorize any use after supplying accurate scope; no keys/account secrets are needed.
+This is a reusable question template **inside this document only**. It has not been sent, pasted into a support form or created as a draft in any external account. No recipient/channel is selected and no response or willingness to provide data is assumed. The owner must separately authorize any use after confirming remaining legal/contract applicability facts; no keys/account secrets are needed.
 
 > Subject: Clarification of official historical spot OHLCVT archive use and bounded sample access
 >
-> We are considering a private offline research study, not trading or live monitoring. Before any acquisition, please identify the applicable archive license/terms for [owner legal entity/jurisdiction and accurate internal/commercial purpose], including whether an account or separate agreement is required.
+> We are considering a private offline research study, not trading or live monitoring. Before any acquisition, please identify the applicable archive license/terms for [owner legal identity/jurisdiction and account/contract status; intended use: private, personal, noncommercial spot-market research, no redistribution or commercial data exploitation], including whether an account or separate agreement is required.
 >
-> 1. Does permitted use include commercial internal research and commercially used non-reconstructive descriptive/strategy-evaluation summaries? What is restricted for derived data versus raw redistribution?
+> 1. Does permitted use include private, personal, noncommercial research and private non-redistributed descriptive/strategy-evaluation summaries? Are there limits on processing the data in personal research code? What is restricted for derived data versus raw redistribution?
 > 2. What storage, retention, backup/deletion, attribution and notice conditions apply? How do archive code-processing/download instructions interact with Global content and automation restrictions?
 > 3. Is there an officially supported lawful bounded sample for 2025-10-01 00:00 UTC–2025-10-08 00:00 UTC, BTC/USD, XRP/USD, SOL/USD, spot USD, 60-minute candles, without retrieving the complete multipart pack? Please identify documentation and size limits; no sample should be sent before separate approval.
 > 4. What exact release/member names, compressed/expanded sizes, externally accessible index/build metadata and independently published member digests describe that scope? Does MANIFEST.json supply these or different fields?
