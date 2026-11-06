@@ -1,5 +1,7 @@
 # BOSS-TRADER-HISTORICAL-DATA-SOURCE-020
 
+> **Subsequent owner policy update — 2026-11-06:** BOSS Trader Lab is a public MIT code repository used by its owner for private, personal, noncommercial research. The owner has **withdrawn the additional repository-wide data-permission approval/outreach gate** described in this historical audit. Every repository user is responsible for determining their own right to access, retain and use third-party data, under their applicable terms and law. This document remains a dated source-rights assessment, **not a blanket restriction on other users or a claim of provider permission**. The unchanged technical safety gates for unapproved real-data adapters, unverified provenance, live workflow integration and trading still apply. See [current README](../README.md#data-source-responsibility-public-repository).
+
 Research date: **2026-11-06 UTC**. Authorization: [Issue #34](https://github.com/tazmanked-bot/boss-trader-lab/issues/34), documentation/terms research only.
 Exact verified main: **`1db658673993a7e45ccfaba3d62eca2cac1b58ea`**, owner squash merge of PR #33.
 
