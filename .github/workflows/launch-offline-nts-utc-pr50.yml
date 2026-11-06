@@ -1,0 +1,75 @@
+name: BOSS Trader owner-run offline NTS PR50
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: boss-trader-offline-nts-pr50-owner
+  cancel-in-progress: false
+
+jobs:
+  offline-nts-utc-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact reviewed Draft PR head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 990c1a1039da36f3034c321f0f58038e9b4a0530
+          persist-credentials: false
+      - name: Set up pinned Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.17'
+      - name: Verify immutable head and initial clean checkout
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "990c1a1039da36f3034c321f0f58038e9b4a0530"
+          test -z "$(git status --porcelain)"
+          git rev-parse HEAD
+          python --version
+          echo "NTS PASSIVE FILE INVENTORY ONLY; B4 NO-GO; NO NETWORK, NO CLIENT EXECUTION, NO ORDERS"
+      - name: Run focused NTS receipt and passive inventory tests
+        run: python -B -m unittest tests.test_nts_chrony_evidence_027 -v
+      - name: Run full offline regression suite
+        run: python -B -m unittest discover -s tests -v
+      - name: Verify disabled default (no files/process/time query)
+        shell: bash
+        run: |
+          set +e
+          python -B -m research.nts_chrony_evidence_027 > nts-disabled-027.json
+          code=$?
+          set -e
+          test "$code" -eq 2
+          python - <<'PY'
+          import json
+          from research import utc_evidence_026
+          with open("nts-disabled-027.json",encoding="utf-8") as f: x=json.load(f)
+          assert x["inventory_status"]=="DISABLED"
+          assert x["B4"]=="B4_NO_GO" and x["independent_utc"] is False
+          assert x["requests"]==0 and x["process_launches"]==0
+          assert x["live_source_admission"]=="HOLD" and x["policy"]=="NO ORDERS"
+          assert utc_evidence_026.authentic_verifier()["B4"]=="NO-GO"
+          print("DEFAULT_DISABLED; AUTHENTIC_UTC_NOT_VERIFIED; NO REQUESTS; NO ORDERS")
+          PY
+      - name: Passively inventory fixed chrony file paths on runner (no execution)
+        shell: bash
+        run: |
+          python -B -m research.nts_chrony_evidence_027 --offline-inventory > nts-inventory-027.json
+          python - <<'PY'
+          import json
+          with open("nts-inventory-027.json",encoding="utf-8") as f: x=json.load(f)
+          assert x["inventory_status"] in ("CLIENT_UNAVAILABLE","CLIENT_INCOMPLETE","CLIENT_CAPABILITY_UNVERIFIED")
+          assert x["requests"]==0 and x["process_launches"]==0
+          assert x["B4"]=="B4_NO_GO" and x["independent_utc"] is False
+          assert x["target_client"]=="TARGET_CLIENT_CAPABILITY_UNVERIFIED"
+          assert x["provenance"]=="AUTHENTIC_PROVENANCE_NOT_COLLECTED"
+          assert x["live_source_admission"]=="HOLD" and x["policy"]=="NO ORDERS"
+          print("PASSIVE_CHRONY_INVENTORY_UBUNTU_24_04")
+          print(json.dumps({"actual_host":x.get("actual_host"),"requested_target":x.get("requested_target"),
+            "inventory_status":x["inventory_status"],"clients":x["clients"],
+            "B4":x["B4"],"requests":x["requests"],"process_launches":x["process_launches"]},sort_keys=True))
+          PY
