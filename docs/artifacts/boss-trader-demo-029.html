@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src data:; base-uri 'none'; form-action 'none'">
+<title>BOSS Trader • Demo research desk</title>
+<style>
+:root{--ink:#142d29;--muted:#5b6d65;--paper:#f5f5ed;--card:#fff;--line:#dce3d9;--green:#176c50;--lime:#d5ef78;--amber:#875c16;--red:#943c35}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button,a,input,select,textarea{touch-action:manipulation}button{min-height:44px;border:1px solid var(--line);border-radius:9px;padding:10px 15px;background:#fff;color:var(--ink);cursor:pointer;font-weight:650}button:hover{border-color:var(--green);background:#f0f6ec}button:disabled{cursor:default;opacity:.48}button.primary{background:var(--green);color:#fff;border-color:var(--green)}button.primary:hover{background:#12543e}button.danger{color:var(--red)}:focus-visible{outline:3px solid #428969;outline-offset:3px}a{color:inherit}header{background:#132e29;color:#fff}.top{max-width:1200px;margin:auto;padding:20px 26px;display:flex;gap:18px;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:750;letter-spacing:-.5px}.logo{background:var(--lime);color:#132e29;font-size:13px;letter-spacing:-1px;display:grid;place-items:center;width:35px;height:35px;border-radius:10px}.top nav{display:flex;gap:22px;font-size:13px;color:#d2dfd4}.top a{text-decoration:none;padding:8px 0}.mode{font-size:11px;font-weight:750;letter-spacing:.08em;background:#d5ef78;color:#143b2c;border-radius:30px;padding:7px 12px;white-space:nowrap}.order-note{font-size:10px;letter-spacing:.09em;color:#ccdad2;margin-top:4px;text-align:right}main{max-width:1200px;margin:auto;padding:36px 26px 40px}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:750;color:var(--green)}h1{font-size:42px;letter-spacing:-1.8px;line-height:1.12;margin:13px 0 15px;max-width:590px}h2{font-size:22px;letter-spacing:-.7px;line-height:1.2;margin:0}h3{font-size:17px;line-height:1.3;margin:0}p{margin:8px 0}.muted,.hint{color:var(--muted)}.hint{font-size:12px}.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:42px;align-items:center;margin-bottom:26px}.hero p{max-width:560px}.session-box{background:#e7ecdF;border:1px solid #d9e1d0;border-radius:14px;padding:20px 22px}.session-box dl{font-size:12px;margin:12px 0;display:grid;grid-template-columns:100px 1fr;gap:6px}.session-box dt{color:var(--muted)}.session-box dd{margin:0;overflow-wrap:anywhere}.session-box button{width:100%;margin-top:4px}.strip{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:18px 0;background:#fff;border:1px solid var(--line);padding:11px 15px;border-radius:10px;font-size:12px}.strip select{width:auto;max-width:100%;padding:8px;border:1px solid var(--line);border-radius:7px;background:#fafbf7;color:var(--ink)}.storage{font-size:12px;color:var(--muted);margin:6px 0;min-height:20px}.notice{padding:13px 16px;border-radius:9px;background:#fff2d9;color:#745016;font-size:13px;border:1px solid #e8d1a2;margin:16px 0}.notice[hidden],*[hidden]{display:none!important}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:20px 0 32px}.stat{background:#fff;padding:18px 20px}.stat strong{display:block;font-size:29px;letter-spacing:-1px;line-height:1.15}.stat span{font-size:12px;color:var(--muted)}.section-heading{display:flex;gap:10px;justify-content:space-between;align-items:flex-end;margin:22px 0 16px}.section-heading p{font-size:12px;color:var(--muted);margin:5px 0 0}.small-label{font-size:11px;color:var(--muted)}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:20px;min-width:0}.card-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.symbol{display:flex;align-items:center;gap:10px;font-weight:750}.coin{width:35px;height:35px;display:grid;place-items:center;border-radius:50%;background:#edf0e6;font-size:12px}.tag{font-size:10px;letter-spacing:.07em;font-weight:800;padding:4px 8px;border-radius:6px;background:#e8f3e7;color:#25693b}.tag.WAIT{background:#fcf0d4;color:var(--amber)}.tag.BLOCKED{background:#f9e7e3;color:var(--red)}.ref{font-size:25px;letter-spacing:-.9px;font-weight:650;margin:18px 0 0}.checks{display:grid;gap:6px;margin:18px 0;padding:0;list-style:none;font-size:12px}.checks li{display:flex;justify-content:space-between;gap:6px}.check{color:var(--green);font-weight:750}.why{font-size:12px;border-top:1px solid var(--line);padding-top:13px;color:var(--muted)}.why b{display:block;color:var(--ink);font-size:11px;margin-bottom:5px}.card details{font-size:11px;color:var(--muted);margin:13px 0}.card summary{cursor:pointer;min-height:30px}.card button{width:100%;font-size:12px}.empty{padding:26px 20px;background:#eff2e9;border:1px dashed #cbd5c6;border-radius:10px;color:var(--muted);font-size:13px}.workspace{display:grid;grid-template-columns:1fr 1.35fr;gap:24px;margin:26px 0}.panel{background:#fff;border:1px solid var(--line);padding:22px;border-radius:13px;min-width:0}.panel .section-heading{margin-top:0}.watch-item{border-top:1px solid var(--line);padding:16px 0;font-size:12px}.watch-item p{color:var(--muted)}.watch-item button{min-height:44px;font-size:11px;padding:8px 12px}.watch-actions{display:flex;justify-content:space-between;align-items:center;gap:10px}.tabs{display:flex;gap:5px;border-bottom:1px solid var(--line);padding-bottom:12px;margin:14px 0}.tabs button{border:0;color:var(--muted);font-size:12px}.tabs button.active{background:#eaf1e3;color:var(--green)}.fields{display:grid;grid-template-columns:1fr 1fr;gap:13px}.fields label{font-size:12px;color:var(--muted);display:grid;gap:5px;align-content:start}.fields input,.fields select,.fields textarea{width:100%;min-width:0;border:1px solid #cfd8cb;border-radius:7px;background:#fdfefa;padding:10px;color:var(--ink);min-height:44px}.fields input[readonly]{background:#eff2e9}.wide{grid-column:1/-1}.fields textarea{resize:vertical;min-height:65px}.form-foot{font-size:11px;color:var(--muted);margin:12px 0}.submit{width:100%;margin-top:5px}.feedback{min-height:25px;font-size:13px;color:var(--green);overflow-wrap:anywhere}.feedback.error{color:var(--red)}.report-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.report-head .actions{display:flex;gap:8px}.actions button{font-size:11px}.pnl{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:18px 0}.pnl>div{background:#eff2e9;border-radius:9px;padding:17px}.pnl .net{background:#173d32;color:#fff}.pnl span{display:block;font-size:11px}.pnl strong{font-size:23px;letter-spacing:-.7px;display:block;margin-top:5px;overflow-wrap:anywhere}.pnl small{font-size:10px}.ledger{display:grid;gap:8px}.record{display:grid;grid-template-columns:1fr auto;gap:5px 15px;padding:13px 0;border-top:1px solid var(--line);font-size:12px;overflow-wrap:anywhere}.record .record-note{grid-column:1/-1;color:var(--muted);white-space:pre-wrap}.record .right{text-align:right}.record small{font-size:10px;color:var(--muted)}.open-position{border:1px solid var(--line);border-radius:8px;padding:12px;margin:8px 0;font-size:12px}.activity{padding-left:18px;font-size:12px;color:var(--muted);max-height:225px;overflow:auto}.activity li{padding:5px 0}.technical{font-size:12px;margin:24px 0;color:var(--muted);overflow-wrap:anywhere}.technical summary{cursor:pointer;padding:12px 0}.technical dl{display:grid;grid-template-columns:140px 1fr;gap:8px}.technical dd{margin:0}.foot{font-size:11px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:20px;color:var(--muted)}dialog{max-width:420px;width:calc(100% - 32px);border:1px solid var(--line);border-radius:14px;padding:25px;color:var(--ink)}dialog::backdrop{background:#102d29aa}dialog button{margin:12px 8px 0 0}noscript{display:block;padding:20px;background:#fff2d9}
+@media(max-width:760px){.top{padding:15px 18px;flex-wrap:wrap;gap:12px}.brand{font-size:17px}.top nav{order:3;width:100%;justify-content:space-between;border-top:1px solid #ffffff22;padding-top:4px;font-size:12px}.mode{font-size:9px;padding:6px 9px}.order-note{font-size:9px}main{padding:25px 18px}.hero{grid-template-columns:1fr;gap:20px}h1{font-size:34px;letter-spacing:-1.2px;margin-top:10px}.session-box{padding:17px}.stats{grid-template-columns:repeat(3,1fr);margin-bottom:24px}.stat{padding:14px}.stat strong{font-size:25px}.stat span{font-size:10px}.cards{grid-template-columns:1fr}.card{padding:19px}.workspace{grid-template-columns:1fr;gap:18px}.panel{padding:18px}.pnl{grid-template-columns:1fr;gap:8px}.pnl>div{padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:4px}.pnl strong{font-size:21px;margin:0;text-align:right}.pnl small{grid-column:1/-1}.section-heading{align-items:center}.small-label{max-width:110px;text-align:right}.strip{align-items:flex-start}.strip label{width:100%}.strip select{width:100%;margin-top:5px}.technical dl{grid-template-columns:1fr;gap:3px}.technical dd{margin-bottom:10px}.record{grid-template-columns:1fr}.record .right{text-align:left}.report-head .actions{width:100%}.report-head .actions button{flex:1}.hint,.muted{overflow-wrap:anywhere}}
+</style></head><body>
+<header><div class="top"><div class="brand"><span class="logo" aria-hidden="true">BT</span>BOSS Trader</div><nav aria-label="Sections"><a href="#scan">01 · Scan</a><a href="#desk">02 · Watch & paper</a><a href="#report">03 · Session report</a></nav><div><div class="mode">DEMO / SYNTHETIC DATA</div><div class="order-note">NO REAL ORDERS</div></div></div></header>
+<main><noscript>This local dashboard needs JavaScript for the watch list and paper journal. No network is required. No real orders.</noscript>
+<section class="hero"><div><div class="eyebrow">Your offline research desk</div><h1>Review the setup.<br>Keep the paper trail.</h1><p class="muted">A small workspace for fixture observations and hypothetical paper records. No current market scan. No real execution.</p></div><div class="session-box"><div class="eyebrow">Last recorded fixture session</div><dl><dt>Source</dt><dd>Static synthetic Kraken-shaped HTTP fixtures</dd><dt>Fixture as-of</dt><dd id="asof"></dd><dt>Source revision</dt><dd id="revision"></dd></dl><button type="button" id="load-demo">Load demo scan <span aria-hidden="true">↗</span></button><p class="hint">Reopens the same embedded session. No request or new signal.</p></div></section>
+<div class="storage" id="storage-status" role="status"></div><div class="notice" id="storage-error" hidden></div>
+<div class="strip"><span>Research preview · USD spot pairs · 1h candles</span><label for="view-mode">Screen state <select id="view-mode"><option value="actual">Actual embedded fixture result</option><option value="empty">Presentation test: no qualifying setup</option><option value="blocked">Presentation test: blocked source</option></select></label></div>
+<div class="notice" id="test-notice" hidden>Presentation-only test view. Scanner output is unchanged. Watch and paper entry actions are paused.</div>
+<div class="stats" aria-label="Session overview"><div class="stat"><strong id="observed-count">3</strong><span>observed symbols</span></div><div class="stat"><strong id="candidate-count">0</strong><span>demo candidates / max 3</span></div><div class="stat"><strong id="watch-count">0</strong><span>WATCH</span></div><div class="stat"><strong id="other-count">0 / 0</strong><span>WAIT / BLOCKED</span></div><div class="stat"><strong id="record-count">0</strong><span>paper records</span></div></div>
+<section id="scan"><div class="section-heading"><div><h2>Scan notes</h2><p>Existing reversal rules. WATCH means monitoring only.</p></div><span class="small-label">Catalysts unverified<br>ENTRY READY unavailable</span></div><div id="empty-scan" class="empty" hidden></div><div class="cards" id="cards"></div></section>
+<div class="workspace" id="desk"><section class="panel"><div class="section-heading"><div><h2>Demo watch list</h2><p>Conditions saved with their source session.</p></div><span id="watch-total" class="tag">0 saved</span></div><div id="watch-list"></div></section>
+<section class="panel"><div class="section-heading"><div><h2>Paper journal</h2><p>Manual hypothetical records. USD only.</p></div><span class="tag">PAPER ONLY</span></div><div class="tabs" role="group" aria-label="Paper action"><button type="button" id="entry-tab" class="active" aria-pressed="true">Record paper entry</button><button type="button" id="exit-tab" aria-pressed="false">Record paper exit</button></div>
+<form id="entry-form" novalidate><div class="fields"><label>Demo pair<select name="symbol" aria-label="Entry pair"></select></label><label>Quote unit<input name="quote" value="USD" readonly aria-label="Entry quote unit"></label><label>Hypothetical price (USD)<input name="price" inputmode="decimal" autocomplete="off" placeholder="e.g. 100" required></label><label>Size by<select name="sizing"><option value="quantity">Base quantity</option><option value="notional">Notional in USD</option></select></label><label class="wide">Quantity / notional above<input name="size" inputmode="decimal" autocomplete="off" placeholder="Enter your hypothetical size" required></label><label>Entry fee (USD)<input name="fee" inputmode="decimal" value="0"></label><label>Slippage cost (USD, optional)<input name="slip" inputmode="decimal" placeholder="0"></label><label class="wide">Paper note (optional)<textarea name="note" maxlength="280" placeholder="Why record this hypothetical example?"></textarea></label></div><p class="form-foot">All prices are user-entered assumptions, not exchange fills. Slippage is an additional USD cost. Entry and invalidation price rules are not defined.</p><button class="primary submit" type="submit">Record paper entry</button></form>
+<form id="exit-form" novalidate hidden><div class="fields"><label class="wide">Open paper entry<select name="entryId" aria-label="Open paper entry"></select></label><label>Hypothetical exit price (USD)<input name="price" inputmode="decimal" autocomplete="off" required></label><label>Base quantity to close<input name="qty" inputmode="decimal" autocomplete="off" required></label><label>Exit fee (USD)<input name="fee" value="0" inputmode="decimal"></label><label>Slippage cost (USD, optional)<input name="slip" placeholder="0" inputmode="decimal"></label><label>Quote unit<input name="quote" value="USD" readonly aria-label="Exit quote unit"></label><label class="wide">Paper note (optional)<textarea name="note" maxlength="280"></textarea></label></div><p class="form-foot">Closes only the selected paper entry. Partial exits are allowed; available quantity is enforced. No real order is sent.</p><button class="primary submit" type="submit">Record paper exit</button></form><p id="feedback" class="feedback" role="status" aria-live="polite"></p></section></div>
+<section id="report" class="panel"><div class="report-head"><div><h2>Session report</h2><p class="hint">Demo journal only · realized results from your hypothetical inputs</p></div><div class="actions"><button id="export" type="button">Export demo journal</button><button id="clear" class="danger" type="button">Clear local demo data</button></div></div><div class="pnl"><div><span>Gross realized paper P&L</span><strong id="gross">$0.00 USD</strong><small>Hypothetical exit proceeds less entry notional</small></div><div class="net"><span>Net realized paper P&L</span><strong id="net">$0.00 USD</strong><small>Includes entered fees & slippage on both sides</small></div><div><span>Open paper entries</span><strong id="open-count">0</strong><small>Market mark & unrealized P&L unavailable</small></div></div><p class="hint">Entry fees and slippage are allocated proportionally on partial exits. Calculations use 8-decimal precision; display rounds to cents. No WATCH-based win rate or actual balance.</p><h3 style="margin-top:23px">Open paper positions</h3><div id="open-positions"></div><h3 style="margin-top:23px">Paper entries & exits</h3><div id="ledger" class="ledger"></div><h3 style="margin-top:23px">Recent activity</h3><ol class="activity" id="activity"></ol></section>
+<details class="technical"><summary>Source details & technical availability</summary><dl><dt>Scanner source revision</dt><dd id="full-revision"></dd><dt>Fixture SHA-256</dt><dd id="fixture-hash"></dd><dt>Session reference</dt><dd id="session-ref"></dd><dt>File generation time</dt><dd id="generated"></dd><dt>Availability</dt><dd>B1/B2/B3/B5 HOLD · B4 NO-GO · real reversal source admission HOLD. Existing close-only observer is separate and unchanged.</dd><dt>Storage</dt><dd>Versioned local browser data, demo only. One tab at a time. Export before clearing. Different browsers/file locations may not share local storage.</dd></dl></details>
+<footer class="foot"><span>BOSS Trader Lab · Personal research, paper only</span><span>Static fixtures ≠ current markets or validated profitability</span></footer>
+</main><dialog id="clear-dialog"><h2>Clear local demo data?</h2><p>This removes the demo watch list, paper records and activity in this browser. Export first if you want a copy.</p><button type="button" id="cancel-clear">Keep my records</button><button type="button" class="danger" id="confirm-clear">Yes, clear demo data</button></dialog>
+<script id="demo-data" type="application/json">{"B4": "NO-GO", "as_of": 1900000800, "as_of_text": "2030-03-17T18:00:00+00:00", "candidates": ["BTC/USD", "SOL/USD", "XRP/USD"], "fixture_sha256": "761c171e090bcfc14c8ab87ea4ce3a20b8278aa01b6445e0871438dc4fc8285b", "generated_at": "2026-11-07T00:32:31.472113+00:00", "id": "8016eb451e0086594c6c903bb270214fb1ab51da05134141363463c441edec4e", "live_source_admission": "HOLD", "mode": "DEMO_ONLY", "policy": "NO ORDERS", "reason": "OFFLINE_VALIDATED_RESEARCH_PREVIEW", "rows": {"BTC/USD": {"catalyst": "UNVERIFIED", "decision": "WATCH", "features": {"fresh_recovery": {"passed": true, "strength_bps": 6666}, "low_retest_hold": {"passed": true, "strength_bps": 10000}, "slowing_downside": {"passed": true, "strength_bps": 5000}, "volume_consistent": {"passed": true, "strength_bps": 5000}}, "fixture_only_closed_price_usd": 101.0, "invalidation_observation": "A later eligible low below the observed retest anchor would invalidate this research condition; no order.", "refusal": null, "score": 26666, "source_status": "VALIDATED_STATIC_DATA", "why_early": "Downside slowed, low retest held, fresh bounded recovery with consistent volume."}, "SOL/USD": {"catalyst": "UNVERIFIED", "decision": "WATCH", "features": {"fresh_recovery": {"passed": true, "strength_bps": 6666}, "low_retest_hold": {"passed": true, "strength_bps": 10000}, "slowing_downside": {"passed": true, "strength_bps": 5000}, "volume_consistent": {"passed": true, "strength_bps": 5000}}, "fixture_only_closed_price_usd": 101.0, "invalidation_observation": "A later eligible low below the observed retest anchor would invalidate this research condition; no order.", "refusal": null, "score": 26666, "source_status": "VALIDATED_STATIC_DATA", "why_early": "Downside slowed, low retest held, fresh bounded recovery with consistent volume."}, "XRP/USD": {"catalyst": "UNVERIFIED", "decision": "WATCH", "features": {"fresh_recovery": {"passed": true, "strength_bps": 6666}, "low_retest_hold": {"passed": true, "strength_bps": 10000}, "slowing_downside": {"passed": true, "strength_bps": 5000}, "volume_consistent": {"passed": true, "strength_bps": 5000}}, "fixture_only_closed_price_usd": 101.0, "invalidation_observation": "A later eligible low below the observed retest anchor would invalidate this research condition; no order.", "refusal": null, "score": 26666, "source_status": "VALIDATED_STATIC_DATA", "why_early": "Downside slowed, low retest held, fresh bounded recovery with consistent volume."}}, "source": "STATIC_SYNTHETIC_KRAKEN_HTTP_FIXTURES", "source_revision": "457531a92df4112957d3c3744c081a15f16858ed", "version": 1}</script><script>/* Exact 8-decimal paper arithmetic. No market calculations or network code. */
+(function(root){
+'use strict';
+const SCALE=100000000n, LIMIT=128*1024, SYMBOLS=['BTC/USD','XRP/USD','SOL/USD'];
+const fail=(s)=>{throw new Error(s);};
+const assert=(v,s)=>{if(!v)fail(s);};
+const exact=(v,keys)=>assert(v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).sort().join('|')===keys.slice().sort().join('|'),'Invalid saved structure');
+const text=(v,n)=>assert(typeof v==='string'&&v.length<=n,'Invalid saved text');
+const hash=(v,n)=>assert(typeof v==='string'&&new RegExp('^[a-f0-9]{'+n+'}$').test(v),'Invalid source reference');
+function amount(value,zero=false){
+ assert(typeof value==='string'&&/^\d{1,12}(?:\.\d{1,8})?$/.test(value),'Use a finite positive decimal, up to 8 decimal places');
+ const [a,b='']=value.split('.'), result=BigInt(a)*SCALE+BigInt(b.padEnd(8,'0'));
+ assert(zero?result>=0n:result>0n,zero?'Cost cannot be negative':'Price and quantity must be positive');return result;
+}
+function decimal(v){const sign=v<0n?'-':'';v=v<0n?-v:v;return sign+(v/SCALE).toString()+((v%SCALE)?'.'+(v%SCALE).toString().padStart(8,'0').replace(/0+$/,''):'');}
+function money(v){const sign=v<0n?'-':'';v=v<0n?-v:v;const cents=(v+500000n)/1000000n;return sign+'$'+(cents/100n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',')+'.'+(cents%100n).toString().padStart(2,'0')+' USD';}
+const product=(p,q)=>(p*q+SCALE/2n)/SCALE;
+const part=(total,q,original)=>(total*q+original/2n)/original;
+function session(model){
+ assert(model.mode==='DEMO_ONLY','Only demo sessions are supported');hash(model.id,64);hash(model.source_revision,40);
+ text(model.as_of_text,64);return {id:model.id,revision:model.source_revision,asOf:model.as_of_text,source:'DEMO_ONLY'};
+}
+function stamp(value){assert(typeof value==='string'&&/^\d{4}-\d\d-\d\dT[0-9:.+-]+Z$/.test(value)&&Number.isFinite(Date.parse(value)),'Invalid local record time');return value;}
+function totals(state){
+ const lots=new Map(), exits=[];let gross=0n,net=0n;
+ for(const r of state.records){
+  const price=amount(r.price),qty=amount(r.qty),fee=amount(r.fee,true),slip=amount(r.slip,true);
+  if(r.kind==='ENTRY'){
+   lots.set(r.id,{record:r,qty,remaining:qty,sold:0n,basis:product(price,qty),fee,slip,allocatedBasis:0n,allocatedFee:0n,allocatedSlip:0n});
+  }else{
+   const l=lots.get(r.entryId);assert(l,'Exit must reference an earlier paper entry');
+   assert(r.symbol===l.record.symbol&&r.session===l.record.session,'Exit source or symbol mismatch');
+   assert(qty<=l.remaining,'Exit quantity exceeds available paper quantity');
+   const sold=l.sold+qty,basis=part(l.basis,sold,l.qty),entryFee=part(l.fee,sold,l.qty),entrySlip=part(l.slip,sold,l.qty);
+   const g=product(price,qty)-(basis-l.allocatedBasis),n=g-(entryFee-l.allocatedFee)-(entrySlip-l.allocatedSlip)-fee-slip;
+   gross+=g;net+=n;exits.push({record:r,gross:g,net:n});
+   Object.assign(l,{sold,remaining:l.remaining-qty,allocatedBasis:basis,allocatedFee:entryFee,allocatedSlip:entrySlip});
+  }
+ }
+ return {gross,net,exits,lots:[...lots.values()],open:[...lots.values()].filter(l=>l.remaining>0n)};
+}
+function validate(state){
+ exact(state,['version','mode','sessions','watch','records','activity']);
+ assert(state.version===1&&state.mode==='DEMO_ONLY','Unsupported journal version or source');
+ assert(Array.isArray(state.sessions)&&state.sessions.length<=20,'Session limit reached');
+ const sessions=new Set();for(const s of state.sessions){exact(s,['id','revision','asOf','source']);hash(s.id,64);hash(s.revision,40);text(s.asOf,64);assert(s.source==='DEMO_ONLY'&&!sessions.has(s.id),'Invalid or duplicate source session');sessions.add(s.id);}
+ assert(Array.isArray(state.watch)&&state.watch.length<=12,'Watch list limit reached');
+ const watches=new Set();for(const w of state.watch){
+  exact(w,['session','symbol','why','invalidation','features']);assert(sessions.has(w.session)&&SYMBOLS.includes(w.symbol),'Invalid watch source');
+  const key=w.session+w.symbol;assert(!watches.has(key),'Duplicate watch');watches.add(key);text(w.why,500);text(w.invalidation,500);
+  exact(w.features,['slowing_downside','low_retest_hold','fresh_recovery','volume_consistent']);
+  for(const f of Object.values(w.features)){exact(f,['passed','strength_bps']);assert(typeof f.passed==='boolean'&&Number.isInteger(f.strength_bps)&&f.strength_bps>=0&&f.strength_bps<=10000,'Invalid watch condition');}
+ }
+ assert(Array.isArray(state.records)&&state.records.length<=200,'Paper record limit reached; export before reset');
+ const ids=new Set();for(const r of state.records){
+  exact(r,['id','kind','session','symbol','quote','price','qty','fee','slip','note','at','entryId']);hash(r.id,32);
+  assert(!ids.has(r.id),'Duplicate submission');ids.add(r.id);assert(['ENTRY','EXIT'].includes(r.kind),'Invalid paper record');
+  assert(sessions.has(r.session)&&SYMBOLS.includes(r.symbol)&&r.quote==='USD','Quote/source mismatch; USD demo only');
+  amount(r.price);amount(r.qty);amount(r.fee,true);amount(r.slip,true);text(r.note,280);stamp(r.at);
+  assert(r.kind==='ENTRY'?r.entryId===null:typeof r.entryId==='string','Invalid paper entry reference');
+ }
+ totals(state);assert(Array.isArray(state.activity)&&state.activity.length<=80,'Invalid activity log');
+ for(const a of state.activity){exact(a,['text','at']);text(a.text,300);stamp(a.at);}
+ assert(JSON.stringify(state).length<=LIMIT,'Journal storage limit reached');return state;
+}
+function log(s,message,at){s.activity.unshift({text:message,at:stamp(at)});s.activity=s.activity.slice(0,80);}
+function load(raw,model,at){
+ let state;if(raw===null)state={version:1,mode:'DEMO_ONLY',sessions:[],watch:[],records:[],activity:[]};
+ else{assert(typeof raw==='string'&&raw.length<=LIMIT,'Saved journal too large');state=validate(JSON.parse(raw));}
+ const current=session(model);
+ if(!state.sessions.some(s=>s.id===current.id)){assert(state.sessions.length<20,'Session limit reached; export before reset');state.sessions.push(current);log(state,'Recorded static demo session '+current.id.slice(0,8),at);}
+ return validate(state);
+}
+const clone=s=>JSON.parse(JSON.stringify(validate(s)));
+function watch(s,model,symbol,at){
+ s=clone(s);assert(s.sessions.some(x=>x.id===model.id),'Unknown session');
+ const row=model.rows[symbol];assert(SYMBOLS.includes(symbol)&&row&&row.decision==='WATCH'&&row.features,'Only a demo WATCH can be added');
+ assert(!s.watch.some(w=>w.session===model.id&&w.symbol===symbol),'Already watching this demo setup');
+ s.watch.push({session:model.id,symbol,why:row.why_early||'Not defined',invalidation:row.invalidation_observation||'Not defined',features:row.features});
+ log(s,'Added '+symbol+' to demo watch',at);return validate(s);
+}
+function unwatch(s,sessionId,symbol,at){s=clone(s);s.watch=s.watch.filter(w=>!(w.session===sessionId&&w.symbol===symbol));log(s,'Removed '+symbol+' from demo watch',at);return validate(s);}
+function entry(s,model,input){
+ s=clone(s);assert(model.rows[input.symbol]&&model.rows[input.symbol].decision==='WATCH','No qualifying demo setup for this paper entry');
+ assert(input.quote==='USD'&&SYMBOLS.includes(input.symbol),'Quote mismatch; use the exact USD pair');
+ const price=amount(input.price),size=amount(input.size);assert(['quantity','notional'].includes(input.sizing),'Invalid paper sizing');
+ const qty=input.sizing==='quantity'?size:size*SCALE/price;assert(qty>0n,'Notional is too small at 8-decimal precision');
+ const r={id:input.id,kind:'ENTRY',session:model.id,symbol:input.symbol,quote:input.quote,price:decimal(price),qty:decimal(qty),
+          fee:decimal(amount(input.fee,true)),slip:decimal(amount(input.slip,true)),note:input.note,at:input.at,entryId:null};
+ s.records.push(r);log(s,'Recorded hypothetical paper entry • '+input.symbol,input.at);return validate(s);
+}
+function exit(s,input){
+ s=clone(s);const lot=totals(s).open.find(l=>l.record.id===input.entryId);assert(lot,'Select an open paper entry');
+ assert(input.quote==='USD','Quote mismatch; exit costs and prices must be USD');
+ const r={id:input.id,kind:'EXIT',session:lot.record.session,symbol:lot.record.symbol,quote:input.quote,
+          price:decimal(amount(input.price)),qty:decimal(amount(input.qty)),fee:decimal(amount(input.fee,true)),
+          slip:decimal(amount(input.slip,true)),note:input.note,at:input.at,entryId:input.entryId};
+ s.records.push(r);log(s,'Recorded hypothetical paper exit • '+r.symbol,input.at);return validate(s);
+}
+const api={amount,decimal,money,product,totals,validate,load,watch,unwatch,entry,exit,LIMIT};
+if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.Paper029=Object.freeze(api);
+})(typeof globalThis==='undefined'?this:globalThis);
+</script><script>(function(){
+'use strict';
+const model=JSON.parse(document.getElementById('demo-data').textContent),P=Paper029,KEY='boss-trader-demo-paper-v1';
+const $=id=>document.getElementById(id),now=()=>new Date().toISOString();
+const labels={slowing_downside:'Downside slowing',low_retest_hold:'Low retest held',fresh_recovery:'Fresh recovery',volume_consistent:'Volume consistent'};
+const node=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
+const uid=()=>Array.from(crypto.getRandomValues(new Uint8Array(16)),n=>n.toString(16).padStart(2,'0')).join('');
+let state,lastRaw=null,storageAvailable=true,locked=false,view='actual',entryToken=uid(),exitToken=uid();
+function feedback(message,error=false){$('feedback').textContent=message;$('feedback').className='feedback'+(error?' error':'');}
+function storageMessage(message,error=false){$(error?'storage-error':'storage-status').textContent=message;if(error)$('storage-error').hidden=false;}
+try{lastRaw=localStorage.getItem(KEY);}catch(_){storageAvailable=false;}
+try{state=P.load(lastRaw,model,now());}catch(_){locked=true;state=P.load(null,model,now());storageMessage('Saved demo data is unreadable or unsupported. Changes are paused. Existing data has not been overwritten; clear only after confirmation.',true);}
+function write(next,reset=false){
+ if(locked&&!reset)throw new Error('Changes paused. Reload or explicitly clear unsupported saved data.');
+ const raw=JSON.stringify(P.validate(next));
+ if(storageAvailable){
+  let current;try{current=localStorage.getItem(KEY);}catch(_){storageAvailable=false;}
+  if(storageAvailable&&current!==lastRaw&&!reset){locked=true;throw new Error('Demo journal changed in another tab. Reload before recording.');}
+  if(storageAvailable){try{localStorage.setItem(KEY,raw);lastRaw=raw;}catch(_){storageAvailable=false;}}
+ }
+ state=next;
+ storageMessage(storageAvailable?'Saved locally in this browser • demo records only':'Browser storage unavailable • changes kept in this tab only; export before leaving');
+ render();
+}
+if(!locked)write(state);
+else render();
+window.addEventListener('storage',e=>{if(e.key===KEY){locked=true;storageMessage('Demo data changed in another tab. Reload before making changes.',true);render();}});
+function rows(){
+ if(view==='actual')return model.rows;
+ const out={};for(const [symbol,r] of Object.entries(model.rows))out[symbol]={...r,decision:view==='empty'?'WAIT':'BLOCKED',features:null,score:null,why_early:null,invalidation_observation:null,fixture_only_closed_price_usd:null,refusal:view==='blocked'?'Presentation test: source unavailable':null};return out;
+}
+function render(){
+ $('asof').textContent=model.as_of_text+' · fixture coordinate, not current time';$('revision').textContent=model.source_revision.slice(0,12);
+ $('full-revision').textContent=model.source_revision;$('fixture-hash').textContent=model.fixture_sha256;$('session-ref').textContent=model.id;
+ $('generated').textContent=model.generated_at+' · local system clock; not source time';
+ const shown=rows(),values=Object.values(shown),watch=values.filter(r=>r.decision==='WATCH').length;
+ $('observed-count').textContent=values.length;$('candidate-count').textContent=view==='actual'?model.candidates.length:0;
+ $('watch-count').textContent=watch;$('other-count').textContent=values.filter(r=>r.decision==='WAIT').length+' / '+values.filter(r=>r.decision==='BLOCKED').length;
+ $('record-count').textContent=state.records.length;$('test-notice').hidden=view==='actual';
+ $('empty-scan').hidden=watch>0;$('empty-scan').textContent=values.every(r=>r.decision==='BLOCKED')?'Source unavailable. No candidate can be admitted.':'No qualifying setup.';
+ const cards=$('cards');cards.replaceChildren();
+ const ordered=[...model.candidates,...Object.keys(shown).filter(s=>!model.candidates.includes(s))];
+ for(const symbol of ordered){
+  const r=shown[symbol],card=node('article',undefined,'card');card.dataset.symbol=symbol;
+  const top=node('div',undefined,'card-top'),symbolLabel=node('div',undefined,'symbol');
+  symbolLabel.append(node('span',symbol.split('/')[0].slice(0,1),'coin'),node('span',symbol));top.append(symbolLabel,node('span',r.decision,'tag '+r.decision));card.append(top);
+  const price=r.fixture_only_closed_price_usd;card.append(node('div',price===null?'Unavailable':P.money(P.amount(String(price))),'ref'),node('div','Reference price • fixture only','hint'));
+  const checks=node('ul',undefined,'checks');for(const [key,label] of Object.entries(labels)){const line=node('li');line.append(node('span',label),node('span',r.features?(r.features[key].passed?'✓ Pass':'Wait'):'Unavailable','check'));checks.append(line);}card.append(checks);
+  card.append(node('p',r.score===null?'Rule score unavailable':'Rule score '+r.score.toLocaleString()+' / 40,000 · ranking, not confidence','hint'));
+  const why=node('div',undefined,'why');why.append(node('b','Rule-based explanation'),node('span',r.why_early||(r.decision==='WAIT'?'No qualifying demo setup.':'Source unavailable; research preview blocked.')));card.append(why);
+  const detail=node('details');detail.append(node('summary','Invalidation & availability'),node('p',r.invalidation_observation||'Invalidation observation: Not defined'),node('p','Entry price: Not defined · Numeric invalidation: Not defined'),node('p','Catalyst: UNVERIFIED · no real BUY authorization'));
+  if(r.refusal)detail.append(node('p',r.refusal));card.append(detail);
+  const button=node('button',state.watch.some(w=>w.session===model.id&&w.symbol===symbol)?'Added to demo watch':'Add to demo watch');button.type='button';button.dataset.watch=symbol;
+  button.disabled=locked||r.decision!=='WATCH'||state.watch.some(w=>w.session===model.id&&w.symbol===symbol);
+  button.addEventListener('click',()=>{try{write(P.watch(state,model,symbol,now()));feedback('Saved '+symbol+' to the demo watch list.');}catch(e){feedback(e.message,true);}});card.append(button);cards.append(card);
+ }
+ const watchList=$('watch-list');watchList.replaceChildren();$('watch-total').textContent=state.watch.length+' saved';
+ if(!state.watch.length)watchList.append(node('div','Add a demo WATCH above to keep its recorded conditions here.','empty'));
+ for(const w of state.watch){
+  const item=node('div',undefined,'watch-item'),head=node('div',undefined,'watch-actions');head.append(node('strong',w.symbol+' • monitoring only'));
+  const remove=node('button','Remove');remove.type='button';remove.disabled=locked;remove.addEventListener('click',()=>{try{write(P.unwatch(state,w.session,w.symbol,now()));}catch(e){feedback(e.message,true);}});head.append(remove);item.append(head);
+  item.append(node('p',w.why),node('p',Object.entries(w.features).map(([k,f])=>labels[k]+': '+(f.passed?'pass':'wait')).join(' · ')),node('p',w.invalidation),node('small','Demo source session '+w.session.slice(0,12)));watchList.append(item);
+ }
+ const entryForm=$('entry-form'),selected=entryForm.elements.symbol.value;entryForm.elements.symbol.replaceChildren();
+ for(const [symbol,r] of Object.entries(model.rows))if(r.decision==='WATCH'){const o=node('option',symbol);o.value=symbol;entryForm.elements.symbol.append(o);}
+ if(selected)entryForm.elements.symbol.value=selected;
+ entryForm.querySelector('button[type=submit]').disabled=locked||view!=='actual'||!entryForm.elements.symbol.options.length;
+ const summary=P.totals(state);$('gross').textContent=P.money(summary.gross);$('net').textContent=P.money(summary.net);$('open-count').textContent=summary.open.length;
+ const exitForm=$('exit-form'),chosen=exitForm.elements.entryId.value;exitForm.elements.entryId.replaceChildren();
+ const blank=node('option',summary.open.length?'Choose an open paper entry':'No open paper entries');blank.value='';exitForm.elements.entryId.append(blank);
+ for(const lot of summary.open){const o=node('option',lot.record.symbol+' · '+P.decimal(lot.remaining)+' available · '+lot.record.id.slice(0,8));o.value=lot.record.id;exitForm.elements.entryId.append(o);}
+ if(summary.open.some(l=>l.record.id===chosen))exitForm.elements.entryId.value=chosen;
+ exitForm.querySelector('button[type=submit]').disabled=locked||!summary.open.length;
+ const positions=$('open-positions');positions.replaceChildren();if(!summary.open.length)positions.append(node('p','No open paper positions.','hint'));
+ for(const lot of summary.open){const e=node('div',undefined,'open-position');e.append(node('strong',lot.record.symbol+' · '+P.decimal(lot.remaining)+' '+lot.record.symbol.split('/')[0]),node('p','Remaining entry notional '+P.money(lot.basis-lot.allocatedBasis)+' · unallocated entry costs '+P.money(lot.fee-lot.allocatedFee+lot.slip-lot.allocatedSlip)),node('p','Market mark: unavailable · Unrealized P&L: unavailable','hint'));positions.append(e);}
+ const ledger=$('ledger');ledger.replaceChildren();if(!state.records.length)ledger.append(node('div','No paper records yet. Enter a hypothetical price and size to start.','empty'));
+ for(const r of [...state.records].reverse()){
+  const row=node('div',undefined,'record'),left=node('div');left.append(node('strong',r.kind==='ENTRY'?'Paper entry • '+r.symbol:'Paper exit • '+r.symbol),node('div',r.qty+' '+r.symbol.split('/')[0]+' at '+P.money(P.amount(r.price))+' • hypothetical'),node('small',r.at+' · demo '+r.session.slice(0,8)));
+  const right=node('div',undefined,'right');right.append(node('div','Fee '+P.money(P.amount(r.fee,true))+' · slippage '+P.money(P.amount(r.slip,true))));
+  const exitResult=summary.exits.find(e=>e.record.id===r.id);if(exitResult)right.append(node('strong','Net realized '+P.money(exitResult.net)));
+  row.append(left,right);if(r.note)row.append(node('div',r.note,'record-note'));ledger.append(row);
+ }
+ $('activity').replaceChildren(...state.activity.map(a=>node('li',a.text+' · '+a.at)));
+ $('export').disabled=locked;
+}
+$('load-demo').addEventListener('click',()=>{view='actual';$('view-mode').value='actual';render();feedback('Embedded demo loaded. Same source session; no network request.');});
+$('view-mode').addEventListener('change',e=>{view=e.target.value;render();});
+function tab(kind){const entry=kind==='entry';$('entry-form').hidden=!entry;$('exit-form').hidden=entry;for(const k of ['entry','exit']){$(k+'-tab').classList.toggle('active',k===kind);$(k+'-tab').setAttribute('aria-pressed',String(k===kind));}feedback('');}
+$('entry-tab').addEventListener('click',()=>tab('entry'));$('exit-tab').addEventListener('click',()=>tab('exit'));
+$('entry-form').addEventListener('submit',e=>{e.preventDefault();try{if(view!=='actual')throw new Error('Presentation-only view; paper entry is paused.');const f=e.target;const input=Object.fromEntries(new FormData(f));input.id=entryToken;input.at=now();input.slip=input.slip||'0';write(P.entry(state,model,input));entryToken=uid();f.reset();feedback('Paper entry recorded. Hypothetical only; no order sent.');}catch(err){feedback(err.message,true);}});
+$('exit-form').addEventListener('submit',e=>{e.preventDefault();try{const f=e.target,input=Object.fromEntries(new FormData(f));input.id=exitToken;input.at=now();input.slip=input.slip||'0';write(P.exit(state,input));exitToken=uid();f.reset();feedback('Paper exit recorded. Hypothetical only; no order sent.');}catch(err){feedback(err.message,true);}});
+$('clear').addEventListener('click',()=>$('clear-dialog').showModal());$('cancel-clear').addEventListener('click',()=>$('clear-dialog').close());
+$('confirm-clear').addEventListener('click',()=>{try{locked=false;write(P.load(null,model,now()),true);$('storage-error').hidden=true;entryToken=uid();exitToken=uid();$('entry-form').reset();$('exit-form').reset();$('clear-dialog').close();feedback(storageAvailable?'Local demo data cleared.':'Demo data cleared in this tab only. Browser storage is unavailable; any previously saved data could not be changed.');}catch(e){feedback(e.message,true);}});
+$('export').addEventListener('click',()=>{try{const raw=JSON.stringify(P.validate(state),null,2),url=URL.createObjectURL(new Blob([raw],{type:'application/json'})),a=node('a');a.href=url;a.download='boss-trader-demo-journal.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){feedback(e.message,true);}});
+})();
+</script></body></html>
