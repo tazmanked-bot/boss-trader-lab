@@ -40,10 +40,10 @@ class DashboardTests(unittest.TestCase):
     def test_fixture_coordinate_distinct_from_generation_clock(self):
         model=self.model();self.assertEqual(model['as_of'],1900000800)
         self.assertTrue(model['as_of_text'].startswith('2030-'));self.assertTrue(model['generated_at'].startswith('2026-'))
-    def test_generated_document_is_self_contained_and_network_disabled(self):
+    def test_generated_document_is_self_contained_with_manual_same_origin_route(self):
         html=dashboard.render(self.model());parser=Embedded();parser.feed(html)
         self.assertEqual(json.loads(parser.payload),self.model());self.assertFalse(parser.external)
-        self.assertIn("connect-src 'none'",html);self.assertIn("form-action 'none'",html)
+        self.assertIn("connect-src 'self'",html);self.assertIn("form-action 'none'",html)
         for token in ('__MODEL__','__APP__','__ENGINE__'):self.assertNotIn(token,html)
         self.assertIn('DEMO / SYNTHETIC DATA',html);self.assertIn('NO REAL ORDERS',html)
         self.assertLess(len(html.encode()),512*1024)

@@ -1,0 +1,18 @@
+{
+  "status": "BLOCKED",
+  "stage": "browser_launch",
+  "launch_attempts": 1,
+  "data": "INVENTED_BINANCE_SHAPED_FIXTURES_NOT_AUTHENTIC_MARKET_DATA",
+  "checks": [],
+  "screenshots": [],
+  "live_fetch": "UNVERIFIED",
+  "native_persistence": "UNVERIFIED",
+  "blocker": {
+    "type": "TargetClosedError",
+    "message": "BrowserType.launch_persistent_context: Target page, context or browser has been closed",
+    "details": [
+      "[pid=5081][err] [5081:5081:1107/115701.932014:ERROR:third_party/crashpad/crashpad/util/linux/socket.cc:45] setsockopt: Operation not permitted (1)",
+      "- [pid=5081][err] [5081:5081:1107/115701.932014:ERROR:third_party/crashpad/crashpad/util/linux/socket.cc:45] setsockopt: Operation not permitted (1)"
+    ]
+  }
+}
