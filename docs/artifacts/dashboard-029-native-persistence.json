@@ -1,0 +1,22 @@
+{
+  "scope": "NATIVE_FILE_ORIGIN",
+  "storage": "NATIVE_LOCALSTORAGE_NO_REPLACEMENT",
+  "html_sha256": "839c30a3fd469005815668fccf7a50a24ef79be2e249fe54fece95d036c1a86c",
+  "launch_attempts": 1,
+  "reload": "NOT_TESTED",
+  "tab_reopen": "NOT_TESTED",
+  "browser_restart": "NOT_TESTED",
+  "checks": [],
+  "external_document_requests": [],
+  "screenshots": "NOT_CAPTURED",
+  "status": "BLOCKED",
+  "stage": "browser_launch",
+  "blocker": {
+    "type": "TargetClosedError",
+    "message": "BrowserType.launch_persistent_context: Target page, context or browser has been closed",
+    "details": [
+      "[pid=3475][err] [3475:3475:1107/071736.343468:ERROR:third_party/crashpad/crashpad/util/linux/socket.cc:45] setsockopt: Operation not permitted (1)",
+      "- [pid=3475][err] [3475:3475:1107/071736.343468:ERROR:third_party/crashpad/crashpad/util/linux/socket.cc:45] setsockopt: Operation not permitted (1)"
+    ]
+  }
+}

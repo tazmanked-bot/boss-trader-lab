@@ -87,3 +87,70 @@ Smallest owner action: download/open the reviewed HTML in the intended phone/des
 
 STOP FOR OWNER AND BOSS AI REVIEW.
 
+
+## CODEX 029 follow-up — 2026-11-07
+
+Starting Draft PR #54 head: `2f9bfd33eec5444959aee8ceb719b6d430ded1ef`.
+Accepted design preserved: the only UI change removes the unsupported arrow after
+**Load demo scan**. The standalone HTML was regenerated. Calculations and runtime
+journal behavior are unchanged.
+
+### Current verification
+
+| Command | Result |
+| --- | --- |
+| `python -B -m unittest tests.test_dashboard_029 -v` | 10 passed, 0.021s |
+| `node tests/test_paper_029.cjs` | 26 passed |
+| `python -B -m unittest discover -s tests -v` | 485 passed, 6.261s, no skips |
+| `python -B tests/browser_native_persistence_029.py --run` | BLOCKED at browser launch; one attempt, exit 2 |
+
+The new engine regression tests two partial closes across serialization: entry
+2 at 100, entry fee 1 and slippage 0.5; each exit 1 at 110, fee 0.5 and slippage
+0.25. First gross/net are 10/8.5 USD; final gross/net are 20/17 USD, no open
+quantity. Source/session identity and watch survive serialization without a
+second session. This is arithmetic/serialization evidence, not native storage.
+
+[Native capability evidence](artifacts/dashboard-029-native-persistence.json)
+records the exact generated HTML SHA-256 and failure. Installed Chromium with
+its sandbox enabled failed at launch: `TargetClosedError`, with
+`setsockopt: Operation not permitted (1)`. No permission escalation, policy
+override, weaker isolation, storage replacement or retry was attempted.
+Native file-origin reload, same-profile tab reopen, and browser restart are
+all **NOT TESTED**. Native persistence remains an evidence gap. No fresh
+screenshots were captured. The four screenshots and controlled browser evidence
+above are historical artifacts from starting head `2f9bfd33eec5444959aee8ceb719b6d430ded1ef`,
+not evidence of this revised HTML or native persistence.
+
+### Reproducible owner acceptance
+
+Use an already permitted ordinary browser and the reviewed generated
+`docs/artifacts/boss-trader-demo-029.html`, opened at one stable file path and
+browser profile. Do not substitute storage or change browser security policy.
+
+1. Add BTC/USD to watch. Record an invented entry at 100 USD, quantity 2,
+   fee 1 USD, slippage 0.5 USD. Record the source/session ID.
+2. Reload. Verify watch and entry persist with unchanged source ID and exactly
+   one session. Close the tab and reopen the same file path in the same browser
+   profile. Verify the same state. These are two distinct checks.
+3. Exit quantity 1 at 110 USD with fee 0.5 and slippage 0.25 USD. Expect gross
+   10 USD, net 8.50 USD and one open quantity. Reload and verify persistence.
+4. Repeat that exit for the remaining quantity. Expect gross 20 USD, net 17 USD,
+   zero open entries and conserved total entry costs of 1.50 USD.
+5. Export JSON. Verify one entry, two exits, unchanged source/session identities,
+   watch state and no duplicate session. Browser restart is a separate optional
+   check and must be reported separately from reload and tab reopening.
+
+The opt-in script `tests/browser_native_persistence_029.py --run` encodes these
+checks using installed Playwright/Chromium, native localStorage and a temporary
+profile; it does not install software or start a server. Run only where browser
+execution is already permitted. It takes one launch attempt and writes an honest
+failure record if blocked; fresh desktop/390px captures require native success.
+Do not interpret a different origin or profile as the same persistence test.
+
+Smallest safe owner action: run the native acceptance in the intended permitted
+browser and attach its result before integration review. PR #54 stays Draft and
+unmerged; Issue #53 remains open. PR #52 is not a dependency. B1/B2/B3/B5 HOLD,
+B4 NO-GO, NO ORDERS remain unchanged. No live requests, workflow dispatch,
+installation, deployment or ZUMERAVO access.
+
+STOP FOR OWNER AND BOSS AI REVIEW.

@@ -47,6 +47,10 @@ class DashboardTests(unittest.TestCase):
         for token in ('__MODEL__','__APP__','__ENGINE__'):self.assertNotIn(token,html)
         self.assertIn('DEMO / SYNTHETIC DATA',html);self.assertIn('NO REAL ORDERS',html)
         self.assertLess(len(html.encode()),512*1024)
+    def test_load_demo_label_is_plain_text_without_missing_glyph(self):
+        html=dashboard.render(self.model())
+        self.assertIn('id="load-demo">Load demo scan</button>',html)
+        self.assertNotIn('↗',html)
     def test_unsafe_text_cannot_close_embedded_json_script(self):
         model=self.model();bad='</script><script>window.stolen=true</script><img src=x onerror=alert(1)>'
         model['rows']['BTC/USD']['why_early']=bad
