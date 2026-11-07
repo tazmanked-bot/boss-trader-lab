@@ -39,6 +39,7 @@ def render(model):
     payload=payload.replace('&','\\u0026').replace('<','\\u003c').replace('>','\\u003e')
     template=(ASSETS/'screen.html').read_text(encoding='utf-8')
     for token,value in (('__MODEL__',payload),('__ENGINE__',(ASSETS/'paper.js').read_text()),
+                        ('__RESTORE__',(ASSETS/'restore.js').read_text()),
                         ('__APP__',(ASSETS/'app.js').read_text())):
         if template.count(token)!=1:raise ValueError('Invalid dashboard template')
         template=template.replace(token,value)

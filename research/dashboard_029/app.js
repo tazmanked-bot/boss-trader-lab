@@ -81,7 +81,7 @@ function render(){
   row.append(left,right);if(r.note)row.append(node('div',r.note,'record-note'));ledger.append(row);
  }
  $('activity').replaceChildren(...state.activity.map(a=>node('li',a.text+' · '+a.at)));
- $('export').disabled=locked;
+ $('export').disabled=locked;$('restore').disabled=locked;
 }
 $('load-demo').addEventListener('click',()=>{view='actual';$('view-mode').value='actual';render();feedback('Embedded demo loaded. Same source session; no network request.');});
 $('view-mode').addEventListener('change',e=>{view=e.target.value;render();});
@@ -91,5 +91,34 @@ $('entry-form').addEventListener('submit',e=>{e.preventDefault();try{if(view!=='
 $('exit-form').addEventListener('submit',e=>{e.preventDefault();try{const f=e.target,input=Object.fromEntries(new FormData(f));input.id=exitToken;input.at=now();input.slip=input.slip||'0';write(P.exit(state,input));exitToken=uid();f.reset();feedback('Paper exit recorded. Hypothetical only; no order sent.');}catch(err){feedback(err.message,true);}});
 $('clear').addEventListener('click',()=>$('clear-dialog').showModal());$('cancel-clear').addEventListener('click',()=>$('clear-dialog').close());
 $('confirm-clear').addEventListener('click',()=>{try{locked=false;write(P.load(null,model,now()),true);$('storage-error').hidden=true;entryToken=uid();exitToken=uid();$('entry-form').reset();$('exit-form').reset();$('clear-dialog').close();feedback(storageAvailable?'Local demo data cleared.':'Demo data cleared in this tab only. Browser storage is unavailable; any previously saved data could not be changed.');}catch(e){feedback(e.message,true);}});
-$('export').addEventListener('click',()=>{try{const raw=JSON.stringify(P.validate(state),null,2),url=URL.createObjectURL(new Blob([raw],{type:'application/json'})),a=node('a');a.href=url;a.download='boss-trader-demo-journal.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){feedback(e.message,true);}});
+
+const recovery=Restore030.create(P,model,()=>state,next=>write(next),now);
+let restoreRead=0;
+function cancelRestore(){restoreRead++;recovery.cancel();$('restore-file').value='';$('restore-dialog').close();}
+$('restore').addEventListener('click',()=>{restoreRead++;recovery.cancel();$('restore-file').value='';$('restore-file').click();});
+$('restore-file').addEventListener('change',async e=>{
+ const ticket=++restoreRead;recovery.cancel();
+ try{
+  if(locked)throw new Error('Changes paused. Reload before restoring.');
+  const files=e.target.files;
+  if(!files||files.length!==1)throw new Error('Choose exactly one local JSON journal file.');
+  const file=files[0];
+  if(!/\.json$/i.test(file.name))throw new Error('Choose a local .json journal backup.');
+  if(file.size>P.LIMIT)throw new Error('Backup exceeds journal storage limit (128 KiB).');
+  const raw=await file.text();if(ticket!==restoreRead)return;
+  if(locked)throw new Error('Journal changed. Reload before restoring.');
+  const preview=recovery.preview(raw);
+  const describe=(label,s)=>label+': '+s.sessions+' sessions, '+s.watches+' watches, '+s.entries+' entries, '+s.exits+' exits; gross '+s.gross+'; net '+s.net;
+  $('restore-preview').textContent=[describe('Backup',preview.backup),describe('Current journal (will be replaced)',preview.current),describe('After replacement (includes displayed fixture session)',preview.replacement)].join('\n');
+  $('restore-storage').textContent=storageAvailable?'Replacement will be saved locally if browser storage remains available.':'MEMORY ONLY: browser storage unavailable. Replacement stays in this tab only; export before leaving.';
+  $('restore-dialog').showModal();
+ }catch(err){recovery.cancel();feedback('Restore refused: '+err.message,true);}
+});
+$('cancel-restore').addEventListener('click',cancelRestore);
+$('restore-dialog').addEventListener('cancel',e=>{e.preventDefault();cancelRestore();});
+$('confirm-restore').addEventListener('click',()=>{
+ try{recovery.confirm();entryToken=uid();exitToken=uid();$('restore-dialog').close();$('restore-file').value='';feedback(storageAvailable?'Demo journal replaced and saved locally. User-supplied synthetic records only.':'Demo journal replaced IN THIS TAB ONLY. Storage unavailable; export before leaving.');}
+ catch(err){$('restore-dialog').close();feedback('Restore refused: '+err.message,true);}
+});
+$('export').addEventListener('click',()=>{try{const raw=JSON.stringify(P.validate(state));if(new TextEncoder().encode(raw).length>P.LIMIT)throw new Error('Journal exceeds backup byte limit; no backup file created.');const url=URL.createObjectURL(new Blob([raw],{type:'application/json'})),a=node('a');a.href=url;a.download='boss-trader-demo-journal.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){feedback(e.message,true);}});
 })();
