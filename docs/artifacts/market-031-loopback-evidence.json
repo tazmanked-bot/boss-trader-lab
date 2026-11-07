@@ -1,0 +1,10 @@
+{
+  "scope": "LOOPBACK_ONLY_WITH_INVENTED_PROVIDER_FIXTURES",
+  "status": "BLOCKED",
+  "external_requests": 0,
+  "checks": [],
+  "blocker": {
+    "type": "PermissionError",
+    "message": "[Errno 1] Operation not permitted"
+  }
+}
