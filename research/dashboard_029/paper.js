@@ -97,6 +97,12 @@ function exit(s,input){
           slip:decimal(amount(input.slip,true)),note:input.note,at:input.at,entryId:input.entryId};
  s.records.push(r);log(s,'Recorded hypothetical paper exit • '+r.symbol,input.at);return validate(s);
 }
-const api={amount,decimal,money,product,totals,validate,load,watch,unwatch,entry,exit,LIMIT};
+function restore(raw,model,at){
+ assert(typeof raw==='string'&&new TextEncoder().encode(raw).length<=LIMIT,'Backup exceeds journal storage limit');
+ const backup=validate(JSON.parse(raw)),current=session(model),existing=backup.sessions.find(s=>s.id===current.id);
+ if(existing)assert(['id','revision','asOf','source'].every(k=>existing[k]===current[k]),'Backup conflicts with current demo session metadata');
+ return load(raw,model,at);
+}
+const api={restore,amount,decimal,money,product,totals,validate,load,watch,unwatch,entry,exit,LIMIT};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.Paper029=Object.freeze(api);
 })(typeof globalThis==='undefined'?this:globalThis);

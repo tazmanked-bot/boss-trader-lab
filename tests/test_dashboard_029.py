@@ -47,6 +47,17 @@ class DashboardTests(unittest.TestCase):
         for token in ('__MODEL__','__APP__','__ENGINE__'):self.assertNotIn(token,html)
         self.assertIn('DEMO / SYNTHETIC DATA',html);self.assertIn('NO REAL ORDERS',html)
         self.assertLess(len(html.encode()),512*1024)
+    def test_restore_is_local_bounded_preview_with_explicit_confirmation(self):
+        html=dashboard.render(self.model())
+        self.assertIn('id="restore" type="button">Restore demo journal</button>',html)
+        self.assertIn('id="restore-file" type="file"',html)
+        self.assertIn('id="confirm-restore"',html)
+        self.assertIn('id="cancel-restore"',html)
+        self.assertLess(html.index('if(file.size>P.LIMIT)'),html.index('await file.text()'))
+        self.assertIn("$('restore-preview').textContent",html)
+        self.assertIn('User-supplied synthetic records only.',html)
+        self.assertNotIn('__RESTORE__',html)
+
     def test_load_demo_label_is_plain_text_without_missing_glyph(self):
         html=dashboard.render(self.model())
         self.assertIn('id="load-demo">Load demo scan</button>',html)

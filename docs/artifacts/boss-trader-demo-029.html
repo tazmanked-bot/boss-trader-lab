@@ -18,11 +18,12 @@
 <section class="panel"><div class="section-heading"><div><h2>Paper journal</h2><p>Manual hypothetical records. USD only.</p></div><span class="tag">PAPER ONLY</span></div><div class="tabs" role="group" aria-label="Paper action"><button type="button" id="entry-tab" class="active" aria-pressed="true">Record paper entry</button><button type="button" id="exit-tab" aria-pressed="false">Record paper exit</button></div>
 <form id="entry-form" novalidate><div class="fields"><label>Demo pair<select name="symbol" aria-label="Entry pair"></select></label><label>Quote unit<input name="quote" value="USD" readonly aria-label="Entry quote unit"></label><label>Hypothetical price (USD)<input name="price" inputmode="decimal" autocomplete="off" placeholder="e.g. 100" required></label><label>Size by<select name="sizing"><option value="quantity">Base quantity</option><option value="notional">Notional in USD</option></select></label><label class="wide">Quantity / notional above<input name="size" inputmode="decimal" autocomplete="off" placeholder="Enter your hypothetical size" required></label><label>Entry fee (USD)<input name="fee" inputmode="decimal" value="0"></label><label>Slippage cost (USD, optional)<input name="slip" inputmode="decimal" placeholder="0"></label><label class="wide">Paper note (optional)<textarea name="note" maxlength="280" placeholder="Why record this hypothetical example?"></textarea></label></div><p class="form-foot">All prices are user-entered assumptions, not exchange fills. Slippage is an additional USD cost. Entry and invalidation price rules are not defined.</p><button class="primary submit" type="submit">Record paper entry</button></form>
 <form id="exit-form" novalidate hidden><div class="fields"><label class="wide">Open paper entry<select name="entryId" aria-label="Open paper entry"></select></label><label>Hypothetical exit price (USD)<input name="price" inputmode="decimal" autocomplete="off" required></label><label>Base quantity to close<input name="qty" inputmode="decimal" autocomplete="off" required></label><label>Exit fee (USD)<input name="fee" value="0" inputmode="decimal"></label><label>Slippage cost (USD, optional)<input name="slip" placeholder="0" inputmode="decimal"></label><label>Quote unit<input name="quote" value="USD" readonly aria-label="Exit quote unit"></label><label class="wide">Paper note (optional)<textarea name="note" maxlength="280"></textarea></label></div><p class="form-foot">Closes only the selected paper entry. Partial exits are allowed; available quantity is enforced. No real order is sent.</p><button class="primary submit" type="submit">Record paper exit</button></form><p id="feedback" class="feedback" role="status" aria-live="polite"></p></section></div>
-<section id="report" class="panel"><div class="report-head"><div><h2>Session report</h2><p class="hint">Demo journal only · realized results from your hypothetical inputs</p></div><div class="actions"><button id="export" type="button">Export demo journal</button><button id="clear" class="danger" type="button">Clear local demo data</button></div></div><div class="pnl"><div><span>Gross realized paper P&L</span><strong id="gross">$0.00 USD</strong><small>Hypothetical exit proceeds less entry notional</small></div><div class="net"><span>Net realized paper P&L</span><strong id="net">$0.00 USD</strong><small>Includes entered fees & slippage on both sides</small></div><div><span>Open paper entries</span><strong id="open-count">0</strong><small>Market mark & unrealized P&L unavailable</small></div></div><p class="hint">Entry fees and slippage are allocated proportionally on partial exits. Calculations use 8-decimal precision; display rounds to cents. No WATCH-based win rate or actual balance.</p><h3 style="margin-top:23px">Open paper positions</h3><div id="open-positions"></div><h3 style="margin-top:23px">Paper entries & exits</h3><div id="ledger" class="ledger"></div><h3 style="margin-top:23px">Recent activity</h3><ol class="activity" id="activity"></ol></section>
+<section id="report" class="panel"><div class="report-head"><div><h2>Session report</h2><p class="hint">Demo journal only · realized results from your hypothetical inputs</p></div><div class="actions"><button id="export" type="button">Export demo journal</button><button id="restore" type="button">Restore demo journal</button><input id="restore-file" type="file" accept=".json,application/json" hidden><button id="clear" class="danger" type="button">Clear local demo data</button></div></div><div class="pnl"><div><span>Gross realized paper P&L</span><strong id="gross">$0.00 USD</strong><small>Hypothetical exit proceeds less entry notional</small></div><div class="net"><span>Net realized paper P&L</span><strong id="net">$0.00 USD</strong><small>Includes entered fees & slippage on both sides</small></div><div><span>Open paper entries</span><strong id="open-count">0</strong><small>Market mark & unrealized P&L unavailable</small></div></div><p class="hint">Entry fees and slippage are allocated proportionally on partial exits. Calculations use 8-decimal precision; display rounds to cents. No WATCH-based win rate or actual balance.</p><h3 style="margin-top:23px">Open paper positions</h3><div id="open-positions"></div><h3 style="margin-top:23px">Paper entries & exits</h3><div id="ledger" class="ledger"></div><h3 style="margin-top:23px">Recent activity</h3><ol class="activity" id="activity"></ol></section>
 <details class="technical"><summary>Source details & technical availability</summary><dl><dt>Scanner source revision</dt><dd id="full-revision"></dd><dt>Fixture SHA-256</dt><dd id="fixture-hash"></dd><dt>Session reference</dt><dd id="session-ref"></dd><dt>File generation time</dt><dd id="generated"></dd><dt>Availability</dt><dd>B1/B2/B3/B5 HOLD · B4 NO-GO · real reversal source admission HOLD. Existing close-only observer is separate and unchanged.</dd><dt>Storage</dt><dd>Versioned local browser data, demo only. One tab at a time. Export before clearing. Different browsers/file locations may not share local storage.</dd></dl></details>
 <footer class="foot"><span>BOSS Trader Lab · Personal research, paper only</span><span>Static fixtures ≠ current markets or validated profitability</span></footer>
 </main><dialog id="clear-dialog"><h2>Clear local demo data?</h2><p>This removes the demo watch list, paper records and activity in this browser. Export first if you want a copy.</p><button type="button" id="cancel-clear">Keep my records</button><button type="button" class="danger" id="confirm-clear">Yes, clear demo data</button></dialog>
-<script id="demo-data" type="application/json">{"B4": "NO-GO", "as_of": 1900000800, "as_of_text": "2030-03-17T18:00:00+00:00", "candidates": ["BTC/USD", "SOL/USD", "XRP/USD"], "fixture_sha256": "761c171e090bcfc14c8ab87ea4ce3a20b8278aa01b6445e0871438dc4fc8285b", "generated_at": "2026-11-07T07:16:45.324805+00:00", "id": "8016eb451e0086594c6c903bb270214fb1ab51da05134141363463c441edec4e", "live_source_admission": "HOLD", "mode": "DEMO_ONLY", "policy": "NO ORDERS", "reason": "OFFLINE_VALIDATED_RESEARCH_PREVIEW", "rows": {"BTC/USD": {"catalyst": "UNVERIFIED", "decision": "WATCH", "features": {"fresh_recovery": {"passed": true, "strength_bps": 6666}, "low_retest_hold": {"passed": true, "strength_bps": 10000}, "slowing_downside": {"passed": true, "strength_bps": 5000}, "volume_consistent": {"passed": true, "strength_bps": 5000}}, "fixture_only_closed_price_usd": 101.0, "invalidation_observation": "A later eligible low below the observed retest anchor would invalidate this research condition; no order.", "refusal": null, "score": 26666, "source_status": "VALIDATED_STATIC_DATA", "why_early": "Downside slowed, low retest held, fresh bounded recovery with consistent volume."}, "SOL/USD": {"catalyst": "UNVERIFIED", "decision": "WATCH", "features": {"fresh_recovery": {"passed": true, "strength_bps": 6666}, "low_retest_hold": {"passed": true, "strength_bps": 10000}, "slowing_downside": {"passed": true, "strength_bps": 5000}, "volume_consistent": {"passed": true, "strength_bps": 5000}}, "fixture_only_closed_price_usd": 101.0, "invalidation_observation": "A later eligible low below the observed retest anchor would invalidate this research condition; no order.", "refusal": null, "score": 26666, "source_status": "VALIDATED_STATIC_DATA", "why_early": "Downside slowed, low retest held, fresh bounded recovery with consistent volume."}, "XRP/USD": {"catalyst": "UNVERIFIED", "decision": "WATCH", "features": {"fresh_recovery": {"passed": true, "strength_bps": 6666}, "low_retest_hold": {"passed": true, "strength_bps": 10000}, "slowing_downside": {"passed": true, "strength_bps": 5000}, "volume_consistent": {"passed": true, "strength_bps": 5000}}, "fixture_only_closed_price_usd": 101.0, "invalidation_observation": "A later eligible low below the observed retest anchor would invalidate this research condition; no order.", "refusal": null, "score": 26666, "source_status": "VALIDATED_STATIC_DATA", "why_early": "Downside slowed, low retest held, fresh bounded recovery with consistent volume."}}, "source": "STATIC_SYNTHETIC_KRAKEN_HTTP_FIXTURES", "source_revision": "457531a92df4112957d3c3744c081a15f16858ed", "version": 1}</script><script>/* Exact 8-decimal paper arithmetic. No market calculations or network code. */
+<dialog id="restore-dialog"><h2>Replace demo journal?</h2><p>Export your current journal first. This replaces its sessions, watch list, records and activity; it does not merge them.</p><p>Synthetic, user-supplied backup only. Valid structure and hashes do not authenticate provenance or establish trusted market evidence.</p><pre id="restore-preview" style="white-space:pre-wrap;overflow-wrap:anywhere"></pre><p id="restore-storage"></p><button id="cancel-restore" type="button">Cancel — keep current journal</button><button id="confirm-restore" type="button" class="danger">Confirm replacement</button></dialog>
+<script id="demo-data" type="application/json">{"B4": "NO-GO", "as_of": 1900000800, "as_of_text": "2030-03-17T18:00:00+00:00", "candidates": ["BTC/USD", "SOL/USD", "XRP/USD"], "fixture_sha256": "761c171e090bcfc14c8ab87ea4ce3a20b8278aa01b6445e0871438dc4fc8285b", "generated_at": "2026-11-07T08:00:24.319837+00:00", "id": "8016eb451e0086594c6c903bb270214fb1ab51da05134141363463c441edec4e", "live_source_admission": "HOLD", "mode": "DEMO_ONLY", "policy": "NO ORDERS", "reason": "OFFLINE_VALIDATED_RESEARCH_PREVIEW", "rows": {"BTC/USD": {"catalyst": "UNVERIFIED", "decision": "WATCH", "features": {"fresh_recovery": {"passed": true, "strength_bps": 6666}, "low_retest_hold": {"passed": true, "strength_bps": 10000}, "slowing_downside": {"passed": true, "strength_bps": 5000}, "volume_consistent": {"passed": true, "strength_bps": 5000}}, "fixture_only_closed_price_usd": 101.0, "invalidation_observation": "A later eligible low below the observed retest anchor would invalidate this research condition; no order.", "refusal": null, "score": 26666, "source_status": "VALIDATED_STATIC_DATA", "why_early": "Downside slowed, low retest held, fresh bounded recovery with consistent volume."}, "SOL/USD": {"catalyst": "UNVERIFIED", "decision": "WATCH", "features": {"fresh_recovery": {"passed": true, "strength_bps": 6666}, "low_retest_hold": {"passed": true, "strength_bps": 10000}, "slowing_downside": {"passed": true, "strength_bps": 5000}, "volume_consistent": {"passed": true, "strength_bps": 5000}}, "fixture_only_closed_price_usd": 101.0, "invalidation_observation": "A later eligible low below the observed retest anchor would invalidate this research condition; no order.", "refusal": null, "score": 26666, "source_status": "VALIDATED_STATIC_DATA", "why_early": "Downside slowed, low retest held, fresh bounded recovery with consistent volume."}, "XRP/USD": {"catalyst": "UNVERIFIED", "decision": "WATCH", "features": {"fresh_recovery": {"passed": true, "strength_bps": 6666}, "low_retest_hold": {"passed": true, "strength_bps": 10000}, "slowing_downside": {"passed": true, "strength_bps": 5000}, "volume_consistent": {"passed": true, "strength_bps": 5000}}, "fixture_only_closed_price_usd": 101.0, "invalidation_observation": "A later eligible low below the observed retest anchor would invalidate this research condition; no order.", "refusal": null, "score": 26666, "source_status": "VALIDATED_STATIC_DATA", "why_early": "Downside slowed, low retest held, fresh bounded recovery with consistent volume."}}, "source": "STATIC_SYNTHETIC_KRAKEN_HTTP_FIXTURES", "source_revision": "457531a92df4112957d3c3744c081a15f16858ed", "version": 1}</script><script>/* Exact 8-decimal paper arithmetic. No market calculations or network code. */
 (function(root){
 'use strict';
 const SCALE=100000000n, LIMIT=128*1024, SYMBOLS=['BTC/USD','XRP/USD','SOL/USD'];
@@ -121,9 +122,40 @@ function exit(s,input){
           slip:decimal(amount(input.slip,true)),note:input.note,at:input.at,entryId:input.entryId};
  s.records.push(r);log(s,'Recorded hypothetical paper exit • '+r.symbol,input.at);return validate(s);
 }
-const api={amount,decimal,money,product,totals,validate,load,watch,unwatch,entry,exit,LIMIT};
+function restore(raw,model,at){
+ assert(typeof raw==='string'&&new TextEncoder().encode(raw).length<=LIMIT,'Backup exceeds journal storage limit');
+ const backup=validate(JSON.parse(raw)),current=session(model),existing=backup.sessions.find(s=>s.id===current.id);
+ if(existing)assert(['id','revision','asOf','source'].every(k=>existing[k]===current[k]),'Backup conflicts with current demo session metadata');
+ return load(raw,model,at);
+}
+const api={restore,amount,decimal,money,product,totals,validate,load,watch,unwatch,entry,exit,LIMIT};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.Paper029=Object.freeze(api);
 })(typeof globalThis==='undefined'?this:globalThis);
+</script><script>/* Temporary preview transaction; accounting and schema belong to Paper029. */
+(function(root){
+'use strict';
+function create(P,model,current,commit,at){
+ let pending=null;
+ const summary=s=>{const t=P.totals(s);return {sessions:s.sessions.length,watches:s.watch.length,entries:s.records.filter(r=>r.kind==='ENTRY').length,exits:s.records.filter(r=>r.kind==='EXIT').length,gross:P.money(t.gross),net:P.money(t.net)};};
+ return Object.freeze({
+  preview(raw){
+   pending=null;
+   const before=current(),candidate=P.restore(raw,model,at());
+   pending={raw:JSON.stringify(candidate),before:JSON.stringify(before)};
+   return {backup:summary(P.validate(JSON.parse(raw))),replacement:summary(candidate),current:summary(before)};
+  },
+  cancel(){pending=null;},
+  confirm(){
+   const saved=pending;pending=null;
+   if(!saved)throw new Error('Preview a valid backup before confirming.');
+   if(JSON.stringify(current())!==saved.before)throw new Error('Current journal changed. Preview the backup again.');
+   const candidate=P.restore(saved.raw,model,at());
+   commit(candidate);return summary(candidate);
+  }
+ });
+}
+if(typeof module!=='undefined'&&module.exports)module.exports={create};else root.Restore030=Object.freeze({create});
+})(globalThis);
 </script><script>(function(){
 'use strict';
 const model=JSON.parse(document.getElementById('demo-data').textContent),P=Paper029,KEY='boss-trader-demo-paper-v1';
@@ -207,7 +239,7 @@ function render(){
   row.append(left,right);if(r.note)row.append(node('div',r.note,'record-note'));ledger.append(row);
  }
  $('activity').replaceChildren(...state.activity.map(a=>node('li',a.text+' · '+a.at)));
- $('export').disabled=locked;
+ $('export').disabled=locked;$('restore').disabled=locked;
 }
 $('load-demo').addEventListener('click',()=>{view='actual';$('view-mode').value='actual';render();feedback('Embedded demo loaded. Same source session; no network request.');});
 $('view-mode').addEventListener('change',e=>{view=e.target.value;render();});
@@ -217,6 +249,35 @@ $('entry-form').addEventListener('submit',e=>{e.preventDefault();try{if(view!=='
 $('exit-form').addEventListener('submit',e=>{e.preventDefault();try{const f=e.target,input=Object.fromEntries(new FormData(f));input.id=exitToken;input.at=now();input.slip=input.slip||'0';write(P.exit(state,input));exitToken=uid();f.reset();feedback('Paper exit recorded. Hypothetical only; no order sent.');}catch(err){feedback(err.message,true);}});
 $('clear').addEventListener('click',()=>$('clear-dialog').showModal());$('cancel-clear').addEventListener('click',()=>$('clear-dialog').close());
 $('confirm-clear').addEventListener('click',()=>{try{locked=false;write(P.load(null,model,now()),true);$('storage-error').hidden=true;entryToken=uid();exitToken=uid();$('entry-form').reset();$('exit-form').reset();$('clear-dialog').close();feedback(storageAvailable?'Local demo data cleared.':'Demo data cleared in this tab only. Browser storage is unavailable; any previously saved data could not be changed.');}catch(e){feedback(e.message,true);}});
-$('export').addEventListener('click',()=>{try{const raw=JSON.stringify(P.validate(state),null,2),url=URL.createObjectURL(new Blob([raw],{type:'application/json'})),a=node('a');a.href=url;a.download='boss-trader-demo-journal.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){feedback(e.message,true);}});
+
+const recovery=Restore030.create(P,model,()=>state,next=>write(next),now);
+let restoreRead=0;
+function cancelRestore(){restoreRead++;recovery.cancel();$('restore-file').value='';$('restore-dialog').close();}
+$('restore').addEventListener('click',()=>{restoreRead++;recovery.cancel();$('restore-file').value='';$('restore-file').click();});
+$('restore-file').addEventListener('change',async e=>{
+ const ticket=++restoreRead;recovery.cancel();
+ try{
+  if(locked)throw new Error('Changes paused. Reload before restoring.');
+  const files=e.target.files;
+  if(!files||files.length!==1)throw new Error('Choose exactly one local JSON journal file.');
+  const file=files[0];
+  if(!/\.json$/i.test(file.name))throw new Error('Choose a local .json journal backup.');
+  if(file.size>P.LIMIT)throw new Error('Backup exceeds journal storage limit (128 KiB).');
+  const raw=await file.text();if(ticket!==restoreRead)return;
+  if(locked)throw new Error('Journal changed. Reload before restoring.');
+  const preview=recovery.preview(raw);
+  const describe=(label,s)=>label+': '+s.sessions+' sessions, '+s.watches+' watches, '+s.entries+' entries, '+s.exits+' exits; gross '+s.gross+'; net '+s.net;
+  $('restore-preview').textContent=[describe('Backup',preview.backup),describe('Current journal (will be replaced)',preview.current),describe('After replacement (includes displayed fixture session)',preview.replacement)].join('\n');
+  $('restore-storage').textContent=storageAvailable?'Replacement will be saved locally if browser storage remains available.':'MEMORY ONLY: browser storage unavailable. Replacement stays in this tab only; export before leaving.';
+  $('restore-dialog').showModal();
+ }catch(err){recovery.cancel();feedback('Restore refused: '+err.message,true);}
+});
+$('cancel-restore').addEventListener('click',cancelRestore);
+$('restore-dialog').addEventListener('cancel',e=>{e.preventDefault();cancelRestore();});
+$('confirm-restore').addEventListener('click',()=>{
+ try{recovery.confirm();entryToken=uid();exitToken=uid();$('restore-dialog').close();$('restore-file').value='';feedback(storageAvailable?'Demo journal replaced and saved locally. User-supplied synthetic records only.':'Demo journal replaced IN THIS TAB ONLY. Storage unavailable; export before leaving.');}
+ catch(err){$('restore-dialog').close();feedback('Restore refused: '+err.message,true);}
+});
+$('export').addEventListener('click',()=>{try{const raw=JSON.stringify(P.validate(state));if(new TextEncoder().encode(raw).length>P.LIMIT)throw new Error('Journal exceeds backup byte limit; no backup file created.');const url=URL.createObjectURL(new Blob([raw],{type:'application/json'})),a=node('a');a.href=url;a.download='boss-trader-demo-journal.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){feedback(e.message,true);}});
 })();
 </script></body></html>

@@ -1,0 +1,20 @@
+{
+  "status": "BLOCKED",
+  "stage": "browser_launch",
+  "launch_attempts": 1,
+  "html_sha256": "56f0f0665bb50033acbabccba98c2232dfffd904a9c67cdaab476bf5635f5e3d",
+  "scope": "NATIVE_FILE_ORIGIN_NO_STORAGE_REPLACEMENT",
+  "checks": [],
+  "screenshots": "NOT_CAPTURED",
+  "native_persistence": "UNVERIFIED",
+  "blocker": {
+    "type": "TargetClosedError",
+    "message": "BrowserType.launch_persistent_context: Target page, context or browser has been closed",
+    "details": [
+      "[pid=4125][err] [4125:4125:1107/075938.953200:ERROR:third_party/crashpad/crashpad/util/linux/socket.cc:45] setsockopt: Operation not permitted (1)",
+      "- [pid=4125][err] [4125:4125:1107/075938.953200:ERROR:third_party/crashpad/crashpad/util/linux/socket.cc:45] setsockopt: Operation not permitted (1)"
+    ]
+  },
+  "final_html_sha256": "39a16102e7d95728e64b024888eb2db601b15f95967affd9c1f975038970b9d3",
+  "artifact_note": "Launch failed before any document navigation. html_sha256 identifies the earlier attempted artifact; final_html_sha256 identifies the revised delivery artifact. Neither was browser-verified."
+}
