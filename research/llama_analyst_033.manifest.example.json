@@ -1,0 +1,10 @@
+{
+  "version": "llama-analyst-preparation-v1",
+  "runtime_path": "/OWNER_REVIEW/llama.cpp/llama-cli",
+  "runtime_sha256": "REPLACE_WITH_OWNER_VERIFIED_64_LOWERCASE_HEX",
+  "model_path": "/OWNER_REVIEW/models/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+  "model_sha256": "REPLACE_WITH_OWNER_VERIFIED_64_LOWERCASE_HEX",
+  "model": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+  "llama_cpp_commit": "REPLACE_WITH_OWNER_VERIFIED_40_LOWERCASE_HEX",
+  "license_review": "OWNER_TARGET_REVIEW_REQUIRED"
+}
