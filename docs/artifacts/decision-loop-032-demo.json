@@ -1,0 +1,1003 @@
+{
+  "version": "offline-decision-loop-v1",
+  "baseline": "e0c098e85d66e4856efd46b062ecefc61f764be5",
+  "mode": "SYNTHETIC_ONLY",
+  "analyst": "MOCK_NOT_GENUINE_AI",
+  "as_of": 1900000800,
+  "cards": [
+    {
+      "symbol": "BTC/USD",
+      "decision": "BLOCKED",
+      "reason": "EVIDENCE_MISSING",
+      "evidence_id": "04a9aac6b6816e3b4fea4f6c064ac760df3259c66985cab05e5f5067ef8f4027",
+      "hypothesis": null,
+      "strongest_objection": null,
+      "invalidation": null,
+      "snapshot_sha256": "9e3b085559b6c678a6ecbcf45a8834aeacb6fb610d1f898fcfacb56222cba769",
+      "score": null,
+      "adapter": {
+        "kind": "MOCK",
+        "model": "mock-objection-v1",
+        "provider": "deterministic-fixture"
+      },
+      "missing_information": [
+        "payload"
+      ],
+      "evidence_refs": [],
+      "buy_authorization": "NONE"
+    },
+    {
+      "symbol": "SOL/USD",
+      "decision": "WAIT",
+      "reason": "ANALYST_REJECTED",
+      "evidence_id": "d1c5ba798f357132bf009cf58d363b73fd2bc1bca8219f4f7e158f0e12c8666e",
+      "hypothesis": "MOCK: unchanged fixture reversal conditions merit research review.",
+      "strongest_objection": "Synthetic candles establish no real-world predictive performance.",
+      "invalidation": "A later eligible low below the retest anchor invalidates this research condition.",
+      "snapshot_sha256": "b18884e9a8620c73c4416803de6bbf3e69173ebf3c19404cfc1681db3ed6bb41",
+      "score": 26666,
+      "adapter": {
+        "kind": "MOCK",
+        "model": "mock-objection-v1",
+        "provider": "deterministic-fixture"
+      },
+      "missing_information": [],
+      "evidence_refs": [
+        "d1c5ba798f357132bf009cf58d363b73fd2bc1bca8219f4f7e158f0e12c8666e"
+      ],
+      "buy_authorization": "NONE"
+    },
+    {
+      "symbol": "BTC/USD",
+      "decision": "WATCH",
+      "reason": "SYNTHETIC_RESEARCH_ACCEPTED",
+      "evidence_id": "27cfaa41370e852469a1d46373e682e9a87cb66fffe16c8b455edafddac59118",
+      "hypothesis": "MOCK: unchanged fixture reversal conditions merit research review.",
+      "strongest_objection": "Synthetic candles establish no real-world predictive performance.",
+      "invalidation": "A later eligible low below the retest anchor invalidates this research condition.",
+      "snapshot_sha256": "91d90e64e5fe939fc40db63f802afa0d79d1b84bf76520854118b7efe420a199",
+      "score": 26666,
+      "adapter": {
+        "kind": "MOCK",
+        "model": "mock-objection-v1",
+        "provider": "deterministic-fixture"
+      },
+      "missing_information": [],
+      "evidence_refs": [
+        "27cfaa41370e852469a1d46373e682e9a87cb66fffe16c8b455edafddac59118"
+      ],
+      "buy_authorization": "NONE"
+    },
+    {
+      "symbol": "XRP/USD",
+      "decision": "WATCH",
+      "reason": "SYNTHETIC_RESEARCH_ACCEPTED",
+      "evidence_id": "9ac624083bc63a0132633f01f3d07e98d4bb727373cd54e1db0b96809339789a",
+      "hypothesis": "MOCK: unchanged fixture reversal conditions merit research review.",
+      "strongest_objection": "Synthetic candles establish no real-world predictive performance.",
+      "invalidation": "A later eligible low below the retest anchor invalidates this research condition.",
+      "snapshot_sha256": "f7695f0b1af8ef4646a66fa92575eeb7fe30e2971016031c86bc4421c32b85a8",
+      "score": 26666,
+      "adapter": {
+        "kind": "MOCK",
+        "model": "mock-objection-v1",
+        "provider": "deterministic-fixture"
+      },
+      "missing_information": [],
+      "evidence_refs": [
+        "9ac624083bc63a0132633f01f3d07e98d4bb727373cd54e1db0b96809339789a"
+      ],
+      "buy_authorization": "NONE"
+    }
+  ],
+  "candidate_count": 2,
+  "deferred_leads": 0,
+  "journal": [
+    {
+      "sha256": "9e3b085559b6c678a6ecbcf45a8834aeacb6fb610d1f898fcfacb56222cba769",
+      "snapshot": {
+        "previous_sha256": null,
+        "record": {
+          "adapter": {
+            "kind": "MOCK",
+            "model": "mock-objection-v1",
+            "provider": "deterministic-fixture"
+          },
+          "analysis": null,
+          "as_of": 1900000800,
+          "buy_authorization": "NONE",
+          "cost": {
+            "amount": "0",
+            "currency": "NTD",
+            "external_calls": 0,
+            "tokens": "NOT_APPLICABLE_MOCK"
+          },
+          "evidence": {
+            "input_sha256": "383b764b512978dd4430c7c8ea80fad0b070da891c0af55762cca5129fa23a52",
+            "observed_at": 1900000800,
+            "provenance": "REFUSED_UNTRUSTED_INPUT",
+            "symbol": "BTC/USD"
+          },
+          "mode": "SYNTHETIC_ONLY",
+          "paper_fill": "NOT_CREATED",
+          "policy": "research-risk-v1",
+          "reason_codes": [
+            "EVIDENCE_MISSING"
+          ],
+          "rule_result": null,
+          "status": "BLOCKED",
+          "timing": {
+            "elapsed_ns": 0,
+            "kind": "NOT_RUN"
+          },
+          "verification": {
+            "age_seconds": 0,
+            "critical_gaps": true,
+            "missing_fields": [
+              "payload"
+            ],
+            "provenance": "SYNTHETIC_DECLARATION_NOT_AUTHENTICATED"
+          }
+        },
+        "sequence": 0,
+        "version": "offline-decision-loop-v1"
+      }
+    },
+    {
+      "sha256": "b18884e9a8620c73c4416803de6bbf3e69173ebf3c19404cfc1681db3ed6bb41",
+      "snapshot": {
+        "previous_sha256": "9e3b085559b6c678a6ecbcf45a8834aeacb6fb610d1f898fcfacb56222cba769",
+        "record": {
+          "adapter": {
+            "kind": "MOCK",
+            "model": "mock-objection-v1",
+            "provider": "deterministic-fixture"
+          },
+          "analysis": {
+            "disposition": "REJECT",
+            "evidence_refs": [
+              "d1c5ba798f357132bf009cf58d363b73fd2bc1bca8219f4f7e158f0e12c8666e"
+            ],
+            "hypothesis": "MOCK: unchanged fixture reversal conditions merit research review.",
+            "invalidation": "A later eligible low below the retest anchor invalidates this research condition.",
+            "missing_information": [],
+            "strongest_objection": "Synthetic candles establish no real-world predictive performance.",
+            "version": "analyst-v1"
+          },
+          "as_of": 1900000800,
+          "buy_authorization": "NONE",
+          "cost": {
+            "amount": "0",
+            "currency": "NTD",
+            "external_calls": 0,
+            "tokens": "NOT_APPLICABLE_MOCK"
+          },
+          "evidence": {
+            "available_at": 1900000800,
+            "observed_at": 1900000800,
+            "payload": {
+              "bars": [
+                {
+                  "close": 130,
+                  "high": 132,
+                  "low": 129,
+                  "open": 131,
+                  "open_time": 1899925200,
+                  "volume": 100
+                },
+                {
+                  "close": 129,
+                  "high": 131,
+                  "low": 128,
+                  "open": 130,
+                  "open_time": 1899928800,
+                  "volume": 100
+                },
+                {
+                  "close": 128,
+                  "high": 130,
+                  "low": 127,
+                  "open": 129,
+                  "open_time": 1899932400,
+                  "volume": 100
+                },
+                {
+                  "close": 127,
+                  "high": 129,
+                  "low": 126,
+                  "open": 128,
+                  "open_time": 1899936000,
+                  "volume": 100
+                },
+                {
+                  "close": 126,
+                  "high": 128,
+                  "low": 125,
+                  "open": 127,
+                  "open_time": 1899939600,
+                  "volume": 100
+                },
+                {
+                  "close": 125,
+                  "high": 127,
+                  "low": 124,
+                  "open": 126,
+                  "open_time": 1899943200,
+                  "volume": 100
+                },
+                {
+                  "close": 124,
+                  "high": 126,
+                  "low": 123,
+                  "open": 125,
+                  "open_time": 1899946800,
+                  "volume": 100
+                },
+                {
+                  "close": 123,
+                  "high": 125,
+                  "low": 122,
+                  "open": 124,
+                  "open_time": 1899950400,
+                  "volume": 100
+                },
+                {
+                  "close": 122,
+                  "high": 124,
+                  "low": 121,
+                  "open": 123,
+                  "open_time": 1899954000,
+                  "volume": 100
+                },
+                {
+                  "close": 121,
+                  "high": 123,
+                  "low": 120,
+                  "open": 122,
+                  "open_time": 1899957600,
+                  "volume": 100
+                },
+                {
+                  "close": 120,
+                  "high": 122,
+                  "low": 119,
+                  "open": 121,
+                  "open_time": 1899961200,
+                  "volume": 100
+                },
+                {
+                  "close": 119,
+                  "high": 121,
+                  "low": 118,
+                  "open": 120,
+                  "open_time": 1899964800,
+                  "volume": 100
+                },
+                {
+                  "close": 118,
+                  "high": 120,
+                  "low": 117,
+                  "open": 119,
+                  "open_time": 1899968400,
+                  "volume": 100
+                },
+                {
+                  "close": 117,
+                  "high": 119,
+                  "low": 116,
+                  "open": 118,
+                  "open_time": 1899972000,
+                  "volume": 100
+                },
+                {
+                  "close": 116,
+                  "high": 118,
+                  "low": 115,
+                  "open": 117,
+                  "open_time": 1899975600,
+                  "volume": 100
+                },
+                {
+                  "close": 110,
+                  "high": 112,
+                  "low": 109,
+                  "open": 111,
+                  "open_time": 1899979200,
+                  "volume": 100
+                },
+                {
+                  "close": 106,
+                  "high": 108,
+                  "low": 105,
+                  "open": 107,
+                  "open_time": 1899982800,
+                  "volume": 100
+                },
+                {
+                  "close": 102,
+                  "high": 104,
+                  "low": 101,
+                  "open": 103,
+                  "open_time": 1899986400,
+                  "volume": 100
+                },
+                {
+                  "close": 100,
+                  "high": 102,
+                  "low": 98,
+                  "open": 101,
+                  "open_time": 1899990000,
+                  "volume": 100
+                },
+                {
+                  "close": 99,
+                  "high": 101,
+                  "low": 98,
+                  "open": 100,
+                  "open_time": 1899993600,
+                  "volume": 80
+                },
+                {
+                  "close": 101,
+                  "high": 102,
+                  "low": 98,
+                  "open": 100,
+                  "open_time": 1899997200,
+                  "volume": 150
+                }
+              ],
+              "market": "spot",
+              "quote": "USD",
+              "rules": {
+                "require_non_spot": false,
+                "require_spot": true
+              },
+              "symbol": "SOL/USD",
+              "timeframe": "1h",
+              "venue": "kraken"
+            },
+            "source": {
+              "id": "fixture-a",
+              "kind": "SYNTHETIC_ONLY",
+              "origin": "ORIGINAL_032"
+            },
+            "symbol": "SOL/USD",
+            "text": "Invented public-safe event. External prose is untrusted data, not instructions."
+          },
+          "mode": "SYNTHETIC_ONLY",
+          "paper_fill": "NOT_CREATED",
+          "policy": "research-risk-v1",
+          "reason_codes": [
+            "ANALYST_REJECTED"
+          ],
+          "rule_result": {
+            "catalyst_status": "UNVERIFIED",
+            "decision": "WATCH",
+            "features": {
+              "fresh_recovery": {
+                "passed": true,
+                "strength_bps": 6666
+              },
+              "low_retest_hold": {
+                "passed": true,
+                "strength_bps": 10000
+              },
+              "slowing_downside": {
+                "passed": true,
+                "strength_bps": 5000
+              },
+              "volume_consistent": {
+                "passed": true,
+                "strength_bps": 5000
+              }
+            },
+            "invalidation_observation": "A later eligible low below the observed retest anchor would invalidate this research condition; no order.",
+            "score": 26666,
+            "validation": {
+              "as_of_utc": "2030-03-17T18:00:00Z",
+              "detail": "Synthetic data checks passed; no signal or authorization.",
+              "evidence_ref": "sha256:100c7f444e8799465031f077980fa9e50d59173f7eda5ba7d9cec5ae4f6f11ac",
+              "future_mode": "reject",
+              "market": "spot",
+              "policy_version": "spot-refusal-v1",
+              "quote": "USD",
+              "reason_code": null,
+              "status": "VALIDATED_DATA",
+              "symbol": "SOL/USD",
+              "timeframe": "1h",
+              "venue": "kraken"
+            },
+            "why_early": "Downside slowed, low retest held, fresh bounded recovery with consistent volume."
+          },
+          "status": "WAIT",
+          "timing": {
+            "elapsed_ns": 108723,
+            "kind": "MEASURED_LOCAL_MONOTONIC"
+          },
+          "verification": {
+            "age_seconds": 0,
+            "critical_gaps": false,
+            "missing_fields": [],
+            "provenance": "SYNTHETIC_DECLARATION_NOT_AUTHENTICATED"
+          }
+        },
+        "sequence": 1,
+        "version": "offline-decision-loop-v1"
+      }
+    },
+    {
+      "sha256": "91d90e64e5fe939fc40db63f802afa0d79d1b84bf76520854118b7efe420a199",
+      "snapshot": {
+        "previous_sha256": "b18884e9a8620c73c4416803de6bbf3e69173ebf3c19404cfc1681db3ed6bb41",
+        "record": {
+          "adapter": {
+            "kind": "MOCK",
+            "model": "mock-objection-v1",
+            "provider": "deterministic-fixture"
+          },
+          "analysis": {
+            "disposition": "SUPPORT",
+            "evidence_refs": [
+              "27cfaa41370e852469a1d46373e682e9a87cb66fffe16c8b455edafddac59118"
+            ],
+            "hypothesis": "MOCK: unchanged fixture reversal conditions merit research review.",
+            "invalidation": "A later eligible low below the retest anchor invalidates this research condition.",
+            "missing_information": [],
+            "strongest_objection": "Synthetic candles establish no real-world predictive performance.",
+            "version": "analyst-v1"
+          },
+          "as_of": 1900000800,
+          "buy_authorization": "NONE",
+          "cost": {
+            "amount": "0",
+            "currency": "NTD",
+            "external_calls": 0,
+            "tokens": "NOT_APPLICABLE_MOCK"
+          },
+          "evidence": {
+            "available_at": 1900000800,
+            "observed_at": 1900000800,
+            "payload": {
+              "bars": [
+                {
+                  "close": 130,
+                  "high": 132,
+                  "low": 129,
+                  "open": 131,
+                  "open_time": 1899925200,
+                  "volume": 100
+                },
+                {
+                  "close": 129,
+                  "high": 131,
+                  "low": 128,
+                  "open": 130,
+                  "open_time": 1899928800,
+                  "volume": 100
+                },
+                {
+                  "close": 128,
+                  "high": 130,
+                  "low": 127,
+                  "open": 129,
+                  "open_time": 1899932400,
+                  "volume": 100
+                },
+                {
+                  "close": 127,
+                  "high": 129,
+                  "low": 126,
+                  "open": 128,
+                  "open_time": 1899936000,
+                  "volume": 100
+                },
+                {
+                  "close": 126,
+                  "high": 128,
+                  "low": 125,
+                  "open": 127,
+                  "open_time": 1899939600,
+                  "volume": 100
+                },
+                {
+                  "close": 125,
+                  "high": 127,
+                  "low": 124,
+                  "open": 126,
+                  "open_time": 1899943200,
+                  "volume": 100
+                },
+                {
+                  "close": 124,
+                  "high": 126,
+                  "low": 123,
+                  "open": 125,
+                  "open_time": 1899946800,
+                  "volume": 100
+                },
+                {
+                  "close": 123,
+                  "high": 125,
+                  "low": 122,
+                  "open": 124,
+                  "open_time": 1899950400,
+                  "volume": 100
+                },
+                {
+                  "close": 122,
+                  "high": 124,
+                  "low": 121,
+                  "open": 123,
+                  "open_time": 1899954000,
+                  "volume": 100
+                },
+                {
+                  "close": 121,
+                  "high": 123,
+                  "low": 120,
+                  "open": 122,
+                  "open_time": 1899957600,
+                  "volume": 100
+                },
+                {
+                  "close": 120,
+                  "high": 122,
+                  "low": 119,
+                  "open": 121,
+                  "open_time": 1899961200,
+                  "volume": 100
+                },
+                {
+                  "close": 119,
+                  "high": 121,
+                  "low": 118,
+                  "open": 120,
+                  "open_time": 1899964800,
+                  "volume": 100
+                },
+                {
+                  "close": 118,
+                  "high": 120,
+                  "low": 117,
+                  "open": 119,
+                  "open_time": 1899968400,
+                  "volume": 100
+                },
+                {
+                  "close": 117,
+                  "high": 119,
+                  "low": 116,
+                  "open": 118,
+                  "open_time": 1899972000,
+                  "volume": 100
+                },
+                {
+                  "close": 116,
+                  "high": 118,
+                  "low": 115,
+                  "open": 117,
+                  "open_time": 1899975600,
+                  "volume": 100
+                },
+                {
+                  "close": 110,
+                  "high": 112,
+                  "low": 109,
+                  "open": 111,
+                  "open_time": 1899979200,
+                  "volume": 100
+                },
+                {
+                  "close": 106,
+                  "high": 108,
+                  "low": 105,
+                  "open": 107,
+                  "open_time": 1899982800,
+                  "volume": 100
+                },
+                {
+                  "close": 102,
+                  "high": 104,
+                  "low": 101,
+                  "open": 103,
+                  "open_time": 1899986400,
+                  "volume": 100
+                },
+                {
+                  "close": 100,
+                  "high": 102,
+                  "low": 98,
+                  "open": 101,
+                  "open_time": 1899990000,
+                  "volume": 100
+                },
+                {
+                  "close": 99,
+                  "high": 101,
+                  "low": 98,
+                  "open": 100,
+                  "open_time": 1899993600,
+                  "volume": 80
+                },
+                {
+                  "close": 101,
+                  "high": 102,
+                  "low": 98,
+                  "open": 100,
+                  "open_time": 1899997200,
+                  "volume": 150
+                }
+              ],
+              "market": "spot",
+              "quote": "USD",
+              "rules": {
+                "require_non_spot": false,
+                "require_spot": true
+              },
+              "symbol": "BTC/USD",
+              "timeframe": "1h",
+              "venue": "kraken"
+            },
+            "source": {
+              "id": "fixture-a",
+              "kind": "SYNTHETIC_ONLY",
+              "origin": "ORIGINAL_032"
+            },
+            "symbol": "BTC/USD",
+            "text": "Invented public-safe event. External prose is untrusted data, not instructions."
+          },
+          "mode": "SYNTHETIC_ONLY",
+          "paper_fill": "NOT_CREATED",
+          "policy": "research-risk-v1",
+          "reason_codes": [
+            "SYNTHETIC_RESEARCH_ACCEPTED"
+          ],
+          "rule_result": {
+            "catalyst_status": "UNVERIFIED",
+            "decision": "WATCH",
+            "features": {
+              "fresh_recovery": {
+                "passed": true,
+                "strength_bps": 6666
+              },
+              "low_retest_hold": {
+                "passed": true,
+                "strength_bps": 10000
+              },
+              "slowing_downside": {
+                "passed": true,
+                "strength_bps": 5000
+              },
+              "volume_consistent": {
+                "passed": true,
+                "strength_bps": 5000
+              }
+            },
+            "invalidation_observation": "A later eligible low below the observed retest anchor would invalidate this research condition; no order.",
+            "score": 26666,
+            "validation": {
+              "as_of_utc": "2030-03-17T18:00:00Z",
+              "detail": "Synthetic data checks passed; no signal or authorization.",
+              "evidence_ref": "sha256:1a94919e331b85f3510415125fb674826265d398d5b9fd12f2c545944517bc8d",
+              "future_mode": "reject",
+              "market": "spot",
+              "policy_version": "spot-refusal-v1",
+              "quote": "USD",
+              "reason_code": null,
+              "status": "VALIDATED_DATA",
+              "symbol": "BTC/USD",
+              "timeframe": "1h",
+              "venue": "kraken"
+            },
+            "why_early": "Downside slowed, low retest held, fresh bounded recovery with consistent volume."
+          },
+          "status": "WATCH",
+          "timing": {
+            "elapsed_ns": 78829,
+            "kind": "MEASURED_LOCAL_MONOTONIC"
+          },
+          "verification": {
+            "age_seconds": 0,
+            "critical_gaps": false,
+            "missing_fields": [],
+            "provenance": "SYNTHETIC_DECLARATION_NOT_AUTHENTICATED"
+          }
+        },
+        "sequence": 2,
+        "version": "offline-decision-loop-v1"
+      }
+    },
+    {
+      "sha256": "f7695f0b1af8ef4646a66fa92575eeb7fe30e2971016031c86bc4421c32b85a8",
+      "snapshot": {
+        "previous_sha256": "91d90e64e5fe939fc40db63f802afa0d79d1b84bf76520854118b7efe420a199",
+        "record": {
+          "adapter": {
+            "kind": "MOCK",
+            "model": "mock-objection-v1",
+            "provider": "deterministic-fixture"
+          },
+          "analysis": {
+            "disposition": "SUPPORT",
+            "evidence_refs": [
+              "9ac624083bc63a0132633f01f3d07e98d4bb727373cd54e1db0b96809339789a"
+            ],
+            "hypothesis": "MOCK: unchanged fixture reversal conditions merit research review.",
+            "invalidation": "A later eligible low below the retest anchor invalidates this research condition.",
+            "missing_information": [],
+            "strongest_objection": "Synthetic candles establish no real-world predictive performance.",
+            "version": "analyst-v1"
+          },
+          "as_of": 1900000800,
+          "buy_authorization": "NONE",
+          "cost": {
+            "amount": "0",
+            "currency": "NTD",
+            "external_calls": 0,
+            "tokens": "NOT_APPLICABLE_MOCK"
+          },
+          "evidence": {
+            "available_at": 1900000800,
+            "observed_at": 1900000800,
+            "payload": {
+              "bars": [
+                {
+                  "close": 130,
+                  "high": 132,
+                  "low": 129,
+                  "open": 131,
+                  "open_time": 1899925200,
+                  "volume": 100
+                },
+                {
+                  "close": 129,
+                  "high": 131,
+                  "low": 128,
+                  "open": 130,
+                  "open_time": 1899928800,
+                  "volume": 100
+                },
+                {
+                  "close": 128,
+                  "high": 130,
+                  "low": 127,
+                  "open": 129,
+                  "open_time": 1899932400,
+                  "volume": 100
+                },
+                {
+                  "close": 127,
+                  "high": 129,
+                  "low": 126,
+                  "open": 128,
+                  "open_time": 1899936000,
+                  "volume": 100
+                },
+                {
+                  "close": 126,
+                  "high": 128,
+                  "low": 125,
+                  "open": 127,
+                  "open_time": 1899939600,
+                  "volume": 100
+                },
+                {
+                  "close": 125,
+                  "high": 127,
+                  "low": 124,
+                  "open": 126,
+                  "open_time": 1899943200,
+                  "volume": 100
+                },
+                {
+                  "close": 124,
+                  "high": 126,
+                  "low": 123,
+                  "open": 125,
+                  "open_time": 1899946800,
+                  "volume": 100
+                },
+                {
+                  "close": 123,
+                  "high": 125,
+                  "low": 122,
+                  "open": 124,
+                  "open_time": 1899950400,
+                  "volume": 100
+                },
+                {
+                  "close": 122,
+                  "high": 124,
+                  "low": 121,
+                  "open": 123,
+                  "open_time": 1899954000,
+                  "volume": 100
+                },
+                {
+                  "close": 121,
+                  "high": 123,
+                  "low": 120,
+                  "open": 122,
+                  "open_time": 1899957600,
+                  "volume": 100
+                },
+                {
+                  "close": 120,
+                  "high": 122,
+                  "low": 119,
+                  "open": 121,
+                  "open_time": 1899961200,
+                  "volume": 100
+                },
+                {
+                  "close": 119,
+                  "high": 121,
+                  "low": 118,
+                  "open": 120,
+                  "open_time": 1899964800,
+                  "volume": 100
+                },
+                {
+                  "close": 118,
+                  "high": 120,
+                  "low": 117,
+                  "open": 119,
+                  "open_time": 1899968400,
+                  "volume": 100
+                },
+                {
+                  "close": 117,
+                  "high": 119,
+                  "low": 116,
+                  "open": 118,
+                  "open_time": 1899972000,
+                  "volume": 100
+                },
+                {
+                  "close": 116,
+                  "high": 118,
+                  "low": 115,
+                  "open": 117,
+                  "open_time": 1899975600,
+                  "volume": 100
+                },
+                {
+                  "close": 110,
+                  "high": 112,
+                  "low": 109,
+                  "open": 111,
+                  "open_time": 1899979200,
+                  "volume": 100
+                },
+                {
+                  "close": 106,
+                  "high": 108,
+                  "low": 105,
+                  "open": 107,
+                  "open_time": 1899982800,
+                  "volume": 100
+                },
+                {
+                  "close": 102,
+                  "high": 104,
+                  "low": 101,
+                  "open": 103,
+                  "open_time": 1899986400,
+                  "volume": 100
+                },
+                {
+                  "close": 100,
+                  "high": 102,
+                  "low": 98,
+                  "open": 101,
+                  "open_time": 1899990000,
+                  "volume": 100
+                },
+                {
+                  "close": 99,
+                  "high": 101,
+                  "low": 98,
+                  "open": 100,
+                  "open_time": 1899993600,
+                  "volume": 80
+                },
+                {
+                  "close": 101,
+                  "high": 102,
+                  "low": 98,
+                  "open": 100,
+                  "open_time": 1899997200,
+                  "volume": 150
+                }
+              ],
+              "market": "spot",
+              "quote": "USD",
+              "rules": {
+                "require_non_spot": false,
+                "require_spot": true
+              },
+              "symbol": "XRP/USD",
+              "timeframe": "1h",
+              "venue": "kraken"
+            },
+            "source": {
+              "id": "fixture-a",
+              "kind": "SYNTHETIC_ONLY",
+              "origin": "ORIGINAL_032"
+            },
+            "symbol": "XRP/USD",
+            "text": "Invented public-safe event. External prose is untrusted data, not instructions."
+          },
+          "mode": "SYNTHETIC_ONLY",
+          "paper_fill": "NOT_CREATED",
+          "policy": "research-risk-v1",
+          "reason_codes": [
+            "SYNTHETIC_RESEARCH_ACCEPTED"
+          ],
+          "rule_result": {
+            "catalyst_status": "UNVERIFIED",
+            "decision": "WATCH",
+            "features": {
+              "fresh_recovery": {
+                "passed": true,
+                "strength_bps": 6666
+              },
+              "low_retest_hold": {
+                "passed": true,
+                "strength_bps": 10000
+              },
+              "slowing_downside": {
+                "passed": true,
+                "strength_bps": 5000
+              },
+              "volume_consistent": {
+                "passed": true,
+                "strength_bps": 5000
+              }
+            },
+            "invalidation_observation": "A later eligible low below the observed retest anchor would invalidate this research condition; no order.",
+            "score": 26666,
+            "validation": {
+              "as_of_utc": "2030-03-17T18:00:00Z",
+              "detail": "Synthetic data checks passed; no signal or authorization.",
+              "evidence_ref": "sha256:0dc8070a6e0486c1f743dbac6ec99c0e494c8835ed456a7306ea7e01e73112c3",
+              "future_mode": "reject",
+              "market": "spot",
+              "policy_version": "spot-refusal-v1",
+              "quote": "USD",
+              "reason_code": null,
+              "status": "VALIDATED_DATA",
+              "symbol": "XRP/USD",
+              "timeframe": "1h",
+              "venue": "kraken"
+            },
+            "why_early": "Downside slowed, low retest held, fresh bounded recovery with consistent volume."
+          },
+          "status": "WATCH",
+          "timing": {
+            "elapsed_ns": 102074,
+            "kind": "MEASURED_LOCAL_MONOTONIC"
+          },
+          "verification": {
+            "age_seconds": 0,
+            "critical_gaps": false,
+            "missing_fields": [],
+            "provenance": "SYNTHETIC_DECLARATION_NOT_AUTHENTICATED"
+          }
+        },
+        "sequence": 3,
+        "version": "offline-decision-loop-v1"
+      }
+    }
+  ],
+  "buy_authorization": "NONE",
+  "gates": {
+    "B1": "HOLD",
+    "B2": "HOLD",
+    "B3": "HOLD",
+    "B4": "NO-GO",
+    "B5": "HOLD"
+  },
+  "additional_expenditure_ntd": "0",
+  "external_calls": 0
+}

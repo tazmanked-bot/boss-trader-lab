@@ -1,0 +1,34 @@
+BOSS TRADER — SYNTHETIC / MOCK RESEARCH ONLY
+Not genuine AI inference. BUY AUTHORIZATION NONE. No fills or orders.
+
+BTC/USD | BLOCKED | EVIDENCE_MISSING
+hypothesis: null
+strongest_objection: null
+missing_information: ["payload"]
+invalidation: null
+evidence_refs: []
+Evidence snapshot: 9e3b085559b6c678a6ecbcf45a8834aeacb6fb610d1f898fcfacb56222cba769
+
+SOL/USD | WAIT | ANALYST_REJECTED
+hypothesis: "MOCK: unchanged fixture reversal conditions merit research review."
+strongest_objection: "Synthetic candles establish no real-world predictive performance."
+missing_information: []
+invalidation: "A later eligible low below the retest anchor invalidates this research condition."
+evidence_refs: ["d1c5ba798f357132bf009cf58d363b73fd2bc1bca8219f4f7e158f0e12c8666e"]
+Evidence snapshot: b18884e9a8620c73c4416803de6bbf3e69173ebf3c19404cfc1681db3ed6bb41
+
+BTC/USD | WATCH | SYNTHETIC_RESEARCH_ACCEPTED
+hypothesis: "MOCK: unchanged fixture reversal conditions merit research review."
+strongest_objection: "Synthetic candles establish no real-world predictive performance."
+missing_information: []
+invalidation: "A later eligible low below the retest anchor invalidates this research condition."
+evidence_refs: ["27cfaa41370e852469a1d46373e682e9a87cb66fffe16c8b455edafddac59118"]
+Evidence snapshot: 91d90e64e5fe939fc40db63f802afa0d79d1b84bf76520854118b7efe420a199
+
+XRP/USD | WATCH | SYNTHETIC_RESEARCH_ACCEPTED
+hypothesis: "MOCK: unchanged fixture reversal conditions merit research review."
+strongest_objection: "Synthetic candles establish no real-world predictive performance."
+missing_information: []
+invalidation: "A later eligible low below the retest anchor invalidates this research condition."
+evidence_refs: ["9ac624083bc63a0132633f01f3d07e98d4bb727373cd54e1db0b96809339789a"]
+Evidence snapshot: f7695f0b1af8ef4646a66fa92575eeb7fe30e2971016031c86bc4421c32b85a8
