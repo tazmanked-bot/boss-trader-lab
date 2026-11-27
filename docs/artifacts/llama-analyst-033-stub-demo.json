@@ -1,0 +1,336 @@
+{
+  "version": "llama-analyst-preparation-v1",
+  "mode": "SIMULATED_STUB_NOT_AI",
+  "test_artifacts": "FABRICATED_NOT_A_RUNTIME_OR_CHECKPOINT",
+  "real_state": "REAL_NOT_RUN",
+  "real_inference_count": 0,
+  "cases": {
+    "success": {
+      "candidate_count": 3,
+      "cards": [
+        {
+          "symbol": "BTC/USD",
+          "decision": "BLOCKED",
+          "reason": "EVIDENCE_MISSING",
+          "evidence_id": "04a9aac6b6816e3b4fea4f6c064ac760df3259c66985cab05e5f5067ef8f4027",
+          "hypothesis": null,
+          "strongest_objection": null,
+          "invalidation": null,
+          "snapshot_sha256": "22e7c84321587051999c462fff32c266b3b94add99b33a1ee1a1b14e91c1eae4",
+          "score": null,
+          "adapter": {
+            "kind": "MOCK",
+            "model": "no-model-executed",
+            "provider": "controlled-subprocess-stub"
+          },
+          "missing_information": [
+            "payload"
+          ],
+          "evidence_refs": [],
+          "buy_authorization": "NONE"
+        },
+        {
+          "symbol": "BTC/USD",
+          "decision": "WATCH",
+          "reason": "SYNTHETIC_RESEARCH_ACCEPTED",
+          "evidence_id": "27cfaa41370e852469a1d46373e682e9a87cb66fffe16c8b455edafddac59118",
+          "hypothesis": "SIMULATED STUB: existing features merit research review.",
+          "strongest_objection": "This program is not a model and tests no reasoning quality.",
+          "invalidation": "A later eligible low below the retest anchor invalidates the condition.",
+          "snapshot_sha256": "9fad49a4716f5a99cbbe79b534ab71ae1dfb6062f0e06cba770bad63f658f66a",
+          "score": 26666,
+          "adapter": {
+            "kind": "MOCK",
+            "model": "no-model-executed",
+            "provider": "controlled-subprocess-stub"
+          },
+          "missing_information": [],
+          "evidence_refs": [
+            "27cfaa41370e852469a1d46373e682e9a87cb66fffe16c8b455edafddac59118"
+          ],
+          "buy_authorization": "NONE"
+        },
+        {
+          "symbol": "SOL/USD",
+          "decision": "WATCH",
+          "reason": "SYNTHETIC_RESEARCH_ACCEPTED",
+          "evidence_id": "d1c5ba798f357132bf009cf58d363b73fd2bc1bca8219f4f7e158f0e12c8666e",
+          "hypothesis": "SIMULATED STUB: existing features merit research review.",
+          "strongest_objection": "This program is not a model and tests no reasoning quality.",
+          "invalidation": "A later eligible low below the retest anchor invalidates the condition.",
+          "snapshot_sha256": "78db92009f8396be0a66012abc5297bc50ea5900b8665a993e6c3921286fc0f1",
+          "score": 26666,
+          "adapter": {
+            "kind": "MOCK",
+            "model": "no-model-executed",
+            "provider": "controlled-subprocess-stub"
+          },
+          "missing_information": [],
+          "evidence_refs": [
+            "d1c5ba798f357132bf009cf58d363b73fd2bc1bca8219f4f7e158f0e12c8666e"
+          ],
+          "buy_authorization": "NONE"
+        },
+        {
+          "symbol": "XRP/USD",
+          "decision": "WATCH",
+          "reason": "SYNTHETIC_RESEARCH_ACCEPTED",
+          "evidence_id": "9ac624083bc63a0132633f01f3d07e98d4bb727373cd54e1db0b96809339789a",
+          "hypothesis": "SIMULATED STUB: existing features merit research review.",
+          "strongest_objection": "This program is not a model and tests no reasoning quality.",
+          "invalidation": "A later eligible low below the retest anchor invalidates the condition.",
+          "snapshot_sha256": "79b430a895c5ec988116bed02022bfe5bb6734b8991f53c34ecba2ab8ea50ece",
+          "score": 26666,
+          "adapter": {
+            "kind": "MOCK",
+            "model": "no-model-executed",
+            "provider": "controlled-subprocess-stub"
+          },
+          "missing_information": [],
+          "evidence_refs": [
+            "9ac624083bc63a0132633f01f3d07e98d4bb727373cd54e1db0b96809339789a"
+          ],
+          "buy_authorization": "NONE"
+        }
+      ],
+      "journal_chain_valid": true,
+      "stub_receipts": [
+        {
+          "elapsed_ns": 18068966,
+          "stdout_bytes": 417,
+          "stderr_bytes": 0,
+          "exit_code": 0,
+          "process_reaped": true,
+          "real_inference": false,
+          "input_tokens": null,
+          "output_tokens": null,
+          "token_counts": "UNMEASURED_STUB",
+          "additional_cost_ntd": "0",
+          "network_calls": 0,
+          "mode": "SIMULATED_STUB_NOT_AI",
+          "adapter": {
+            "provider": "llama.cpp-prepared",
+            "model": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+            "kind": "REAL_NOT_RUN"
+          },
+          "prompt_sha256": "3517e0e8898bfc5e4d66953f470f718850d7689b66de55c0687ad877332cea45",
+          "manifest_sha256": "fcbcf83b0b4675de8c29797ba9334d197f0fd8a344c0c3433f127952c86ca546",
+          "provenance": {
+            "licensing": "UNVERIFIED_ON_TARGET",
+            "model": {
+              "bytes": 39,
+              "sha256": "d67a38a9d36295dc6d6694278dc59e373a3577178b0dbe5352176155fad437c9"
+            },
+            "model_identity": "OWNER_DECLARED_NOT_AUTHENTICATED",
+            "runtime": {
+              "bytes": 39,
+              "sha256": "03e932c2873932b6f029e44d59db086874c7e3e35d11ceedf41fe82ab3787115"
+            },
+            "runtime_revision": "0000000000000000000000000000000000000000"
+          },
+          "buy_authorization": "NONE"
+        },
+        {
+          "elapsed_ns": 17513571,
+          "stdout_bytes": 417,
+          "stderr_bytes": 0,
+          "exit_code": 0,
+          "process_reaped": true,
+          "real_inference": false,
+          "input_tokens": null,
+          "output_tokens": null,
+          "token_counts": "UNMEASURED_STUB",
+          "additional_cost_ntd": "0",
+          "network_calls": 0,
+          "mode": "SIMULATED_STUB_NOT_AI",
+          "adapter": {
+            "provider": "llama.cpp-prepared",
+            "model": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+            "kind": "REAL_NOT_RUN"
+          },
+          "prompt_sha256": "ab2a46888f67c4e596b38595fb04427a5d85f04a73985007a4a774000ccff67f",
+          "manifest_sha256": "fcbcf83b0b4675de8c29797ba9334d197f0fd8a344c0c3433f127952c86ca546",
+          "provenance": {
+            "licensing": "UNVERIFIED_ON_TARGET",
+            "model": {
+              "bytes": 39,
+              "sha256": "d67a38a9d36295dc6d6694278dc59e373a3577178b0dbe5352176155fad437c9"
+            },
+            "model_identity": "OWNER_DECLARED_NOT_AUTHENTICATED",
+            "runtime": {
+              "bytes": 39,
+              "sha256": "03e932c2873932b6f029e44d59db086874c7e3e35d11ceedf41fe82ab3787115"
+            },
+            "runtime_revision": "0000000000000000000000000000000000000000"
+          },
+          "buy_authorization": "NONE"
+        },
+        {
+          "elapsed_ns": 19985421,
+          "stdout_bytes": 417,
+          "stderr_bytes": 0,
+          "exit_code": 0,
+          "process_reaped": true,
+          "real_inference": false,
+          "input_tokens": null,
+          "output_tokens": null,
+          "token_counts": "UNMEASURED_STUB",
+          "additional_cost_ntd": "0",
+          "network_calls": 0,
+          "mode": "SIMULATED_STUB_NOT_AI",
+          "adapter": {
+            "provider": "llama.cpp-prepared",
+            "model": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+            "kind": "REAL_NOT_RUN"
+          },
+          "prompt_sha256": "bd21273cd3fb9a4cf7387d133d31926827016f982c21d6601c0759f33994ee53",
+          "manifest_sha256": "fcbcf83b0b4675de8c29797ba9334d197f0fd8a344c0c3433f127952c86ca546",
+          "provenance": {
+            "licensing": "UNVERIFIED_ON_TARGET",
+            "model": {
+              "bytes": 39,
+              "sha256": "d67a38a9d36295dc6d6694278dc59e373a3577178b0dbe5352176155fad437c9"
+            },
+            "model_identity": "OWNER_DECLARED_NOT_AUTHENTICATED",
+            "runtime": {
+              "bytes": 39,
+              "sha256": "03e932c2873932b6f029e44d59db086874c7e3e35d11ceedf41fe82ab3787115"
+            },
+            "runtime_revision": "0000000000000000000000000000000000000000"
+          },
+          "buy_authorization": "NONE"
+        }
+      ]
+    },
+    "nonzero": {
+      "candidate_count": 0,
+      "cards": [
+        {
+          "symbol": "BTC/USD",
+          "decision": "BLOCKED",
+          "reason": "EVIDENCE_MISSING",
+          "evidence_id": "04a9aac6b6816e3b4fea4f6c064ac760df3259c66985cab05e5f5067ef8f4027",
+          "hypothesis": null,
+          "strongest_objection": null,
+          "invalidation": null,
+          "snapshot_sha256": "22e7c84321587051999c462fff32c266b3b94add99b33a1ee1a1b14e91c1eae4",
+          "score": null,
+          "adapter": {
+            "kind": "MOCK",
+            "model": "no-model-executed",
+            "provider": "controlled-subprocess-stub"
+          },
+          "missing_information": [
+            "payload"
+          ],
+          "evidence_refs": [],
+          "buy_authorization": "NONE"
+        },
+        {
+          "symbol": "BTC/USD",
+          "decision": "BLOCKED",
+          "reason": "PROVIDER_UNAVAILABLE",
+          "evidence_id": "27cfaa41370e852469a1d46373e682e9a87cb66fffe16c8b455edafddac59118",
+          "hypothesis": null,
+          "strongest_objection": null,
+          "invalidation": null,
+          "snapshot_sha256": "aeff469f64417f0f45123d9ca5cd134b000e9bc603facd310e91a22c0f4119c4",
+          "score": 26666,
+          "adapter": {
+            "kind": "MOCK",
+            "model": "no-model-executed",
+            "provider": "controlled-subprocess-stub"
+          },
+          "missing_information": [],
+          "evidence_refs": [],
+          "buy_authorization": "NONE"
+        },
+        {
+          "symbol": "SOL/USD",
+          "decision": "BLOCKED",
+          "reason": "PROVIDER_UNAVAILABLE",
+          "evidence_id": "d1c5ba798f357132bf009cf58d363b73fd2bc1bca8219f4f7e158f0e12c8666e",
+          "hypothesis": null,
+          "strongest_objection": null,
+          "invalidation": null,
+          "snapshot_sha256": "f0569bb076a19efd8f763219e5f8076525475a4f8580b5502370e7b017bc85e2",
+          "score": 26666,
+          "adapter": {
+            "kind": "MOCK",
+            "model": "no-model-executed",
+            "provider": "controlled-subprocess-stub"
+          },
+          "missing_information": [],
+          "evidence_refs": [],
+          "buy_authorization": "NONE"
+        },
+        {
+          "symbol": "XRP/USD",
+          "decision": "BLOCKED",
+          "reason": "PROVIDER_UNAVAILABLE",
+          "evidence_id": "9ac624083bc63a0132633f01f3d07e98d4bb727373cd54e1db0b96809339789a",
+          "hypothesis": null,
+          "strongest_objection": null,
+          "invalidation": null,
+          "snapshot_sha256": "f77b2a2c5b78d165ae7acb7b58e8236a05c280f83c179bb6d6e762edd13191f5",
+          "score": 26666,
+          "adapter": {
+            "kind": "MOCK",
+            "model": "no-model-executed",
+            "provider": "controlled-subprocess-stub"
+          },
+          "missing_information": [],
+          "evidence_refs": [],
+          "buy_authorization": "NONE"
+        }
+      ],
+      "journal_chain_valid": true,
+      "stub_receipts": [
+        {
+          "mode": "SIMULATED_STUB_NOT_AI",
+          "state": "REAL_NOT_RUN",
+          "reason": "PROCESS_NONZERO",
+          "elapsed_ns": 17753060,
+          "stdout_bytes": 0,
+          "stderr_bytes": 0,
+          "process_reaped": true,
+          "exit_code": 7,
+          "real_inference": false,
+          "input_tokens": null,
+          "output_tokens": null,
+          "additional_cost_ntd": "0"
+        },
+        {
+          "mode": "SIMULATED_STUB_NOT_AI",
+          "state": "REAL_NOT_RUN",
+          "reason": "PROCESS_NONZERO",
+          "elapsed_ns": 18806974,
+          "stdout_bytes": 0,
+          "stderr_bytes": 0,
+          "process_reaped": true,
+          "exit_code": 7,
+          "real_inference": false,
+          "input_tokens": null,
+          "output_tokens": null,
+          "additional_cost_ntd": "0"
+        },
+        {
+          "mode": "SIMULATED_STUB_NOT_AI",
+          "state": "REAL_NOT_RUN",
+          "reason": "PROCESS_NONZERO",
+          "elapsed_ns": 18293365,
+          "stdout_bytes": 0,
+          "stderr_bytes": 0,
+          "process_reaped": true,
+          "exit_code": 7,
+          "real_inference": false,
+          "input_tokens": null,
+          "output_tokens": null,
+          "additional_cost_ntd": "0"
+        }
+      ]
+    }
+  },
+  "additional_cost_ntd": "0",
+  "buy_authorization": "NONE"
+}
