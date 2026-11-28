@@ -15,7 +15,7 @@ import struct
 import subprocess
 import sys
 import time
-from research import portable_runtime_036 as prep, memory_headroom_037 as memory, recorder_health_037 as recorder_observer
+from research import portable_runtime_036 as prep, memory_headroom_037 as memory, recorder_health_037 as recorder_observer, host_supervision_038 as host_supervisor
 from research.qualification_035 import provision as p, process, containment
 from research.llama_analyst_033 import Refused
 
@@ -136,6 +136,10 @@ def tools_inventory():
     result['memory_headroom']={'path':str(Path(memory.__file__)),'sha256':p.hash_file(Path(memory.__file__))[0]}
     p.secure(Path(recorder_observer.__file__))
     result['recorder_observer']={'path':str(Path(recorder_observer.__file__)),'sha256':p.hash_file(Path(recorder_observer.__file__))[0]}
+    for name,path in {'host_protocol_038':Path(host_supervisor.__file__),
+                      'windows_supervisor_038':host_supervisor.WINDOWS/'HostSupervisor038.ps1',
+                      'windows_probe_038':host_supervisor.WINDOWS/'HostProbe038.ps1'}.items():
+        p.secure(path);result[name]={'path':str(path),'sha256':p.hash_file(path)[0]}
     return result
 
 
@@ -159,7 +163,8 @@ def budget_check(plan):
 
 def prepare(config, *, apply=False):
     required = CONFIG_FIELDS
-    p.need(set(config) == required, 'CONFIG_FIELDS')
+    p.need(set(config) in (required,required|{'host_supervision'}), 'CONFIG_FIELDS')
+    if 'host_supervision' in config:host_supervisor.policy(config)
     job = Path(config['job']); p.secure(job.parent)
     p.need(job.is_absolute() and job == job.resolve() and not job.exists() and not job.is_symlink(), 'NEW_PRIVATE_JOB_REQUIRED')
     p.need(config['protected_roots'] and config['recorder_id'] and type(config['collection_cadence_seconds']) is int
@@ -270,8 +275,12 @@ def health(plan, now=None):
     now=time.time() if now is None else now; config=plan['config']; value=read_json(config['health_file'],4096)
     p.need(type(value) is dict,'HEALTH_OBJECT')
     cadence=config['collection_cadence_seconds']
+    if 'host_supervision' in config:p.need('observer' in value,'INDEPENDENT_RECORDER_OBSERVER_REQUIRED')
     if 'observer' in value:
         recorder_observer.validate_evidence(value,config['recorder_id'],cadence,now=now)
+        if 'host_supervision' in config:
+            return {'recorder':value,'host_supervision':host_supervisor.check(plan,value),
+                    'hardware_uncertainty':host_supervisor.UNCERTAINTY,'physical_hardware_verified':False}
         p.need(value.get('desktop_stable') is True,'PHYSICAL_HOST_STABILITY_HOLD')
     p.need(value.get('version')=='external-recorder-health-037-v1' and value.get('recorder_id')==config['recorder_id'], 'HEALTH_IDENTITY')
     for key in ('measured_at','last_collection_at'):
@@ -453,6 +462,8 @@ print(json.dumps(checks))
     probe='PARENT='+repr(os.readlink('/proc/self/ns/net'))+'\nPARENTPID='+repr(os.readlink('/proc/self/ns/pid'))+'\nPROTECTED='+repr([plan['config']['source'],*plan['config']['protected_roots']])+'\nSECRET='+repr(str(secret))+'\n'+probe
     result={'version':'build-qualification-037-v1','plan_sha256':scope,'qualified':False,'gates':GATES,'measured_at':int(time.time()),'measured_monotonic':time.monotonic()}
     try:
+        if 'host_supervision' in plan['config']:
+            result['host_supervision_proof']=host_supervisor.prove(plan)
         with containment.Canaries(secrets.token_hex(24)) as canary, BuildCgroup(plan['config']['cgroup_parent']) as group:
             canary.positive(); counts=list(canary.counts)
             probe += '\nPORTS='+repr([s.getsockname()[1] for s in canary.sockets])+'\nCHALLENGE='+repr(canary.challenge)+'''
@@ -534,7 +545,15 @@ def _execute(plan, approval):
         q=read_json(job/'qualification.json')
         p.need(q.get('qualified') is True and q['plan_sha256']==prep.digest(plan) and 0<=time.time()-q['measured_at']<=1800
                and 0<=time.monotonic()-q['measured_monotonic']<=1800,'FRESH_QUALIFICATION_REQUIRED')
-        p.need(set(approval)=={'version','plan_sha256','qualification_sha256','owner_review_ref','expires_at','one_attempt','inference'},'APPROVAL_FIELDS')
+        fields={'version','plan_sha256','qualification_sha256','owner_review_ref','expires_at','one_attempt','inference'}
+        if 'host_supervision' in plan['config']:
+            fields|={'host_supervision_binding','host_policy','hardware_uncertainty'}
+            current=health(plan)['host_supervision']
+            p.need(q.get('host_supervision_proof',{}).get('binding')==current['binding'],'HOST_QUALIFICATION_SESSION_MISMATCH')
+            p.need(approval.get('host_supervision_binding')==current['binding']
+                   and approval.get('host_policy')==host_supervisor.POLICY
+                   and approval.get('hardware_uncertainty')==host_supervisor.UNCERTAINTY,'HOST_APPROVAL_SESSION_OR_POLICY')
+        p.need(set(approval)==fields,'APPROVAL_FIELDS')
         p.need(approval['version']=='owner-build-037-v1' and approval['plan_sha256']==prep.digest(plan)
                and approval['qualification_sha256']==prep.digest(q) and approval['owner_review_ref']
                and approval['one_attempt'] is True and approval['inference']=='HOLD'
@@ -548,7 +567,9 @@ def _execute(plan, approval):
             with BuildCgroup(plan['config']['cgroup_parent']) as group:
                 new_json(job/'attempt.json',{'approval':approval,'started_at':int(time.time())})
                 def guard():
-                    p.need(not (job/'STOP').exists(),'OWNER_STOP');health(plan)
+                    p.need(not (job/'STOP').exists(),'OWNER_STOP');state=health(plan)
+                    if 'host_supervision' in plan['config']:
+                        p.need(state['host_supervision']['binding']==approval['host_supervision_binding'],'HOST_BUILD_SESSION_CHANGED')
                     p.need(__import__('shutil').disk_usage(job).free>=1024**3,'DISK_RESERVE_STOP')
                 for index,argv in enumerate(plan['commands']):
                     p.need(plan['tools']==tools_inventory(),'TOOLCHAIN_CHANGED')
@@ -559,7 +580,7 @@ def _execute(plan, approval):
                         log=job/'evidence'/('configure.log' if index==0 else 'build.log'),launch=plan['tools']['python']['resolved'])
                     result['steps'].append(receipt);warnings_check(raw)
                     if index==0:cache_check(job)
-                result['artifacts']=stage(plan);result['operation']='LOCAL_BUILD_PASS_INFERENCE_HOLD'
+                guard();result['artifacts']=stage(plan);guard();result['operation']='LOCAL_BUILD_PASS_INFERENCE_HOLD'
         except (OSError,Refused,ValueError) as exc:
             result['operation']='BUILD_FAILED';result['blocker']=str(exc)
             if hasattr(exc,'receipt'):result['failure_process']=exc.receipt
@@ -695,7 +716,7 @@ def monitor(status_file,health_file,recorder_id,collection_key,healthy_key,stabl
     return {'operation':'MONITOR_STOPPED_HEALTH_WILL_EXPIRE','gates':GATES}
 
 
-def approval_record(plan,review_ref,output):
+def approval_record(plan,review_ref,output,*,accept_host_policy=False):
     """Explicit OWNER action after review; no digital-signature/authenticity claim."""
     revalidate(plan);q=read_json(Path(plan['job'])/'qualification.json')
     p.need(q.get('qualified') is True and q.get('plan_sha256')==prep.digest(plan),'QUALIFICATION_REQUIRED')
@@ -703,6 +724,11 @@ def approval_record(plan,review_ref,output):
     value={'version':'owner-build-037-v1','plan_sha256':prep.digest(plan),
            'qualification_sha256':prep.digest(q),'owner_review_ref':review_ref,
            'expires_at':int(time.time())+900,'one_attempt':True,'inference':'HOLD'}
+    if 'host_supervision' in plan['config']:
+        p.need(accept_host_policy is True,'EXPLICIT_OPERATIONAL_HOST_POLICY_ACCEPTANCE_REQUIRED')
+        current=health(plan)['host_supervision']
+        p.need(q.get('host_supervision_proof',{}).get('binding')==current['binding'],'HOST_QUALIFICATION_SESSION_MISMATCH')
+        value.update(host_supervision_binding=current['binding'],host_policy=host_supervisor.POLICY,hardware_uncertainty=host_supervisor.UNCERTAINTY)
     path=Path(output);p.secure(path.parent);new_json(path,value)
     return {'operation':'EXPLICIT_OWNER_APPROVAL_RECORDED_NOT_EXECUTED','approval':str(path),**value}
 
@@ -715,7 +741,7 @@ def preflight(config):
         except (OSError,ValueError,TypeError,KeyError,Refused,struct.error) as exc:
             checks[name]={'status':'HOLD','reason':str(exc)}
     def schema():
-        p.need(set(config)==CONFIG_FIELDS,'CONFIG_FIELDS');return 'UNCHANGED_CONFIG_SCHEMA'
+        p.need(set(config) in (CONFIG_FIELDS,CONFIG_FIELDS|{'host_supervision'}),'CONFIG_FIELDS');return 'UNCHANGED_CONFIG_SCHEMA'
     check('config_schema',schema)
     check('memory',lambda:memory.snapshot(config['cgroup_parent']))
     if checks['memory']['status']=='PASS':
@@ -753,17 +779,22 @@ def preflight(config):
         return {'enabled':sorted(enabled),'write_access_flag':True,'child_creation_limit_readback_kill_and_lock':'UNVERIFIED_UNTIL_QUALIFY'}
     check('delegation_readiness',delegation)
     check('recorder_observation',lambda:recorder_observer.validate_evidence(read_json(config['health_file'],4096),config['recorder_id'],config['collection_cadence_seconds']))
-    check('recorder_health',lambda:health({'config':config}))
+    if 'host_supervision' in config:
+        check('host_policy',lambda:host_supervisor.policy(config))
+        checks['host_supervision_session']={'status':'UNVERIFIED','reason':'USE_FRESH_PREPARED_PLAN_AND_SSH_HOST_SESSION'}
+        check('recorder_health',lambda:recorder_observer.validate_evidence(read_json(config['health_file'],4096),config['recorder_id'],config['collection_cadence_seconds']))
+    else:check('recorder_health',lambda:health({'config':config}))
     checks['actual_containment']={'status':'UNVERIFIED','reason':'REQUIRES_EXISTING_HARMLESS_QUALIFY_NO_STATE_CHANGED'}
     checks['configure_flags_and_runtime_loader']={'status':'UNVERIFIED','reason':'SOURCE_REVIEWED_FLAGS_REQUIRE_APPROVED_CONFIGURE_AND_CONTAINED_LOADER_PROBE'}
     return {'operation':'READ_ONLY_PREFLIGHT','checks':checks,
             'readiness':'HOLD' if any(v['status']=='HOLD' for v in checks.values()) else 'READY_FOR_HARMLESS_QUALIFICATION_REVIEW',
-            'qualified':False,'writes':0,'limits':LIMITS,'gates':GATES}
+            'qualified':False,'writes':0,'limits':LIMITS,'gates':GATES,
+            'hardware_uncertainty':host_supervisor.UNCERTAINTY if 'host_supervision' in config else 'PHYSICAL_HOST_STABILITY_HOLD'}
 
 
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__);sub=parser.add_subparsers(dest='action',required=True)
-    a=sub.add_parser('approve');a.add_argument('--plan',required=True);a.add_argument('--review-ref',required=True);a.add_argument('--output',required=True)
+    a=sub.add_parser('approve');a.add_argument('--plan',required=True);a.add_argument('--review-ref',required=True);a.add_argument('--output',required=True);a.add_argument('--accept-operational-host-policy',action='store_true')
     a=sub.add_parser('monitor');a.add_argument('--status-file',required=True);a.add_argument('--health-file',required=True);a.add_argument('--recorder-id',required=True)
     a.add_argument('--collection-key',required=True);a.add_argument('--healthy-key',required=True);a.add_argument('--stable-key',required=True);a.add_argument('--seconds',type=int,default=7500);a.add_argument('--stop-file');a.add_argument('--measurement-key',default='measured_at')
     a=sub.add_parser('inputs');a.add_argument('--directory',required=True);a.add_argument('--review-ref',required=True);a.add_argument('--apply',action='store_true')
@@ -778,7 +809,7 @@ def main(argv=None):
     def interrupted(signum,frame):raise Refused('SUPERVISOR_TERMINATED')
     signal.signal(signal.SIGTERM,interrupted)
     try:
-        if args.action=='approve':result=approval_record(read_json(args.plan),args.review_ref,args.output)
+        if args.action=='approve':result=approval_record(read_json(args.plan),args.review_ref,args.output,accept_host_policy=args.accept_operational_host_policy)
         elif args.action=='monitor':result=monitor(args.status_file,args.health_file,args.recorder_id,args.collection_key,args.healthy_key,args.stable_key,seconds=args.seconds,stop_file=args.stop_file,measurement_key=args.measurement_key)
         elif args.action=='inputs':result=target_inputs(args.directory,args.review_ref,apply=args.apply)
         elif args.action=='preflight':result=preflight(read_json(args.config))
