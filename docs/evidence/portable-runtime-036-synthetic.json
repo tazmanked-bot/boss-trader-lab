@@ -1,0 +1,69 @@
+{
+  "code_sha256": "d567b6cc92c5283368ac87e43924a18c65f8f7ad22be6f87de4066df5f6481db",
+  "corrupt_hash_refusal": "ARTIFACT_HASH_SIZE",
+  "fixture_source_commit_is_synthetic_not_reviewed": "03dbd8acf33c614cfe908137a6c0d47244edac36",
+  "label": "SYNTHETIC_ONLY_INERT_NON_RUNNABLE_ELF_BYTES_NO_BUILD_NO_MODEL",
+  "limits": {
+    "available_ram_min_bytes": 4294967296,
+    "cpu_quota_percent": 100,
+    "cpu_seconds": 600,
+    "disk_free_min_bytes": 8589934592,
+    "jobs": 1,
+    "memory_max_bytes": 3221225472,
+    "nice": 10,
+    "output_max_bytes": 1048576,
+    "pids_max": 64,
+    "swap_max_bytes": 0,
+    "wall_seconds": 900
+  },
+  "positive_inventory": {
+    "artifacts": {
+      "bin/llama-cli": {
+        "interpreter": "/lib/ld-inert.so",
+        "needed": [
+          "libfake.so.1"
+        ],
+        "paths": [
+          "$ORIGIN/../lib"
+        ],
+        "sha256": "b99464784cc6bcdc6da058c68be4ceb7350885d7354648db0b26826d3704c0d2",
+        "size": 4096,
+        "soname": null
+      },
+      "lib/ld-inert.so": {
+        "interpreter": null,
+        "needed": [],
+        "paths": [],
+        "sha256": "772434b78cfddeb6132b9f1e75b51bc9d73366dcefd81e8258f7aa7cb8b7a7be",
+        "size": 4096,
+        "soname": null
+      },
+      "lib/libfake.so.1.0": {
+        "interpreter": null,
+        "needed": [],
+        "paths": [],
+        "sha256": "2e5c9ca12253895df0ce7e04725c4279eb67445aaa0b73301c9152bb95b4184a",
+        "size": 4096,
+        "soname": "libfake.so.1"
+      }
+    },
+    "attestation": "LOCAL_BUILD_ATTESTATION_NOT_INDEPENDENT",
+    "build_inputs_sha256": "368af67fd580a7f9f4cc4b2a6e0560fededfdeeec9add47d5e41079691831977",
+    "gates": {
+      "AEP_Gate_B": "HOLD",
+      "buy_authorization": "NONE",
+      "desktop_build": "HOLD",
+      "full_containment": "HOLD",
+      "inference": "HOLD",
+      "real": "REAL_NOT_RUN"
+    },
+    "manifest_sha256": "c1cc0b2bc5abba86de23a21ed5c73ea9bd1a259edada471c47994fd94015c821",
+    "operation": "PASSIVE_ARTIFACT_CHECK",
+    "provisioner_035": "HOLD_INDEPENDENT_EXPECTATIONS_AND_MODEL_REQUIRED",
+    "symlink_chains": {
+      "lib/libfake.so.1": "lib/libfake.so.1.0"
+    }
+  },
+  "real": "REAL_NOT_RUN",
+  "reviewed_source_commit": "0978a6e9022fb9bd6874b86154ee304e81929b9f"
+}
