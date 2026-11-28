@@ -340,3 +340,125 @@ any separately approved build attempt. All target-containment, recorder-health,
 model publisher/license and independent-reproducibility gaps above remain.
 No actual compilation, inference, system-library modifications, merge or workflow
 dispatch. Additional spending NT$0. STOP FOR OWNER AND BOSS AI REVIEW.
+
+## Authorized Hotfix #2 — process/build cgroup memory headroom (2026-11-28)
+
+Reviewed parent `048c2e89a1f79ee56ff2c3730379d64a36c10ed0`. Owner reports 662/662
+local tests and successful toolchain inventory, then `RAM_HEADROOM_HOLD` despite
+kernel `MemAvailable: 5678440 kB`, absent root memory.max/current and unlimited
+configured delegation memory.max/high. These are **owner observations**, not new
+Codex desktop measurements. The old detector assumed memory.max existed directly
+at `/sys/fs/cgroup` and returned zero on its absence.
+
+`research.memory_headroom_037.snapshot` now reads actual unified process membership
+from `/proc/self/cgroup` and maps it through `/proc/self/mountinfo`. It walks both
+the process and configured build-parent ancestor chains to the visible global
+cgroup-v2 root, deduplicating shared ancestors. For each applicable finite
+memory.max **and memory.high**, remaining capacity is `max(0, limit-current)`.
+Effective available memory is the minimum of all such capacities and kernel
+MemAvailable. `max` means unlimited and causes no extra subtraction. Linux kB is
+converted using 1024 bytes. Root memory interfaces may legitimately all be absent;
+this is not zero physical memory. The synthetic reproduction of the reported
+Debian hierarchy yields **5,814,722,560 bytes**, above **4,294,967,296 bytes (4 GiB)**.
+
+The configured build **parent** is inspected; the future child **3 GiB compilation
+ceiling** is neither increased nor subtracted as if it were host headroom. The
+supervisor's own cgroup constraints are checked too. Finite sibling/ancestor
+constraints can still yield RAM_HEADROOM_HOLD even when global RAM is plentiful.
+
+No optimistic fallback: unreadable values, partial/nonroot missing interfaces,
+invalid/negative/overflowing numbers, unknown scope, ambiguous mounts, cgroup-v1
+memory profiles, hidden mount ancestors and changing membership/limits fail
+closed. Nonroot all-absent interfaces are accepted only with readable proof the
+parent has not enabled memory, and the ancestors still constrain capacity.
+The node must exist and have readable cgroup.type. A nominal mount root that
+exposes nonroot-style memory interfaces requires namespace/hidden-ancestor review
+and returns HOLD rather than assuming no outer ceiling. Unsupported profiles are
+reported, never repaired by changing system state. Snapshots are point-in-time
+observations, not reservations or a guarantee of future free RAM.
+
+CODEX036's integer `resources()` API delegates to the new detector and stays
+compatible; CODEX037 passes the existing config's `cgroup_parent`, records the
+memory evidence in the new plan and rechecks before qualification/build. The
+4 GiB available-memory floor, 3 GiB child memory.max, zero swap, one CPU, PIDs,
+watchdogs, source/ELF/trust and all containment checks remain unchanged. The new
+memory module is included in the plan's pinned code inventory.
+
+### Preserve existing inputs; inspect before another attempt
+
+No new configuration keys or inventory format changes are required. Existing
+config/toolchain/system-library JSON can be reused if their paths, versions,
+hashes and license review remain valid. The hotfix does not edit, regenerate or
+overwrite them. Their historical code hashes remain historical evidence; the new
+plan independently binds the current supervisor/worker/memory-module code. Do not
+reuse old plan approvals or qualification receipts for changed code.
+
+Run from the reviewed updated checkout using the existing `bt037` shell helper:
+
+```sh
+bt037 preflight --config "$BT_PRIVATE/config.json"
+```
+
+This is a new **read-only** survey using the existing config. It reports checks
+individually instead of hiding later issues behind the first failed check. It
+reads memory hierarchy evidence, CPU flags, current tool hashes, existing input
+review/hashes, library closure, destination/path/disk compatibility, delegated
+controller readiness and recorder health. It creates no source/build directories,
+processes, namespaces, cgroups, locks or report files. Exit 2 means a reported
+HOLD; exit 0 means only readiness to review harmless qualification. `qualified`
+remains false in either case. It does not grant compilation or inference authority.
+
+Then review the report. Existing `prepare --config ...` remains dry-run by default.
+If the earlier failure was RAM_HEADROOM_HOLD, that check occurred before job
+creation, so the same still-unused destination normally remains compatible.
+An existing destination or partial evidence is not automatically removed or
+resumed. Preserve it for review; do not delete or rewrite inventory/config to
+silence a refusal. Source content is still authenticated again by prepare; the
+survey explicitly defers that expensive check instead of claiming fresh source
+verification from the owner's previous run.
+
+### Remaining target-specific assumptions inspected
+
+| Assumption / possible blocker | Survey or next mandatory evidence |
+|---|---|
+| True global cgroup-v2 hierarchy is visible; other ancestor limits may constrain the process or build parent | New memory report lists exact paths, max/high/current and effective bytes. Hidden/namespaced or ambiguous roots HOLD. |
+| Existing private delegation is user-owned, below `/sys/fs/cgroup`, with cpu/memory/pids already enabled and writable | Read-only survey checks ownership/controller/access flags and leftovers. No auto-enable, sudo or chown. Nonstandard mount profiles may still fail existing containment. |
+| Child limits, zero-swap interface, cgroup.kill, directory flock, aggregate CPU/PID ancestor capacity and detached-descendant cleanup work | **UNVERIFIED until existing harmless qualify.** Read-only metadata/access flags do not prove child writes/readback/kill. Lower ancestor CPU quotas or PID limits may throttle/fail an attempt; no limit is raised. |
+| Installed tools use supported fixed `/usr/bin` paths and resolve under `/usr`; Debian compiler alternatives and usrmerge profile are supported | Survey reuses tools_inventory; prior successful local inventory is owner evidence, not an excuse to skip current hashes. Non-usrmerge/other tool profiles require review. |
+| Reviewed loader/library manifest still matches hashes, SONAME and transitive closure; DT_STRSZ <=1 MiB | Survey reuses existing corrected passive verifier. File-only loader execution remains the harmless qualification probe, not inference. |
+| Job parent/config/code/health paths meet existing strict ownership/ACL/symlink policy; job unused; 4 GiB disk free before build | Survey checks existing path/disk rules. Original group-writable source remains only the authenticated read-input exception. No automatic permission changes. |
+| Recorder producer reports actual healthy/stable status, fresh measurement <=30s and actual collection <=2 cadences+30s | Survey reads existing health input. Missing feed is a qualification/build HOLD, not proof the operational recorder failed and not a new restriction on harmless source export. Cadence is actual collection cadence, not candle length. |
+| CMake recognizes every security flag and emits the expected cache; no downloading or unexpected fallback | Still requires separately reviewed controlled configure. No flags relaxed, no install/download or configure performed to predict success. |
+| All gates can be closed solely from metadata/synthetic success | False. Qualification, actual target behavior, runtime/model publisher/license evidence and independent reproducibility remain separate HOLDs. |
+
+The survey does not promise no further target-specific blocker. It exposes current
+read-only incompatibilities and separates them from the kernel/namespace/loader
+behavior that cannot be verified without the already designed harmless target
+qualification. No actual compilation or genuine inference was performed here.
+
+### Hotfix #2 verification
+
+| Exact command | Actual result |
+|---|---|
+| `/usr/bin/python3 -B -m unittest discover -s tests -p test_memory_headroom_037.py -v` | 33 passed, 0.013s |
+| `/usr/bin/python3 -B -m unittest discover -s tests -p test_controlled_build_037.py -v` | 39 passed, 2.859s |
+| `/usr/bin/python3 -B -m unittest discover -s tests -p test_portable_runtime_036.py -v` | 30 passed, 0.618s |
+| `/usr/bin/python3 -B -m unittest discover -s tests -v` (Python 3.13.5) | 695 passed, 12.212s; 662 baseline +33 new; no skips |
+| `python -B -m unittest discover -s tests -v` (Python 3.12.14) | 695 passed, 11.093s; no skips |
+
+The new deterministic cases reproduce missing global-root interfaces/unlimited
+Debian delegation, root process membership, finite process/sibling build and
+shared ancestors, memory.high, exhausted limits, exact 4 GiB boundary/one byte
+below, unreadable/partial/invalid/missing data, disabled controllers, migration,
+changing limits, escaped/ambiguous/subtree mounts and namespace-root ambiguity.
+Survey tests prove multiple holds are reported without writes/spawns or config/
+inventory byte changes; READY survey does not become qualified containment.
+See `docs/evidence/controlled-build-037-memory-hotfix.json` for labeled synthetic
+results. Python 3.13's 10 inherited SQLite ResourceWarnings remain unsuppressed.
+
+Next owner action: review this revised draft and run the single read-only preflight
+against the **existing** config. Review all HOLD/UNVERIFIED results, then review
+fresh preparation/qualification evidence before any separately authorized build.
+No actual compilation, inference, system modifications, merge, workflow dispatch
+or additional expenditure. AEP Gate B HOLD; BUY AUTHORIZATION NONE. STOP FOR OWNER
+AND BOSS AI REVIEW.

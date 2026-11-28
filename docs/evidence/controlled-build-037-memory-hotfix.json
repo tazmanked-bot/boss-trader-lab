@@ -1,0 +1,122 @@
+{
+  "compilation": "NOT_RUN",
+  "compilation_memory_ceiling_bytes": 3221225472,
+  "debian_reproduction": {
+    "available_bytes": 5814722560,
+    "configured_build_cgroup": "/sys/fs/cgroup/build.slice",
+    "hierarchy_root": "/",
+    "kernel_available_bytes": 5814722560,
+    "limits": [
+      {
+        "current_bytes": 0,
+        "high": "max",
+        "max": "max",
+        "path": "/sys/fs/cgroup/user.slice/session.scope"
+      },
+      {
+        "current_bytes": 0,
+        "high": "max",
+        "max": "max",
+        "path": "/sys/fs/cgroup/user.slice"
+      },
+      {
+        "current_bytes": 0,
+        "high": "max",
+        "max": "max",
+        "path": "/sys/fs/cgroup/build.slice"
+      },
+      {
+        "path": "/sys/fs/cgroup",
+        "state": "HIERARCHY_ROOT_NO_MEMORY_INTERFACES"
+      }
+    ],
+    "mountpoint": "/sys/fs/cgroup",
+    "observation": "POINT_IN_TIME_NOT_RESERVED_MEMORY",
+    "process_cgroup": "/sys/fs/cgroup/user.slice/session.scope",
+    "scope": "VISIBLE_PROCESS_AND_CONFIGURED_BUILD_ANCESTORS",
+    "status": "PASS",
+    "version": "memory-headroom-037-v1"
+  },
+  "finite_process_ancestor": {
+    "available_bytes": 3221225472,
+    "configured_build_cgroup": "/sys/fs/cgroup/build.slice",
+    "hierarchy_root": "/",
+    "kernel_available_bytes": 5814722560,
+    "limits": [
+      {
+        "current_bytes": 0,
+        "high": "max",
+        "max": "max",
+        "path": "/sys/fs/cgroup/user.slice/session.scope"
+      },
+      {
+        "current_bytes": 2147483648,
+        "high": "max",
+        "max": "5368709120",
+        "max_remaining_bytes": 3221225472,
+        "path": "/sys/fs/cgroup/user.slice"
+      },
+      {
+        "current_bytes": 0,
+        "high": "max",
+        "max": "max",
+        "path": "/sys/fs/cgroup/build.slice"
+      },
+      {
+        "path": "/sys/fs/cgroup",
+        "state": "HIERARCHY_ROOT_NO_MEMORY_INTERFACES"
+      }
+    ],
+    "mountpoint": "/sys/fs/cgroup",
+    "observation": "POINT_IN_TIME_NOT_RESERVED_MEMORY",
+    "process_cgroup": "/sys/fs/cgroup/user.slice/session.scope",
+    "scope": "VISIBLE_PROCESS_AND_CONFIGURED_BUILD_ANCESTORS",
+    "status": "PASS",
+    "version": "memory-headroom-037-v1"
+  },
+  "gates": {
+    "AEP_Gate_B": "HOLD",
+    "buy_authorization": "NONE",
+    "desktop_build": "EXPLICIT_OWNER_INVOCATION_ONLY",
+    "full_containment": "HOLD",
+    "inference": "HOLD",
+    "real": "REAL_NOT_RUN"
+  },
+  "genuine_inference": "HOLD",
+  "memory_module_sha256": "f3330e07ec0270f7dd4e5933ed08a0f3897b307d2729ff71b0dd88d9550e38ee",
+  "minimum_available_bytes": 4294967296,
+  "owner_reported": {
+    "delegated_max_and_high": "UNLIMITED",
+    "kernel_MemAvailable_kB": 5678440,
+    "root_memory_max_and_current": "ABSENT"
+  },
+  "scope": "DETERMINISTIC_SYNTHETIC_HIERARCHIES_NOT_OWNER_TARGET_MEASUREMENTS",
+  "system_writes": 0,
+  "unreadable_current": {
+    "available_bytes": 0,
+    "configured_build_cgroup": "/sys/fs/cgroup/build.slice",
+    "hierarchy_root": "/",
+    "kernel_available_bytes": 5814722560,
+    "limits": [
+      {
+        "current_bytes": 0,
+        "high": "max",
+        "max": "max",
+        "path": "/sys/fs/cgroup/user.slice/session.scope"
+      },
+      {
+        "current_bytes": 0,
+        "high": "max",
+        "max": "max",
+        "path": "/sys/fs/cgroup/user.slice"
+      }
+    ],
+    "mountpoint": "/sys/fs/cgroup",
+    "observation": "POINT_IN_TIME_NOT_RESERVED_MEMORY",
+    "process_cgroup": "/sys/fs/cgroup/user.slice/session.scope",
+    "reason": "SYNTHETIC_UNREADABLE_CURRENT",
+    "scope": "VISIBLE_PROCESS_AND_CONFIGURED_BUILD_ANCESTORS",
+    "status": "HOLD",
+    "version": "memory-headroom-037-v1"
+  }
+}

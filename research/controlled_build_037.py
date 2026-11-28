@@ -15,7 +15,7 @@ import struct
 import subprocess
 import sys
 import time
-from research import portable_runtime_036 as prep
+from research import portable_runtime_036 as prep, memory_headroom_037 as memory
 from research.qualification_035 import provision as p, process, containment
 from research.llama_analyst_033 import Refused
 
@@ -25,6 +25,8 @@ LIMITS = dict(prep.LIMITS, wall_seconds=7200, cpu_seconds=5400, pids_max=64,
               disk_free_min_bytes=4*1024**3, available_ram_min_bytes=4*1024**3,
               output_max_bytes=4*1024**2)
 GATES = dict(prep.GATES, desktop_build='EXPLICIT_OWNER_INVOCATION_ONLY')
+CONFIG_FIELDS=frozenset({'source','job','protected_roots','cgroup_parent','health_file','recorder_id',
+                         'collection_cadence_seconds','toolchain_evidence','system_libraries'})
 SYSTEM_TOOLS = {'cmake': '/usr/bin/cmake', 'cc': '/usr/bin/cc', 'cxx': '/usr/bin/c++',
                 'make': '/usr/bin/make', 'linker': '/usr/bin/ld', 'python': '/usr/bin/python3',
                 'bwrap': '/usr/bin/bwrap', 'resolution_probe':'/usr/bin/true'}
@@ -130,6 +132,8 @@ def tools_inventory():
     p.secure(WORKER);p.secure(Path(__file__))
     result['worker'] = {'path':str(WORKER), 'sha256':p.hash_file(WORKER)[0]}
     result['supervisor'] = {'path':str(Path(__file__)), 'sha256':p.hash_file(Path(__file__))[0]}
+    p.secure(Path(memory.__file__))
+    result['memory_headroom']={'path':str(Path(memory.__file__)),'sha256':p.hash_file(Path(memory.__file__))[0]}
     return result
 
 
@@ -143,13 +147,16 @@ def commands():
 def budget_check(plan):
     p.need(plan['limits'] == LIMITS, 'FIXED_REVIEWED_BUDGET_REQUIRED')
     prep.compatibility()
-    p.need(prep.resources() >= LIMITS['available_ram_min_bytes'], 'RAM_HEADROOM_HOLD')
+    parent=plan['config']['cgroup_parent']
+    p.need(type(parent) is str and parent.startswith('/'),'DELEGATED_CGROUP_REQUIRED')
+    capacity=memory.snapshot(parent)
+    p.need(capacity['status']=='PASS' and capacity['available_bytes'] >= LIMITS['available_ram_min_bytes'], 'RAM_HEADROOM_HOLD')
     p.need(__import__('shutil').disk_usage(plan['job']).free >= LIMITS['disk_free_min_bytes'], 'DISK_HEADROOM_HOLD')
+    return capacity
 
 
 def prepare(config, *, apply=False):
-    required = {'source','job','protected_roots','cgroup_parent','health_file','recorder_id','collection_cadence_seconds',
-                'toolchain_evidence','system_libraries'}
+    required = CONFIG_FIELDS
     p.need(set(config) == required, 'CONFIG_FIELDS')
     job = Path(config['job']); p.secure(job.parent)
     p.need(job.is_absolute() and job == job.resolve() and not job.exists() and not job.is_symlink(), 'NEW_PRIVATE_JOB_REQUIRED')
@@ -170,7 +177,8 @@ def prepare(config, *, apply=False):
             'host':{'boot_id':Path('/proc/sys/kernel/random/boot_id').read_text().strip(),'uid':os.getuid(),
                     'kernel':os.uname().release},'created_at':int(time.time()),'nonce':secrets.token_hex(24)}
     # No workspace writes for dry-run. Check current free space on the existing parent.
-    observed_job = plan['job']; plan['job'] = str(job.parent); budget_check(plan); plan['job'] = observed_job
+    observed_job = plan['job']; plan['job'] = str(job.parent)
+    plan['memory_evidence']=budget_check(plan); plan['job'] = observed_job
     if not apply: return dict(plan, operation='DRY_RUN_NO_WRITES')
     old = os.umask(0o077)
     try:
@@ -693,12 +701,66 @@ def approval_record(plan,review_ref,output):
     return {'operation':'EXPLICIT_OWNER_APPROVAL_RECORDED_NOT_EXECUTED','approval':str(path),**value}
 
 
+def preflight(config):
+    """Read-only compatibility survey. Never qualifies namespaces or changes system state."""
+    checks={}
+    def check(name,operation):
+        try:checks[name]={'status':'PASS','evidence':operation()}
+        except (OSError,ValueError,TypeError,KeyError,Refused,struct.error) as exc:
+            checks[name]={'status':'HOLD','reason':str(exc)}
+    def schema():
+        p.need(set(config)==CONFIG_FIELDS,'CONFIG_FIELDS');return 'UNCHANGED_CONFIG_SCHEMA'
+    check('config_schema',schema)
+    check('memory',lambda:memory.snapshot(config['cgroup_parent']))
+    if checks['memory']['status']=='PASS':
+        capacity=checks['memory']['evidence']
+        if capacity['status']!='PASS' or capacity['available_bytes']<LIMITS['available_ram_min_bytes']:
+            checks['memory']['status']='HOLD';checks['memory']['reason']='RAM_HEADROOM_HOLD'
+    check('cpu',prep.compatibility)
+    check('toolchain',tools_inventory)
+    check('system_libraries',lambda:validate_system(read_json(config['system_libraries'])))
+    def inputs():
+        value=read_json(config['toolchain_evidence'])
+        p.need(value.get('packages') and value.get('licenses') and value.get('review_ref'),'TOOLCHAIN_REVIEW_REQUIRED')
+        return {'review_ref':value['review_ref'],'sha256':p.hash_file(Path(config['toolchain_evidence']))[0]}
+    check('existing_toolchain_evidence',inputs)
+    def paths():
+        job=Path(config['job']);p.secure(job.parent)
+        p.need(job.is_absolute() and job==job.resolve() and not job.exists() and not job.is_symlink(),'NEW_PRIVATE_JOB_REQUIRED')
+        for value in [config['source'],config['health_file'],*config['protected_roots']]:
+            path=Path(value);p.need(path.is_absolute(),'ABSOLUTE_INPUT_REQUIRED');path=path.resolve()
+            p.need(not job.is_relative_to(path) and not path.is_relative_to(job),'PROTECTED_JOB_OVERLAP')
+        for value in [config['source'],*config['protected_roots']]:
+            p.need(not Path(value).resolve().is_relative_to('/usr'),'PROTECTED_UNDER_TOOLCHAIN_MOUNT')
+        free=__import__('shutil').disk_usage(job.parent).free
+        p.need(free>=LIMITS['disk_free_min_bytes'],'DISK_HEADROOM_HOLD')
+        return {'job':str(job),'disk_free_bytes':free,'source_content_verification':'DEFERRED_TO_PREPARE'}
+    check('paths_and_disk',paths)
+    def delegation():
+        parent=Path(config['cgroup_parent']);root=Path('/sys/fs/cgroup').resolve()
+        p.need(parent.is_absolute() and parent==parent.resolve() and parent.is_relative_to(root) and parent!=root,'DELEGATED_CGROUP_REQUIRED')
+        p.need(parent.stat().st_uid==os.getuid(),'CGROUP_OWNERSHIP')
+        enabled=set((parent/'cgroup.subtree_control').read_text().split())
+        p.need({'cpu','memory','pids'}<=enabled,'CONTROLLERS_NOT_DELEGATED')
+        p.need(os.access(parent,os.W_OK),'CGROUP_NOT_WRITABLE')
+        p.need(not list(parent.glob('boss-035-*')),'PREVIOUS_PRIVATE_SCOPE_REVIEW_REQUIRED')
+        return {'enabled':sorted(enabled),'write_access_flag':True,'child_creation_limit_readback_kill_and_lock':'UNVERIFIED_UNTIL_QUALIFY'}
+    check('delegation_readiness',delegation)
+    check('recorder_health',lambda:health({'config':config}))
+    checks['actual_containment']={'status':'UNVERIFIED','reason':'REQUIRES_EXISTING_HARMLESS_QUALIFY_NO_STATE_CHANGED'}
+    checks['configure_flags_and_runtime_loader']={'status':'UNVERIFIED','reason':'SOURCE_REVIEWED_FLAGS_REQUIRE_APPROVED_CONFIGURE_AND_CONTAINED_LOADER_PROBE'}
+    return {'operation':'READ_ONLY_PREFLIGHT','checks':checks,
+            'readiness':'HOLD' if any(v['status']=='HOLD' for v in checks.values()) else 'READY_FOR_HARMLESS_QUALIFICATION_REVIEW',
+            'qualified':False,'writes':0,'limits':LIMITS,'gates':GATES}
+
+
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__);sub=parser.add_subparsers(dest='action',required=True)
     a=sub.add_parser('approve');a.add_argument('--plan',required=True);a.add_argument('--review-ref',required=True);a.add_argument('--output',required=True)
     a=sub.add_parser('monitor');a.add_argument('--status-file',required=True);a.add_argument('--health-file',required=True);a.add_argument('--recorder-id',required=True)
     a.add_argument('--collection-key',required=True);a.add_argument('--healthy-key',required=True);a.add_argument('--stable-key',required=True);a.add_argument('--seconds',type=int,default=7500);a.add_argument('--stop-file');a.add_argument('--measurement-key',default='measured_at')
     a=sub.add_parser('inputs');a.add_argument('--directory',required=True);a.add_argument('--review-ref',required=True);a.add_argument('--apply',action='store_true')
+    a=sub.add_parser('preflight');a.add_argument('--config',required=True)
     a=sub.add_parser('prepare');a.add_argument('--config',required=True);a.add_argument('--apply',action='store_true')
     for action in ('qualify','build','stop','status'):
         a=sub.add_parser(action);a.add_argument('--plan',required=True)
@@ -712,6 +774,7 @@ def main(argv=None):
         if args.action=='approve':result=approval_record(read_json(args.plan),args.review_ref,args.output)
         elif args.action=='monitor':result=monitor(args.status_file,args.health_file,args.recorder_id,args.collection_key,args.healthy_key,args.stable_key,seconds=args.seconds,stop_file=args.stop_file,measurement_key=args.measurement_key)
         elif args.action=='inputs':result=target_inputs(args.directory,args.review_ref,apply=args.apply)
+        elif args.action=='preflight':result=preflight(read_json(args.config))
         elif args.action=='prepare':result=prepare(read_json(args.config),apply=args.apply)
         elif args.action=='rollback':result=prep.rollback(args.job,args.receipt_sha256,apply=args.apply)
         else:
@@ -720,7 +783,10 @@ def main(argv=None):
             elif args.action=='build':result=execute(plan,read_json(args.approval))
             elif args.action=='stop':new_json(Path(plan['job'])/'STOP',{'owner_stop':True});result={'operation':'STOP_REQUESTED'}
             else:result={'plan_sha256':prep.digest(plan),'gates':GATES,'source_commit':plan['source']['commit'],'limits':plan['limits']}
-        print(json.dumps(result,indent=2,sort_keys=True));return 2 if result.get('operation')=='BUILD_FAILED' or result.get('qualified') is False else 0
+        print(json.dumps(result,indent=2,sort_keys=True))
+        failed=(result.get('operation')=='BUILD_FAILED' or result.get('readiness')=='HOLD'
+                or result.get('qualified') is False and result.get('operation')!='READ_ONLY_PREFLIGHT')
+        return 2 if failed else 0
     except (OSError,ValueError,KeyError,Refused,struct.error) as exc:
         print(json.dumps({'operation':'REFUSED','reason':str(exc),'gates':GATES},sort_keys=True));return 2
     finally:signal.signal(signal.SIGTERM,previous)
