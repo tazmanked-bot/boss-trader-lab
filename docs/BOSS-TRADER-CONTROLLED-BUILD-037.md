@@ -292,3 +292,51 @@ no-network namespace, read-only mounts and file-only loader resolution must stil
 be measured by the owner's exact `qualify` command; unavailable capabilities cause
 refusal, never fallback. Installed toolchain closure completeness, publisher/model
 identity/licensing and reproducibility remain independently unverified.
+
+## Authorized ELF string-table compatibility hotfix (2026-11-28)
+
+The owner reported Debian `libstdc++.so.6` with DT_STRSZ **308,098** bytes,
+exceeding CODEX035's old 65,536-byte dynamic string-table limit. The shared passive
+reader now permits **at most 1,048,576 bytes (1 MiB) for DT_STRTAB/DT_STRSZ only**.
+PT_INTERP and PT_DYNAMIC entry metadata reads remain capped at **65,536 bytes**.
+The 128 MiB full-ELF cap and SHA-256 binding remain unchanged. The selected
+PT_LOAD must contain the complete table, fit within the actual file, and have
+p_filesz <= p_memsz. Reads explicitly reject offsets/spans outside the file;
+invalid string offsets, missing terminators, absent/zero/oversized tables,
+misaligned dynamic entries and truncated metadata still refuse. This is no
+change to library trust, source permissions, containment, budgets or inference.
+
+The same failure was independently reproduced by **read-only inspection of this
+cloud runner's installed library**, not the owner's desktop:
+
+* `/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33`, 2,497,768 bytes.
+* SHA-256 `972bb2a18b71140dab0240f8a1f68ab3fb1d56bcd4c4f824a91b70888faf5a00`.
+* Measured DT_STRSZ 308,098 bytes. Original parser: `ELF_STRING_TABLE`.
+  Corrected CODEX037 passive consumer: PASS; SONAME `libstdc++.so.6`, dependencies
+  `libm.so.6`, `libc.so.6`, `ld-linux-x86-64.so.2`, `libgcc_s.so.1`.
+
+This read did not load/execute or modify the library. It is parser compatibility
+proof, not authentication of the owner's library or toolchain/license clearance.
+See `docs/evidence/controlled-build-037-elf-hotfix.json` for exact recorded evidence.
+
+| Command | Actual result |
+|---|---|
+| `/usr/bin/python3 -B -m unittest discover -s tests -p test_elf_string_table_037.py -v` | 15 passed, 0.041s |
+| `/usr/bin/python3 -B -m unittest discover -s tests -p test_owner_qualification_035.py -v` | 26 passed, 0.793s |
+| `/usr/bin/python3 -B -m unittest discover -s tests -p test_controlled_build_037.py -v` | 39 passed, 2.785s |
+| `/usr/bin/python3 -B -m unittest discover -s tests -v` (3.13.5) | 662 passed, 12.067s; no skips |
+| `python -B -m unittest discover -s tests -v` (3.12.14) | 662 passed, 11.432s; no skips |
+
+The 15 new synthetic regressions use end-of-table names beyond 64 KiB, the actual
+Debian-sized table, 64 KiB/64 KiB+1/exact 1 MiB success and 1 MiB+1 refusal. They
+also cover full-file/segment boundaries, invalid p_filesz/p_memsz, absent metadata,
+invalid offsets/termination, hash corruption, dynamic-entry alignment and unchanged
+64 KiB limits for unrelated interpreter/dynamic metadata. The inherited Python
+3.13 SQLite ResourceWarnings remain recorded; they were not suppressed or fixed.
+
+Owner next action: review the revised draft, update the reviewed local checkout,
+rerun these tests and regenerate/review the target inventory and exact plan before
+any separately approved build attempt. All target-containment, recorder-health,
+model publisher/license and independent-reproducibility gaps above remain.
+No actual compilation, inference, system-library modifications, merge or workflow
+dispatch. Additional spending NT$0. STOP FOR OWNER AND BOSS AI REVIEW.
