@@ -192,7 +192,7 @@ def demo():
         now=fixture['as_of']
         connection.executemany('INSERT INTO events VALUES (?,?,?)',[(now-86400,now-10,'SYNTHETIC_BTC_USD'),(now-72000,now-5,'SYNTHETIC_BTC_USD')])
         connection.commit();connection.close()
-        freshness=snapshots.freshness(str(db),'events','open_time','recorded_at',now,snapshot_kind='OWNER_CONSISTENT_OFFLINE_SNAPSHOT',stream_column='stream',stream_value='SYNTHETIC_BTC_USD')
+        freshness=snapshots.freshness(str(db),'events','open_time','recorded_at',now,snapshot_kind='OWNER_CONSISTENT_OFFLINE_SNAPSHOT',expected_interval=3600,collection_cadence=3600,timestamp_semantics='UTC_EPOCH_SECONDS_OPEN_TIME_AND_ACTUAL_INSERT_TIME',stream_column='stream',stream_value='SYNTHETIC_BTC_USD')
     return {'version':VERSION,'mode':'SYNTHETIC_TEST_NOT_TARGET_EXECUTION','state':'REAL_NOT_RUN',
             'copy_plan':copying,'first_inference_plan':plan,'all_checks_claimed_still_disabled':all_claimed,
             'negative_control_missing':failed_control,'synthetic_backfill_snapshot':freshness,

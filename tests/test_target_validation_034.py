@@ -99,7 +99,7 @@ class RecorderTests(unittest.TestCase):
         connection=sqlite3.connect(self.path);connection.execute('CREATE TABLE events(open_time INTEGER, recorded_at INTEGER,stream TEXT)')
         connection.executemany('INSERT INTO events VALUES (?,?,?)',[(*row,'SYNTHETIC_BTC_USD') for row in rows]);connection.commit();connection.close()
     def inspect(self,**kwargs):
-        return db.freshness(str(self.path),'events','open_time','recorded_at',self.now,snapshot_kind='OWNER_CONSISTENT_OFFLINE_SNAPSHOT',stream_column='stream',stream_value='SYNTHETIC_BTC_USD',**kwargs)
+        return db.freshness(str(self.path),'events','open_time','recorded_at',self.now,snapshot_kind='OWNER_CONSISTENT_OFFLINE_SNAPSHOT',expected_interval=3600,collection_cadence=3600,timestamp_semantics='UTC_EPOCH_SECONDS_OPEN_TIME_AND_ACTUAL_INSERT_TIME',stream_column='stream',stream_value='SYNTHETIC_BTC_USD',**kwargs)
     def test_read_only_recent_metrics_and_no_file_or_sidecar_change(self):
         self.create([(self.now-7200,self.now-3590),(self.now-3600,self.now)])
         before=self.path.read_bytes();files=set(self.path.parent.iterdir());result=self.inspect()
@@ -124,7 +124,7 @@ class RecorderTests(unittest.TestCase):
             if self.path.exists():self.path.unlink()
             self.create([row])
             with self.assertRaises(ValueError):self.inspect()
-        with self.assertRaisesRegex(ValueError,'SQL_IDENTIFIER'):db.freshness(str(self.path),'events;DROP TABLE events','open_time','recorded_at',self.now,snapshot_kind='OWNER_CONSISTENT_OFFLINE_SNAPSHOT',stream_column='stream',stream_value='SYNTHETIC_BTC_USD')
+        with self.assertRaisesRegex(ValueError,'SQL_IDENTIFIER'):db.freshness(str(self.path),'events;DROP TABLE events','open_time','recorded_at',self.now,snapshot_kind='OWNER_CONSISTENT_OFFLINE_SNAPSHOT',expected_interval=3600,collection_cadence=3600,timestamp_semantics='UTC_EPOCH_SECONDS_OPEN_TIME_AND_ACTUAL_INSERT_TIME',stream_column='stream',stream_value='SYNTHETIC_BTC_USD')
     def test_other_stream_cannot_hide_selected_stream_staleness(self):
         self.create([(self.now-86400,self.now-10)])
         connection=sqlite3.connect(self.path)
@@ -143,7 +143,7 @@ class RecorderTests(unittest.TestCase):
         self.create([])
         with self.assertRaisesRegex(ValueError,'EMPTY'):self.inspect()
         before=self.path.read_bytes()
-        with self.assertRaises(ValueError):db.freshness(str(self.path),'missing','open_time','recorded_at',self.now,snapshot_kind='OWNER_CONSISTENT_OFFLINE_SNAPSHOT',stream_column='stream',stream_value='SYNTHETIC_BTC_USD')
+        with self.assertRaises(ValueError):db.freshness(str(self.path),'missing','open_time','recorded_at',self.now,snapshot_kind='OWNER_CONSISTENT_OFFLINE_SNAPSHOT',expected_interval=3600,collection_cadence=3600,timestamp_semantics='UTC_EPOCH_SECONDS_OPEN_TIME_AND_ACTUAL_INSERT_TIME',stream_column='stream',stream_value='SYNTHETIC_BTC_USD')
         self.assertEqual(self.path.read_bytes(),before)
 
 
