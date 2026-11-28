@@ -86,7 +86,7 @@ synthetic and cannot qualify Windows.
 ## Read-only Windows observations and process bounds
 
 The host worker reads Win32_OperatingSystem boot identity and the Windows system
-uptime performance counter, then **VBoxManage showvminfo UUID --machinereadable**.
+native GetTickCount64 uptime (hotfix #1), then **VBoxManage showvminfo UUID --machinereadable**.
 It requires the selected VM running and a unique TCP forwarding rule host 2222 to
 guest 22 (loopback or existing wildcard host binding). This ties the observed VM
 UUID to the existing SSH forwarding route; it never modifies the rule or VM.
@@ -330,3 +330,11 @@ Existing offline Node regressions also passed: `node tests/test_paper_029.cjs`
 26 checks; `node tests/test_restore_030.cjs` 14 checks; `node tests/test_market_031.cjs`
 8 controlled groups. These are controlled dependency tests, not native browser
 persistence or actual market requests.
+
+
+## Hotfix #1
+
+The missing performance-CIM class is replaced by native uptime. Use the current
+[hotfix validation sequence](BOSS-TRADER-038-HOTFIX-1.md) before the earlier
+plan/session procedure. The earlier test counts and evidence describe the original
+reviewed head, not the revised Windows implementation.

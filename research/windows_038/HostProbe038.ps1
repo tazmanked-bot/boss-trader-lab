@@ -1,6 +1,49 @@
 param([string]$ProbeVmUuid,[string]$ProbeVBoxManagePath='C:\Program Files\Oracle\VirtualBox\VBoxManage.exe',[switch]$ProbeLibraryOnly)
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
+# Run-only Reflection.Emit: no external compiler, source file or saved assembly.
+$script:TickMethod038=$null
+function Diagnostic038([string]$Stage,[string]$Reason,$Failure) {
+    $message='';$hr='0x00000000'
+    if ($null -ne $Failure) {
+        $message=$Failure.Message
+        $inner=$Failure
+        for ($depth=0;$depth -lt 4 -and $null -ne $inner.InnerException;$depth++) { $inner=$inner.InnerException }
+        $hr='0x'+([BitConverter]::ToUInt32([BitConverter]::GetBytes([int]$inner.HResult),0)).ToString('X8')
+    }
+    if ($message -cmatch '^CODEX038\|[A-Z_]{1,32}\|[A-Z_]{1,48}\|0x[0-9A-F]{8}\z') { return $message }
+    if ($message -cin @('PROCESS_TIMEOUT','PROCESS_OUTPUT_LIMIT','SSH_STDERR_REQUIRES_REVIEW','PIPELINED_SSH_RESPONSE',
+        'SSH_DISCONNECTED','SSH_RESPONSE_TIMEOUT','HOST_CLOCK_GAP_OR_RESUME','HOST_INPUT_CHANGED',
+        'VM_IDENTITY_METADATA','VM_NOT_RUNNING_OR_FOREIGN','REVIEWED_VM_SSH_FORWARD_NOT_FOUND',
+        'REVIEWED_SCRIPT_BYTES_MISMATCH','FOREIGN_PLAN_OR_VM','PROTOCOL_ENVELOPE','SSH_ACK_SESSION_OR_REPLAY')) { $Reason=$message }
+    if ($Stage -cnotmatch '^[A-Z_]{1,32}$' -or $Reason -cnotmatch '^[A-Z_]{1,48}$') { return 'CODEX038|DIAGNOSTIC|INVALID_CODE|0x00000000' }
+    return 'CODEX038|'+$Stage+'|'+$Reason+'|'+$hr
+}
+function Convert-Tick038($Milliseconds) {
+    # Reject signed, floating, string, null and zero inputs; never truncate a DWORD.
+    if ($Milliseconds -isnot [UInt64] -or $Milliseconds -lt 1000) { throw (Diagnostic038 NATIVE_UNITS INVALID_TICKS $null) }
+    $seconds=[decimal]::Floor(([decimal]$Milliseconds)/1000)
+    if ($seconds -gt 9007199254740991) { throw (Diagnostic038 NATIVE_UNITS OUT_OF_RANGE $null) }
+    return [long]$seconds
+}
+function Get-NativeUptime038 {
+    if ($null -eq $script:TickMethod038) {
+        try {
+            $name=New-Object Reflection.AssemblyName ('BossTraderTick038_'+[guid]::NewGuid().ToString('N'))
+            $assembly=[AppDomain]::CurrentDomain.DefineDynamicAssembly($name,[Reflection.Emit.AssemblyBuilderAccess]::Run)
+            $module=$assembly.DefineDynamicModule('Native038')
+            $type=$module.DefineType('BossTrader.Native038.Tick',[Reflection.TypeAttributes]'Public, Sealed, Abstract')
+            $method=$type.DefinePInvokeMethod('ReadTickCount64','kernel32.dll','GetTickCount64',
+                [Reflection.MethodAttributes]'Public, Static, PinvokeImpl',[Reflection.CallingConventions]::Standard,
+                [UInt64],[Type[]]@(),[Runtime.InteropServices.CallingConvention]::Winapi,[Runtime.InteropServices.CharSet]::None)
+            $method.SetImplementationFlags($method.GetMethodImplementationFlags() -bor [Reflection.MethodImplAttributes]::PreserveSig)
+            $script:TickMethod038=$type.CreateType().GetMethod('ReadTickCount64')
+        } catch { throw (Diagnostic038 NATIVE_BIND BIND_FAILED $_.Exception) }
+    }
+    try { $ticks=$script:TickMethod038.Invoke($null,$null) }
+    catch { throw (Diagnostic038 NATIVE_CALL CALL_FAILED $_.Exception) }
+    return (Convert-Tick038 $ticks)
+}
 function Quote-Arg038([string]$Value) {
     if ($Value -match '[\r\n\x00]') { throw 'UNSUPPORTED_ARGUMENT' }
     $text=New-Object Text.StringBuilder;[void]$text.Append('"');$slashes=0
@@ -78,16 +121,21 @@ function Stop-Owned038($Owned) {
     finally { $process.Dispose() }
     if (-not $clean) { throw 'OWNED_TREE_CLEANUP_UNVERIFIED' }
 }
-function Invoke-Bounded038([string]$File,[string[]]$Arguments,[int]$TimeoutMs=2000,[int]$Cap=262144) {
-    $owned=Start-Owned038 $File $Arguments $Cap;$watch=[Diagnostics.Stopwatch]::StartNew()
+function Invoke-Bounded038([string]$File,[string[]]$Arguments,[int]$TimeoutMs=2000,[int]$Cap=262144,[string]$Stage='WORKER_PROCESS') {
+    try { $owned=Start-Owned038 $File $Arguments $Cap } catch { throw (Diagnostic038 $Stage START_FAILED $_.Exception) };$watch=[Diagnostics.Stopwatch]::StartNew()
     try {
         while (-not $owned.Process.HasExited -or -not $owned.Out.Done -or -not $owned.Err.Done) {
-            if ($watch.ElapsedMilliseconds -gt $TimeoutMs) { throw 'PROCESS_TIMEOUT' }
+            if ($watch.ElapsedMilliseconds -gt $TimeoutMs) { throw (Diagnostic038 $Stage PROCESS_TIMEOUT $null) }
             Pump038 $owned.Out;Pump038 $owned.Err;Start-Sleep -Milliseconds 10
         }
-        if ($owned.Process.ExitCode -ne 0 -or $owned.Err.Text.Length -ne 0) { throw 'PROCESS_NONZERO_OR_STDERR' }
+        if ($owned.Process.ExitCode -ne 0 -or $owned.Err.Text.Length -ne 0) {
+            $diagnostic=$owned.Err.Text.TrimEnd("`r","`n")
+            if ($diagnostic -cmatch '^CODEX038\|[A-Z_]{1,32}\|[A-Z_]{1,48}\|0x[0-9A-F]{8}\z') { throw $diagnostic }
+            throw (Diagnostic038 $Stage NONZERO_OR_STDERR $null)
+        }
         return $owned.Out.Text
-    } finally { Stop-Owned038 $owned }
+    } catch { throw (Diagnostic038 $Stage PROCESS_FAILED $_.Exception) }
+    finally { try { Stop-Owned038 $owned } catch { throw (Diagnostic038 CLEANUP TREE_UNVERIFIED $_.Exception) } }
 }
 function Read-Line038($Owned,[int]$TimeoutMs=15000) {
     $watch=[Diagnostics.Stopwatch]::StartNew()
@@ -109,10 +157,14 @@ function Read-Line038($Owned,[int]$TimeoutMs=15000) {
 function Get-HostProbe038([string]$Uuid,[string]$VBox) {
     if ($env:OS -cne 'Windows_NT') { throw 'REAL_WINDOWS_REQUIRED' }
     $id=([guid]$Uuid).ToString().ToLowerInvariant();$watch=[Diagnostics.Stopwatch]::StartNew()
-    $os=Get-CimInstance Win32_OperatingSystem -OperationTimeoutSec 2
-    $perf=Get-CimInstance Win32_PerfFormattedData_PerfOS_System -OperationTimeoutSec 2
-    if ($null -eq $perf.SystemUpTime -or [double]$perf.SystemUpTime -le 0) { throw 'HOST_UPTIME_MEASUREMENT_MISSING' }
-    $raw=Invoke-Bounded038 $VBox @('showvminfo',$id,'--machinereadable') 2000 262144
+    try {
+        $os=Get-CimInstance Win32_OperatingSystem -OperationTimeoutSec 2
+        $boot=$os.LastBootUpTime.ToUniversalTime().ToString('o')
+    } catch { throw (Diagnostic038 BOOT_CIM QUERY_FAILED $_.Exception) }
+    $uptime=Get-NativeUptime038
+    try { $raw=Invoke-Bounded038 $VBox @('showvminfo',$id,'--machinereadable') 2000 262144 'VBOX_PROCESS' }
+    catch { throw (Diagnostic038 VBOX_PROCESS QUERY_FAILED $_.Exception) }
+    try {
     $uuidMatches=@([regex]::Matches($raw,'(?m)^UUID="([^"]+)"\r?$'))
     $stateMatches=@([regex]::Matches($raw,'(?m)^VMState="([^"]+)"\r?$'))
     if ($uuidMatches.Count -ne 1 -or $stateMatches.Count -ne 1) { throw 'VM_IDENTITY_METADATA' }
@@ -123,11 +175,12 @@ function Get-HostProbe038([string]$Uuid,[string]$VBox) {
         if ($parts.Count -eq 6 -and $parts[1] -ceq 'tcp' -and $parts[3] -ceq '2222' -and $parts[5] -ceq '22' -and $parts[2] -in @('','127.0.0.1')) { $forward+=,$parts }
     }
     if ($forward.Count -ne 1) { throw 'REVIEWED_VM_SSH_FORWARD_NOT_FOUND' }
-    return @{platform='Windows';host_boot=$os.LastBootUpTime.ToUniversalTime().ToString('o');host_uptime_seconds=[long]$perf.SystemUpTime;
+    } catch { throw (Diagnostic038 VBOX_PARSE IDENTITY_OR_FORWARD_FAILED $_.Exception) }
+    return @{platform='Windows';host_boot=$boot;host_uptime_seconds=$uptime;
         probe_duration_ms=[long]$watch.ElapsedMilliseconds;vm_uuid=$id;vm_state='running';forward_host_port=2222;forward_guest_port=22;forward_host_ip=$forward[0][2]}
 }
 if ($ProbeLibraryOnly) { return }
 try {
     $result=Get-HostProbe038 $ProbeVmUuid $ProbeVBoxManagePath
     [Console]::Out.WriteLine(($result | ConvertTo-Json -Compress -Depth 8));exit 0
-} catch { [Console]::Error.WriteLine('HOST_PROBE_FAILED');exit 2 }
+} catch { [Console]::Error.WriteLine((Diagnostic038 HOST_PROBE VALIDATION_FAILED $_.Exception));exit 2 }

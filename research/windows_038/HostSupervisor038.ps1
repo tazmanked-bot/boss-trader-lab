@@ -23,7 +23,7 @@ function New-SshArguments038([string]$Remote,[string]$Hosts,[string]$User,[strin
     return $arguments+@(($User+'@127.0.0.1'),$Remote)
 }
 if ($LibraryOnly) { return }
-$sshOwned=$null
+$sshOwned=$null;$stage038='SUPERVISOR'
 try {
     if ($env:OS -cne 'Windows_NT' -or $Seconds -lt 1 -or $Seconds -gt 7500) { throw 'WINDOWS_OR_DURATION_REQUIRED' }
     $vm=([guid]$VmUuid).ToString().ToLowerInvariant()
@@ -47,13 +47,16 @@ try {
     $knownSha=(Get-FileHash -LiteralPath $KnownHosts -Algorithm SHA256).Hash
     $remote='cd -- '+$GuestRepo+' && exec /usr/bin/python3 -u -B -m research.host_supervision_038 serve --plan '+$GuestPlan+' --expected-plan-sha '+$PlanSha256+' --max-seconds '+$Seconds
     if ($NewSession) { $remote+=' --new-session' }
+    $stage038='SSH_CONNECT'
     $sshOwned=Start-Owned038 $ssh (New-SshArguments038 $remote $KnownHosts $GuestUser $IdentityFile) 8192
+    $stage038='SSH_PROTOCOL'
     $hello=(Read-Line038 $sshOwned 15000 | ConvertFrom-Json)
     Assert-Envelope038 $hello $PlanSha256 $vm
     if ($hello.expected_scripts.'HostSupervisor038.ps1' -cne $selfSha -or $hello.expected_scripts.'HostProbe038.ps1' -cne $probeSha) { throw 'REVIEWED_SCRIPT_BYTES_MISMATCH' }
     $session=$hello.session;$boot=$hello.guest_boot;$observer=$hello.observer_sha256
     $watch=[Diagnostics.Stopwatch]::StartNew();$hostSession=[guid]::NewGuid().ToString();$previous=$null
     while ($watch.Elapsed.TotalSeconds -lt $Seconds) {
+        $stage038='HOST_PROBE'
         $cycle=$watch.ElapsedMilliseconds
         $measurement=(Invoke-Bounded038 $ps $probeArgs 4000 8192 | ConvertFrom-Json)
         $measurement | Add-Member -NotePropertyName host_session -NotePropertyValue $hostSession
@@ -76,6 +79,7 @@ try {
             (Get-FileHash -LiteralPath $VBoxManagePath -Algorithm SHA256).Hash.ToLowerInvariant() -cne $hashes.virtualbox) { throw 'HOST_INPUT_CHANGED' }
         $message=@{version=$hello.version;session=$session;challenge=$hello.challenge;seq=$hello.seq;
             plan_sha256=$PlanSha256;guest_boot=$boot;observer_sha256=$observer;measurement=$measurement}
+        $stage038='SSH_PROTOCOL'
         $sshOwned.Process.StandardInput.WriteLine(($message | ConvertTo-Json -Compress -Depth 8));$sshOwned.Process.StandardInput.Flush()
         $next=(Read-Line038 $sshOwned 15000 | ConvertFrom-Json)
         Assert-Envelope038 $next $PlanSha256 $vm
@@ -86,10 +90,10 @@ try {
         $sleep=5000-($watch.ElapsedMilliseconds-$cycle)
         if ($sleep -gt 0) { Start-Sleep -Milliseconds ([int]$sleep) }
     }
-} catch { [Console]::Error.WriteLine('HOST_SUPERVISION_HOLD: '+$_.Exception.Message);exit 2 }
+} catch { [Console]::Error.WriteLine((Diagnostic038 $stage038 VALIDATION_FAILED $_.Exception));exit 2 }
 finally {
     if ($null -ne $sshOwned) {
         try { $sshOwned.Process.StandardInput.Close();Stop-Owned038 $sshOwned }
-        catch { [Console]::Error.WriteLine('SSH_CLEANUP_UNVERIFIED; GUEST MUST REFUSE BY EOF/PID/EXPIRY');exit 3 }
+        catch { [Console]::Error.WriteLine((Diagnostic038 CLEANUP SSH_TREE_UNVERIFIED $_.Exception));exit 3 }
     }
 }
