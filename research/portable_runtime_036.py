@@ -130,21 +130,9 @@ def source_manifest(source):
             'untracked': 'EXCLUDED', 'git_sha256': p.hash_file(Path('/usr/bin/git'))[0]}
 
 
-def resources():
-    mem = {}
-    for line in Path('/proc/meminfo').read_text().splitlines():
-        key, value = line.split(':', 1)
-        if value.strip().split() and value.strip().split()[0].isdigit():
-            mem[key] = int(value.strip().split()[0])*1024
-    available = mem.get('MemAvailable', 0)
-    # cgroup v2 visible ceiling; hidden ancestor limits remain a target review gap.
-    cg = Path('/sys/fs/cgroup')
-    try:
-        maximum = (cg/'memory.max').read_text().strip()
-        if maximum != 'max': available = min(available, max(0, int(maximum)-int((cg/'memory.current').read_text())))
-    except (OSError, ValueError):
-        return 0  # Missing/unsupported controller evidence fails closed.
-    return available
+def resources(build_cgroup=None):
+    from research.memory_headroom_037 import snapshot
+    return snapshot(build_cgroup)['available_bytes']
 
 
 def compatibility():

@@ -1,0 +1,21 @@
+{
+  "compilation": "NOT_RUN",
+  "corrected_parser": {
+    "needed": [
+      "libm.so.6",
+      "libc.so.6",
+      "ld-linux-x86-64.so.2",
+      "libgcc_s.so.1"
+    ],
+    "result": "PASS",
+    "soname": "libstdc++.so.6"
+  },
+  "dynamic_string_table_bytes": 308098,
+  "file_size": 2497768,
+  "old_parser": "ELF_STRING_TABLE",
+  "path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+  "real_inference": "REAL_NOT_RUN",
+  "scope": "READ_ONLY_CLOUD_SYSTEM_LIBRARY_NOT_OWNER_DESKTOP",
+  "sha256": "972bb2a18b71140dab0240f8a1f68ab3fb1d56bcd4c4f824a91b70888faf5a00",
+  "system_library_writes": 0
+}

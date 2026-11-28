@@ -1,0 +1,153 @@
+{
+  "actual_compilation": "NOT_RUN",
+  "actual_linux_read_only": {
+    "interfaces": {
+      "cgroup.controllers": {
+        "state": "READ",
+        "value": "cpuset cpu io memory hugetlb pids"
+      },
+      "cgroup.type": {
+        "state": "READ",
+        "value": "domain"
+      },
+      "memory.current": {
+        "state": "READ",
+        "value": "122286080"
+      },
+      "memory.high": {
+        "state": "READ",
+        "value": "max"
+      },
+      "memory.max": {
+        "state": "READ",
+        "value": "8589934592"
+      }
+    },
+    "memory_snapshot": {
+      "available_bytes": 0,
+      "kernel_available_bytes": 9822015488,
+      "reason": "CGROUP_PATH",
+      "status": "HOLD"
+    },
+    "scope": "ACTUAL_CLOUD_LINUX_READ_ONLY_NOT_OWNER_TARGET"
+  },
+  "actual_process_tests": {
+    "kill": "PASSED_OBSERVER_LOST_BEFORE_TTL_TEST",
+    "real_recorder_queries": 0,
+    "real_systemd_queries": 0,
+    "scope": "PRODUCTION_OBSERVER_WITH_DELIBERATELY_MISSING_SOURCE_IN_PRIVATE_FIXTURE_HOME",
+    "term": "PASSED_STOPPED_EVIDENCE_TEST"
+  },
+  "cadence_seconds": 900,
+  "code_sha256": {
+    "research/controlled_build_037.py": "b1f6244712206ae7ed8f84c684a267ebcf411ed19562375cdcee31a90fcc241f",
+    "research/memory_headroom_037.py": "b77df0b0ed5bf20cb180f593989f07cea3efd7c1ae298360dcbcce62d826f60d",
+    "research/recorder_health_037.py": "87b8688ee4978363510cee5b9cb99f4ac63834987929fff6d75218ece1494e3e"
+  },
+  "inference": "HOLD",
+  "observer_ttl_seconds": 15,
+  "orders": "NONE",
+  "owner_target_recorder": "UNVERIFIED_NO_OWNER_DESKTOP_ACCESS",
+  "parent": "584d2eb34760895dfd826cdd9dc01c7f7bd245c3",
+  "publication_interval_seconds": 5,
+  "synthetic": {
+    "debian_root_type_absent": {
+      "available_bytes": 5818220544,
+      "configured_build_cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service",
+      "hierarchy_root": "/",
+      "kernel_available_bytes": 5818220544,
+      "limits": [
+        {
+          "current_bytes": 79650816,
+          "high": "max",
+          "max": "max",
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service"
+        },
+        {
+          "current_bytes": 0,
+          "high": "max",
+          "max": "max",
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-3.scope"
+        },
+        {
+          "current_bytes": 79650816,
+          "high": "max",
+          "max": "max",
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice"
+        },
+        {
+          "current_bytes": 0,
+          "high": "max",
+          "max": "max",
+          "path": "/sys/fs/cgroup/user.slice"
+        },
+        {
+          "path": "/sys/fs/cgroup",
+          "state": "HIERARCHY_ROOT_NO_MEMORY_INTERFACES",
+          "type": "ABSENT_AT_VERIFIED_HIERARCHY_ROOT"
+        }
+      ],
+      "mountpoint": "/sys/fs/cgroup",
+      "observation": "POINT_IN_TIME_NOT_RESERVED_MEMORY",
+      "process_cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/session-3.scope",
+      "scope": "VISIBLE_PROCESS_AND_CONFIGURED_BUILD_ANCESTORS",
+      "status": "PASS",
+      "version": "memory-headroom-037-v1"
+    },
+    "idle_success_measurement": {
+      "cadence_seconds": 900,
+      "collection_time_source": "ACTUAL_STATUS_LAST_SUCCESS_NOT_OBSERVER_POLL",
+      "last_attempt_at": "2026-11-28T11:59:47Z",
+      "last_collection_at": 1795867189,
+      "last_success_at": "2026-11-28T11:59:49Z",
+      "service": {
+        "ActiveState": "inactive",
+        "ExecMainStartTimestampMonotonic": "9987000000",
+        "ExecMainStatus": "0",
+        "Id": "boss-s3-recorder.service",
+        "LoadState": "loaded",
+        "Result": "success",
+        "SubState": "dead",
+        "Type": "oneshot"
+      },
+      "service_phase": "IDLE_SUCCESS_BETWEEN_COLLECTIONS",
+      "source_generated_at": "2026-11-28T11:59:50Z",
+      "timer": {
+        "ActiveState": "active",
+        "Id": "boss-s3-recorder.timer",
+        "LoadState": "loaded",
+        "Result": "success",
+        "SubState": "waiting"
+      }
+    },
+    "label": "DETERMINISTIC_FIXTURES_NOT_OWNER_RECORDER_MEASUREMENTS",
+    "physical_host": "HOLD_NO_PHYSICAL_HOST_SUPERVISOR_IMPLEMENTED",
+    "running_oneshot_measurement": {
+      "cadence_seconds": 900,
+      "collection_time_source": "ACTUAL_STATUS_LAST_SUCCESS_NOT_OBSERVER_POLL",
+      "last_attempt_at": "2026-11-28T11:59:59Z",
+      "last_collection_at": 1795867189,
+      "last_success_at": "2026-11-28T11:59:49Z",
+      "service": {
+        "ActiveState": "activating",
+        "ExecMainStartTimestampMonotonic": "9987000000",
+        "ExecMainStatus": "0",
+        "Id": "boss-s3-recorder.service",
+        "LoadState": "loaded",
+        "Result": "success",
+        "SubState": "start",
+        "Type": "oneshot"
+      },
+      "service_phase": "BOUNDED_ONESHOT_RUNNING",
+      "source_generated_at": "2026-11-28T12:00:00Z",
+      "timer": {
+        "ActiveState": "active",
+        "Id": "boss-s3-recorder.timer",
+        "LoadState": "loaded",
+        "Result": "success",
+        "SubState": "running"
+      }
+    }
+  },
+  "system_modifications": 0
+}

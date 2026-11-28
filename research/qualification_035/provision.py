@@ -16,6 +16,8 @@ from research.decision_loop_032 import canonical,digest,exact
 
 RECEIPT='.boss-provision-035.json'
 CAP=2*1024**3
+ELF_METADATA_LIMIT=64*1024
+ELF_STRING_TABLE_LIMIT=1024*1024
 
 
 def need(value,reason):
@@ -55,6 +57,7 @@ def elf(path,expected_sha256):
         data=source.read(128*1024**2+1)
     need(len(data)<=128*1024**2 and hashlib.sha256(data).hexdigest()==expected_sha256,'ELF_HASH_BINDING')
     with io.BytesIO(data) as f:
+        file_size=len(data)
         head=f.read(64)
         need(len(head)==64 and head[:6]==b'\x7fELF\x02\x01','ELF64_LE_REQUIRED')
         fields=struct.unpack('<16sHHIQQQIHHHHHH',head)
@@ -62,8 +65,10 @@ def elf(path,expected_sha256):
         f.seek(fields[5]);headers=[]
         for _ in range(fields[10]):
             item=f.read(56);need(len(item)==56,'ELF_TRUNCATED');headers.append(struct.unpack('<IIQQQQQQ',item))
-        def read(offset,size):
-            need(0<=size<=65536,'ELF_METADATA_LIMIT');f.seek(offset);data=f.read(size);need(len(data)==size,'ELF_TRUNCATED');return data
+        def read(offset,size,*,limit=ELF_METADATA_LIMIT):
+            need(0<=size<=limit,'ELF_METADATA_LIMIT')
+            need(0<=offset<=file_size and size<=file_size-offset,'ELF_TRUNCATED')
+            f.seek(offset);data=f.read(size);need(len(data)==size,'ELF_TRUNCATED');return data
         interpreter=None;dynamic=[]
         for h in headers:
             if h[0]==3:interpreter=read(h[2],h[5]).rstrip(b'\0').decode('ascii')
@@ -75,10 +80,12 @@ def elf(path,expected_sha256):
                     dynamic.append((tag,value))
         if not dynamic:return {'needed':[],'interpreter':interpreter,'paths':[]}
         strings=next((v for k,v in dynamic if k==5),None);size=next((v for k,v in dynamic if k==10),0)
-        need(strings is not None and 0<size<=65536,'ELF_STRING_TABLE')
+        need(strings is not None and 0<size<=ELF_STRING_TABLE_LIMIT,'ELF_STRING_TABLE')
         segment=next((h for h in headers if h[0]==1 and h[3]<=strings<h[3]+h[5]),None)
-        need(segment is not None and strings-segment[3]+size<=segment[5],'ELF_STRING_MAPPING')
-        table=read(segment[2]+strings-segment[3],size)
+        need(segment is not None and segment[5]<=segment[6] and
+             segment[2]<=file_size and segment[5]<=file_size-segment[2] and
+             strings-segment[3]+size<=segment[5],'ELF_STRING_MAPPING')
+        table=read(segment[2]+strings-segment[3],size,limit=ELF_STRING_TABLE_LIMIT)
         def string(at):
             need(at<len(table) and b'\0' in table[at:],'ELF_STRING_INVALID')
             return table[at:table.index(0,at)].decode('ascii')
