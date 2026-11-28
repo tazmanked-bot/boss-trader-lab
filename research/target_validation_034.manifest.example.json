@@ -1,0 +1,72 @@
+{
+  "version": "target-validation-v1",
+  "reported_evidence_only": {
+    "cpu": "Ryzen 3 2200G AVX2/FMA",
+    "os": "Debian x86_64",
+    "vcpus": 2,
+    "ram_gib": 5.8,
+    "available_ram_gib": 5.5,
+    "runtime": {
+      "bytes": 1424080,
+      "sha256": "daa63b89ca47f511403ad31f23d4fa9b907713a27d4d7dfa6cd01fe872a7a5c2"
+    },
+    "model": {
+      "bytes": 1117320736,
+      "sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e"
+    },
+    "source_revision": "0978a6e9022fb9bd6874b86154ee304e81929b9f",
+    "unshare_user_net_exit": 0,
+    "recorder_service": "REPORTED_RESUMED_DB_FRESHNESS_UNKNOWN",
+    "desktop_failure_root_cause": "UNRESOLVED"
+  },
+  "independent_expected": {
+    "runtime_sha256": null,
+    "model_sha256": null,
+    "library_hashes": null,
+    "expected_hash_sources": null,
+    "source_revision_exists_in_upstream": "0978a6e9022fb9bd6874b86154ee304e81929b9f",
+    "source_to_installed_binary_binding": "UNKNOWN",
+    "licenses": "UNKNOWN"
+  },
+  "adapter_manifest": {
+    "version": "llama-analyst-preparation-v1",
+    "runtime_path": "/OWNER_ONLY/new-private/bin/llama-cli",
+    "runtime_sha256": "daa63b89ca47f511403ad31f23d4fa9b907713a27d4d7dfa6cd01fe872a7a5c2",
+    "model_path": "/OWNER_ONLY/new-private/models/model.gguf",
+    "model_sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+    "model": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+    "llama_cpp_commit": "0978a6e9022fb9bd6874b86154ee304e81929b9f",
+    "license_review": "OWNER_TARGET_REVIEW_REQUIRED"
+  },
+  "copy_inventory": {
+    "source_root": "/OWNER_ONLY/ORIGINAL_REVIEWED_RUNTIME_ROOT",
+    "destination": "/OWNER_ONLY/new-private",
+    "entries": [
+      {
+        "path": "bin/llama-cli",
+        "role": "runtime",
+        "reported_sha256": "daa63b89ca47f511403ad31f23d4fa9b907713a27d4d7dfa6cd01fe872a7a5c2",
+        "expected_sha256": null,
+        "expected_source": null
+      },
+      {
+        "path": "lib/OWNER_MUST_INVENTORY_DEPENDENCIES.so",
+        "role": "library",
+        "reported_sha256": null,
+        "expected_sha256": null,
+        "expected_source": null
+      }
+    ]
+  },
+  "recorder_snapshot": {
+    "path": null,
+    "table": null,
+    "open_column": null,
+    "actual_ingest_column": null,
+    "schema_semantics": "UNKNOWN",
+    "coherent_snapshot_evidence": null,
+    "stream_column": null,
+    "exact_stream_value": null
+  },
+  "actual_inference_authorization": "HOLD_REAL_NOT_RUN"
+}
