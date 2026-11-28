@@ -371,7 +371,8 @@ invalid/negative/overflowing numbers, unknown scope, ambiguous mounts, cgroup-v1
 memory profiles, hidden mount ancestors and changing membership/limits fail
 closed. Nonroot all-absent interfaces are accepted only with readable proof the
 parent has not enabled memory, and the ancestors still constrain capacity.
-The node must exist and have readable cgroup.type. A nominal mount root that
+Nonroot nodes must exist and have readable cgroup.type. The verified global
+hierarchy root may lack it; see the Combined Hotfix #3 correction below. A nominal mount root that
 exposes nonroot-style memory interfaces requires namespace/hidden-ancestor review
 and returns HOLD rather than assuming no outer ceiling. Unsupported profiles are
 reported, never repaired by changing system state. Snapshots are point-in-time
@@ -462,3 +463,14 @@ fresh preparation/qualification evidence before any separately authorized build.
 No actual compilation, inference, system modifications, merge, workflow dispatch
 or additional expenditure. AEP Gate B HOLD; BUY AUTHORIZATION NONE. STOP FOR OWNER
 AND BOSS AI REVIEW.
+
+## Combined Hotfix #3 — latest recorder/root compatibility instructions
+
+See [the dedicated 037-A–D report](BOSS-TRADER-CONTROLLED-BUILD-037-HOTFIX-3.md).
+It corrects the verified hierarchy root's missing cgroup.type handling (nonroot
+validation stays strict), supplies the independent status.json/systemd observer,
+and supersedes the generic monitor mapping example for this actual recorder.
+The existing config/inventory can remain where compatible; cadence is 900 seconds.
+Recorder measurements never assert physical host stability: the dedicated observer
+always keeps desktop_stable false and compilation on PHYSICAL_HOST_STABILITY_HOLD.
+No actual compilation, genuine inference, recorder/system changes or expenditure.

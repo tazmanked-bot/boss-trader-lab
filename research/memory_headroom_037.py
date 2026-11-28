@@ -99,13 +99,14 @@ def snapshot(build_cgroup=None, *, reader=read_text):
             try:return reader(str(path)).strip()
             except FileNotFoundError:return None
         for node in sorted(nodes,key=lambda item:(len(item.parts),str(item)),reverse=True):
-            kind=reader(str(node/'cgroup.type')).strip()
-            need(kind in ('domain','threaded','domain threaded'),'CGROUP_TYPE')
+            kind=optional(node/'cgroup.type') if node==point else reader(str(node/'cgroup.type')).strip()
+            need(kind in ('domain','threaded','domain threaded') or node==point and kind is None,'CGROUP_TYPE')
             high=optional(node/'memory.high');maximum=optional(node/'memory.max')
             current=optional(node/'memory.current')
             if high is None and maximum is None and current is None:
                 if node==point:
-                    result['limits'].append({'path':str(node),'state':'HIERARCHY_ROOT_NO_MEMORY_INTERFACES'})
+                    result['limits'].append({'path':str(node),'state':'HIERARCHY_ROOT_NO_MEMORY_INTERFACES',
+                                             'type':kind if kind is not None else 'ABSENT_AT_VERIFIED_HIERARCHY_ROOT'})
                     continue
                 controllers=reader(str(node.parent/'cgroup.subtree_control')).split()
                 need('memory' not in controllers,'MISSING_ENABLED_MEMORY_INTERFACE')

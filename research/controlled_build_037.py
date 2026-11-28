@@ -15,7 +15,7 @@ import struct
 import subprocess
 import sys
 import time
-from research import portable_runtime_036 as prep, memory_headroom_037 as memory
+from research import portable_runtime_036 as prep, memory_headroom_037 as memory, recorder_health_037 as recorder_observer
 from research.qualification_035 import provision as p, process, containment
 from research.llama_analyst_033 import Refused
 
@@ -134,6 +134,8 @@ def tools_inventory():
     result['supervisor'] = {'path':str(Path(__file__)), 'sha256':p.hash_file(Path(__file__))[0]}
     p.secure(Path(memory.__file__))
     result['memory_headroom']={'path':str(Path(memory.__file__)),'sha256':p.hash_file(Path(memory.__file__))[0]}
+    p.secure(Path(recorder_observer.__file__))
+    result['recorder_observer']={'path':str(Path(recorder_observer.__file__)),'sha256':p.hash_file(Path(recorder_observer.__file__))[0]}
     return result
 
 
@@ -266,7 +268,11 @@ class BuildCgroup(containment.Cgroup):
 
 def health(plan, now=None):
     now=time.time() if now is None else now; config=plan['config']; value=read_json(config['health_file'],4096)
+    p.need(type(value) is dict,'HEALTH_OBJECT')
     cadence=config['collection_cadence_seconds']
+    if 'observer' in value:
+        recorder_observer.validate_evidence(value,config['recorder_id'],cadence,now=now)
+        p.need(value.get('desktop_stable') is True,'PHYSICAL_HOST_STABILITY_HOLD')
     p.need(value.get('version')=='external-recorder-health-037-v1' and value.get('recorder_id')==config['recorder_id'], 'HEALTH_IDENTITY')
     for key in ('measured_at','last_collection_at'):
         p.need(type(value.get(key)) is int and value[key]<=now+2, 'HEALTH_CLOCK_OR_TYPE')
@@ -746,6 +752,7 @@ def preflight(config):
         p.need(not list(parent.glob('boss-035-*')),'PREVIOUS_PRIVATE_SCOPE_REVIEW_REQUIRED')
         return {'enabled':sorted(enabled),'write_access_flag':True,'child_creation_limit_readback_kill_and_lock':'UNVERIFIED_UNTIL_QUALIFY'}
     check('delegation_readiness',delegation)
+    check('recorder_observation',lambda:recorder_observer.validate_evidence(read_json(config['health_file'],4096),config['recorder_id'],config['collection_cadence_seconds']))
     check('recorder_health',lambda:health({'config':config}))
     checks['actual_containment']={'status':'UNVERIFIED','reason':'REQUIRES_EXISTING_HARMLESS_QUALIFY_NO_STATE_CHANGED'}
     checks['configure_flags_and_runtime_loader']={'status':'UNVERIFIED','reason':'SOURCE_REVIEWED_FLAGS_REQUIRE_APPROVED_CONFIGURE_AND_CONTAINED_LOADER_PROBE'}
