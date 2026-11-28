@@ -1,0 +1,110 @@
+{
+  "actual_harmless_child": {
+    "output": {
+      "allowed_cpus": 1,
+      "nice": 10
+    },
+    "receipt": {
+      "bytes": 32,
+      "cgroup_empty": "UNVERIFIED_NO_CGROUP_SYNTHETIC_ONLY",
+      "direct_child_reaped": true,
+      "elapsed_seconds": 0.02435949200298637,
+      "error": null,
+      "exit_code": 0
+    }
+  },
+  "base": "bdd88585f9719d625609834bb26a6fb7513bd502",
+  "code_sha256": "1ddc631415074b57c741af3c594a5ffc9c9d9f6eab734433927885377f57abe0",
+  "environment_limitations": {
+    "bwrap_network_namespace": "FAIL: loopback: Failed to create NETLINK_ROUTE socket: Operation not permitted",
+    "delegated_private_cgroup": "UNVERIFIED: /sys/fs/cgroup not writable",
+    "model_publisher_hash_license": "UNVERIFIED",
+    "owner_target": "NOT_ACCESSED",
+    "system_cmake": "MISSING /usr/bin/cmake"
+  },
+  "gates": {
+    "AEP_Gate_B": "HOLD",
+    "buy_authorization": "NONE",
+    "desktop_build": "EXPLICIT_OWNER_INVOCATION_ONLY",
+    "full_containment": "HOLD",
+    "inference": "HOLD",
+    "real": "REAL_NOT_RUN"
+  },
+  "label": "SYNTHETIC_WORKLOADS_ONLY_NO_LLAMA_COMPILATION_NO_MODEL_EXECUTION",
+  "orchestration_injected_controls": {
+    "actual": [
+      "gated child execution",
+      "nice/affinity/rlimits",
+      "log capture",
+      "approval binding",
+      "exclusive attempt record",
+      "direct-child cleanup"
+    ],
+    "result": {
+      "artifacts": {
+        "label": "SYNTHETIC_STAGE_NOT_REAL_ELF",
+        "runtime_execution": "HOLD"
+      },
+      "elapsed_seconds": 0.06568958499701694,
+      "gates": {
+        "AEP_Gate_B": "HOLD",
+        "buy_authorization": "NONE",
+        "desktop_build": "EXPLICIT_OWNER_INVOCATION_ONLY",
+        "full_containment": "HOLD",
+        "inference": "HOLD",
+        "real": "REAL_NOT_RUN"
+      },
+      "operation": "LOCAL_BUILD_PASS_INFERENCE_HOLD",
+      "plan_sha256": "baee974e92f4975fa867ea9bdee0bb42443aa872f6fdb4ce9b1af71c35a0b6f4",
+      "steps": [
+        {
+          "bytes": 20,
+          "cgroup_empty": true,
+          "direct_child_reaped": true,
+          "elapsed_seconds": 0.038054490003560204,
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "bytes": 46,
+          "cgroup_empty": true,
+          "direct_child_reaped": true,
+          "elapsed_seconds": 0.026670630999433342,
+          "error": null,
+          "exit_code": 0
+        }
+      ]
+    },
+    "simulated": [
+      "kernel cgroup",
+      "bwrap namespaces/mounts",
+      "toolchain revalidation",
+      "ELF staging"
+    ]
+  },
+  "output_flood": {
+    "reason": "OUTPUT_LIMIT",
+    "receipt": {
+      "bytes": 128,
+      "cgroup_empty": "UNVERIFIED_NO_CGROUP_SYNTHETIC_ONLY",
+      "direct_child_reaped": true,
+      "elapsed_seconds": 0.024758200997894164,
+      "error": "OUTPUT_LIMIT",
+      "exit_code": null
+    }
+  },
+  "second_invocation_refused": "ONE_SHOT_OR_STOP",
+  "source_commit": "0978a6e9022fb9bd6874b86154ee304e81929b9f",
+  "timeout": {
+    "reason": "WALL_TIMEOUT",
+    "receipt": {
+      "bytes": 0,
+      "cgroup_empty": "UNVERIFIED_NO_CGROUP_SYNTHETIC_ONLY",
+      "direct_child_reaped": true,
+      "elapsed_seconds": 0.20265390900021885,
+      "error": "WALL_TIMEOUT",
+      "exit_code": null
+    }
+  },
+  "worker_sha256": "fca2b3f9d95af0ea4b4b8983c9cde355cb7b6e02cb06574bd68cc7fb094e516e"
+}
