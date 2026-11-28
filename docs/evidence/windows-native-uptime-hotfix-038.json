@@ -1,0 +1,35 @@
+{
+  "actual_compilation": "NOT_RUN",
+  "baseline": "080c4cdce021d5b7d99123feb3a0f084708185f2",
+  "code_sha256": {
+    "research/windows_038/HostProbe038.ps1": "15f6008afe14ed4de61362202f308ec81305c216f5231ae7ae07a6b0ab1c7fe8",
+    "research/windows_038/HostSupervisor038.ps1": "44225ea26c3cf9a23e84454b7551e1c3dd5644ea326835166393438001a887be",
+    "research/windows_038/Test-HostSupervisor038.ps1": "264fa1cf4e1f12f8a496cbbca8d778a2997c26c5cddfd0814d13035a703a1357",
+    "tests/test_native_uptime_038.py": "6f7254403dc45f2ea00ec47b7358dcbb018b387cff9b8421c50daf86a6205183"
+  },
+  "draft_pr": 72,
+  "evidence_scope": "LINUX_OFFLINE_TESTS_AND_SOURCE_CONTRACTS_NOT_WINDOWS_EXECUTION",
+  "focused_python": 50,
+  "full_python": {
+    "3.12.14": 785,
+    "3.13.5": 785
+  },
+  "inference": "HOLD",
+  "issue": 71,
+  "native_artifacts": "RUN_ONLY_DYNAMIC_ASSEMBLY_NO_EXPLICIT_COMPILER_OR_FILE_WRITE; TARGET_OBSERVATION_UNVERIFIED",
+  "node_checks": [
+    26,
+    14,
+    8
+  ],
+  "orders": "NONE",
+  "owner_baseline_harness": {
+    "pass": 17,
+    "provenance": "OWNER_REPORTED_PARENT_HEAD"
+  },
+  "physical_hardware": "UNRESOLVED",
+  "spending_ntd": 0,
+  "windows_full_probe_budget": "UNVERIFIED_4000_MS_UNCHANGED",
+  "windows_revised_harness": "NOT_RUN",
+  "windows_revised_native_binding": "UNVERIFIED"
+}

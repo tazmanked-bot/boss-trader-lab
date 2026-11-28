@@ -1,0 +1,57 @@
+{
+  "actual_compilation": "NOT_RUN",
+  "actual_local_harmless_abort": {
+    "reason": "HOST_SUPERVISION_LOST",
+    "receipt": {
+      "bytes": 0,
+      "cgroup_empty": "UNVERIFIED_NO_CGROUP_SYNTHETIC_ONLY",
+      "direct_child_reaped": true,
+      "elapsed_seconds": 0.20272427699819673,
+      "error": "HOST_SUPERVISION_LOST",
+      "exit_code": null
+    },
+    "windows_or_cgroup_qualification": false
+  },
+  "code_sha256": {
+    "research/controlled_build_037.py": "e551495d9cd39a9ee339d5f8dd28f8396d7ce2f679af841f78e10a32607711a0",
+    "research/host_supervision_038.py": "d5426d0421fa6580b73322f36e776dd0e150aff96b36bdff906588dcaa43eb4f",
+    "research/windows_038/HostProbe038.ps1": "b0d82676ef50227075313f56b44e3d223d82bfd5bc5ef9de4c16fcbc81965900",
+    "research/windows_038/HostSupervisor038.ps1": "0e05b7ba7602d5a7100aad76f28b096c7ad3ddbb38c6d366046b47435bf5ca6a"
+  },
+  "development_baseline": "4f5cbd8dbeceee05017126b1f11071ee6d06e7d6",
+  "hardware_uncertainty": "UNRESOLVED_NOT_HARDWARE_SAFETY",
+  "inference": "HOLD",
+  "orders": "NONE",
+  "physical_hardware_verified": false,
+  "resource_limits": {
+    "available_ram_min_bytes": 4294967296,
+    "cpu_quota_percent": 100,
+    "cpu_seconds": 5400,
+    "disk_free_min_bytes": 4294967296,
+    "jobs": 1,
+    "memory_max_bytes": 3221225472,
+    "nice": 10,
+    "output_max_bytes": 4194304,
+    "pids_max": 64,
+    "swap_max_bytes": 0,
+    "wall_seconds": 7200
+  },
+  "source_scope": "SYNTHETIC_PROTOCOL_AND_LOCAL_HARMLESS_PROCESSES_ONLY",
+  "synthetic_freeze_resume_refusal": "GUEST_CLOCK_GAP_OR_RESUME",
+  "synthetic_protocol": {
+    "accepted_sequences": [
+      1,
+      2
+    ],
+    "challenge_rotated": true,
+    "declared_platform": "WINDOWS_FIXTURE_NOT_WINDOWS_MEASUREMENT"
+  },
+  "synthetic_session_poisoned": "HOST_SESSION_TERMINAL",
+  "windows_execution": {
+    "cim_and_virtualbox": "UNVERIFIED",
+    "powershell_exe_available": false,
+    "powershell_harness": "NOT_RUN",
+    "pwsh_available": false,
+    "real_verified_ssh": "UNVERIFIED"
+  }
+}
