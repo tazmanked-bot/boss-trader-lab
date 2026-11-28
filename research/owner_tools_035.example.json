@@ -1,0 +1,69 @@
+{
+  "instructions": "LOCAL TEMPLATE ONLY. Replace placeholders with reviewed paths. Unknown provenance/capabilities remain HOLD. Never upload private config/receipts.",
+  "reported_only": {
+    "runtime_sha256": "daa63b89ca47f511403ad31f23d4fa9b907713a27d4d7dfa6cd01fe872a7a5c2",
+    "model_sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+    "independent_expectations": "UNKNOWN"
+  },
+  "provision": {
+    "version": "private-bundle-v1",
+    "destination": "/OWNER_ONLY/boss-private-035",
+    "protected_roots": [
+      "/OWNER_ONLY/AEP_ORIGINAL_ROOT",
+      "/OWNER_ONLY/RECORDER_ORIGINAL_ROOT"
+    ],
+    "licenses_reviewed": false,
+    "build_evidence": null,
+    "dynamic_source_dirs": [
+      "/OWNER_ONLY/REVIEWED_CUSTOM_LIBRARY_DIR"
+    ],
+    "entries": [
+      {
+        "source": "/OWNER_ONLY/ORIGINAL_RUNTIME",
+        "bundle_path": "bin/llama-cli",
+        "role": "runtime",
+        "sha256": null,
+        "expectation": "UNKNOWN",
+        "evidence_ref": null
+      },
+      {
+        "source": "/OWNER_ONLY/ORIGINAL_GGUF",
+        "bundle_path": "models/qwen.gguf",
+        "role": "model",
+        "sha256": null,
+        "expectation": "UNKNOWN",
+        "evidence_ref": null
+      }
+    ]
+  },
+  "adapter_manifest": {
+    "version": "llama-analyst-preparation-v1",
+    "runtime_path": "/OWNER_ONLY/boss-private-035/bin/llama-cli",
+    "runtime_sha256": null,
+    "model_path": "/OWNER_ONLY/boss-private-035/models/qwen.gguf",
+    "model_sha256": null,
+    "model": "Qwen2.5-1.5B-Instruct-Q4_K_M",
+    "llama_cpp_commit": "0978a6e9022fb9bd6874b86154ee304e81929b9f",
+    "license_review": "OWNER_TARGET_REVIEW_REQUIRED"
+  },
+  "request_path": null,
+  "qualification": {
+    "state_directory": "/OWNER_ONLY/boss-035-state",
+    "cgroup_parent": null
+  },
+  "snapshot": {
+    "snapshot": "/OWNER_ONLY/coherent-offline-snapshot.sqlite",
+    "snapshot_kind": "OWNER_CONSISTENT_OFFLINE_SNAPSHOT",
+    "table": null,
+    "open_column": null,
+    "ingest_column": null,
+    "stream_column": null,
+    "stream_value": null,
+    "as_of": null,
+    "expected_interval": null,
+    "collection_cadence": null,
+    "timestamp_semantics": "UTC_EPOCH_SECONDS_OPEN_TIME_AND_ACTUAL_INSERT_TIME",
+    "max_ingest_age": 7200,
+    "interval_column": null
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "version": "codex-035-demo-v1",
+  "mode": "SYNTHETIC_ONLY_NOT_OWNER_TARGET",
+  "state": "REAL_NOT_RUN",
+  "provision_dry_run": {
+    "writes": 0,
+    "files": 3
+  },
+  "provision_apply_verified": "APPLIED_PRIVATE_COPY",
+  "rollback": {
+    "operation": "ROLLED_BACK_OWN_BUNDLE",
+    "state": "REAL_NOT_RUN"
+  },
+  "stub": {
+    "mode": "PINNED_SYNTHETIC_STUB_NOT_AI",
+    "state": "REAL_NOT_RUN",
+    "analysis": {
+      "disposition": "SUPPORT",
+      "evidence_refs": [
+        "27cfaa41370e852469a1d46373e682e9a87cb66fffe16c8b455edafddac59118"
+      ],
+      "hypothesis": "SYNTHETIC STUB; no AI inference.",
+      "invalidation": "Eligible retest low breached",
+      "missing_information": [],
+      "strongest_objection": "No genuine reasoning was executed.",
+      "version": "analyst-v1"
+    },
+    "process": {
+      "elapsed_ns": 20294354,
+      "direct_child_reaped": true,
+      "tracked_process_count": 1,
+      "process_tree_gone": true,
+      "stderr_bytes": 0,
+      "error": null,
+      "real_inference": false
+    },
+    "binding": {
+      "artifact_manifest_sha256": "45918c696b821c6574b908ef71d21b02a62687e3c787e4775a3e983981011d29",
+      "artifact_pins_sha256": "6f79dd71f4a559fdc4e8a57f70da0dd2ce078e7be1ca510445dd8cd6c059649a",
+      "bundle_inventory_sha256": null,
+      "bundle_receipt_sha256": null,
+      "evidence_id": "27cfaa41370e852469a1d46373e682e9a87cb66fffe16c8b455edafddac59118",
+      "prompt_sha256": "3517e0e8898bfc5e4d66953f470f718850d7689b66de55c0687ad877332cea45",
+      "schema_sha256": "cb3fed921a1d27779710d3320ed8f2ade9a3c3ab4d6934cd807bbaa6bd2d486f",
+      "target_scope_sha256": "5b4c6aad447653ef1bc33158bb3d626bdef42acaa20a3658df2bf9231c3f83cd",
+      "worker_sha256": "21df83767120a3b236fe9cfa1597b35ebe61f8f3117236b3c0257db0ac218fc5"
+    },
+    "qualification_mode": "SYNTHETIC_TEST_INJECTED_NOT_TARGET_QUALIFIED",
+    "real_inference_count": 0,
+    "model_tokens": null,
+    "token_ceiling_exercised_by_model": false,
+    "buy_authorization": "NONE"
+  },
+  "actual_codex_capability_attempt": {
+    "version": "qualification-v1",
+    "mode": "ACTUAL_LOCAL_SYNTHETIC_PROFILE_ONLY",
+    "state": "REAL_NOT_RUN",
+    "qualified": false,
+    "request_binding": {
+      "artifact_manifest_sha256": "45918c696b821c6574b908ef71d21b02a62687e3c787e4775a3e983981011d29",
+      "artifact_pins_sha256": "6f79dd71f4a559fdc4e8a57f70da0dd2ce078e7be1ca510445dd8cd6c059649a",
+      "prompt_sha256": "3517e0e8898bfc5e4d66953f470f718850d7689b66de55c0687ad877332cea45",
+      "schema_sha256": "cb3fed921a1d27779710d3320ed8f2ade9a3c3ab4d6934cd807bbaa6bd2d486f",
+      "target_scope_sha256": "5b4c6aad447653ef1bc33158bb3d626bdef42acaa20a3658df2bf9231c3f83cd",
+      "worker_sha256": "21df83767120a3b236fe9cfa1597b35ebe61f8f3117236b3c0257db0ac218fc5",
+      "evidence_id": "27cfaa41370e852469a1d46373e682e9a87cb66fffe16c8b455edafddac59118",
+      "bundle_receipt_sha256": null,
+      "bundle_inventory_sha256": null
+    },
+    "checks": {},
+    "real_model_launch": "TECHNICALLY_DISABLED",
+    "owner_target_executed_by_codex": false,
+    "blocker": "SYSTEM_PYTHON_PROFILE_REQUIRED",
+    "receipt_sha256": "be40f34d6713d9d00dc300a520b3c91e102026170fdaec2339ce4a090073be8d"
+  },
+  "synthetic_snapshots": {
+    "900": {
+      "version": "recorder-snapshot-v2",
+      "state": "READ_ONLY_SNAPSHOT_METRICS_NOT_LIVE_SERVICE_HEALTH",
+      "rows_examined": 2,
+      "history_scope": "SNAPSHOT_ROWS_ONLY",
+      "max_ingest_age_seconds": 7200,
+      "record_gap_threshold_seconds": 1800,
+      "record_gap_interpretation": "INSERT_GAP_NOT_PROOF_OF_MISSED_COLLECTION",
+      "candle_interval_seconds": 900,
+      "collection_cadence_seconds": 60,
+      "stored_interval_validation": "CHECKED_SECONDS_COLUMN",
+      "timestamp_semantics": "UTC_EPOCH_SECONDS_OPEN_TIME_AND_ACTUAL_INSERT_TIME",
+      "stream_filter": "SYNTHETIC",
+      "as_of": 1900000800,
+      "latest_recorded_at": 1900000800,
+      "latest_candle_close": 1900000800,
+      "ingest_age_seconds": 0,
+      "candle_age_seconds": 0,
+      "freshness": "RECENT_RELATIVE_TO_SUPPLIED_AS_OF",
+      "historical_candle_gaps": [
+        {
+          "after_close": 1899999000,
+          "before_close": 1900000800,
+          "missing_intervals": 1
+        }
+      ],
+      "observed_recording_gaps": [],
+      "possible_delayed_or_backfilled_rows": 0,
+      "outage_cause": "NOT_ESTABLISHED",
+      "ingest_column_semantics": "OWNER_DECLARED_ACTUAL_INSERT_TIME_NOT_AUTHENTICATED",
+      "backfill_vs_outage": "HISTORY_GAPS_AND_INSERT_GAPS_ARE_DIFFERENT; NO AUTOMATIC_BACKFILL",
+      "database_writes": 0,
+      "service_operations": 0
+    },
+    "3600": {
+      "version": "recorder-snapshot-v2",
+      "state": "READ_ONLY_SNAPSHOT_METRICS_NOT_LIVE_SERVICE_HEALTH",
+      "rows_examined": 2,
+      "history_scope": "SNAPSHOT_ROWS_ONLY",
+      "max_ingest_age_seconds": 7200,
+      "record_gap_threshold_seconds": 7200,
+      "record_gap_interpretation": "INSERT_GAP_NOT_PROOF_OF_MISSED_COLLECTION",
+      "candle_interval_seconds": 3600,
+      "collection_cadence_seconds": 60,
+      "stored_interval_validation": "CHECKED_SECONDS_COLUMN",
+      "timestamp_semantics": "UTC_EPOCH_SECONDS_OPEN_TIME_AND_ACTUAL_INSERT_TIME",
+      "stream_filter": "SYNTHETIC",
+      "as_of": 1900000800,
+      "latest_recorded_at": 1900000800,
+      "latest_candle_close": 1900000800,
+      "ingest_age_seconds": 0,
+      "candle_age_seconds": 0,
+      "freshness": "RECENT_RELATIVE_TO_SUPPLIED_AS_OF",
+      "historical_candle_gaps": [
+        {
+          "after_close": 1899993600,
+          "before_close": 1900000800,
+          "missing_intervals": 1
+        }
+      ],
+      "observed_recording_gaps": [],
+      "possible_delayed_or_backfilled_rows": 0,
+      "outage_cause": "NOT_ESTABLISHED",
+      "ingest_column_semantics": "OWNER_DECLARED_ACTUAL_INSERT_TIME_NOT_AUTHENTICATED",
+      "backfill_vs_outage": "HISTORY_GAPS_AND_INSERT_GAPS_ARE_DIFFERENT; NO AUTOMATIC_BACKFILL",
+      "database_writes": 0,
+      "service_operations": 0
+    }
+  },
+  "response_budget": {
+    "minimum_schema_valid_bytes": 219,
+    "minimum_byte_div_four_estimate": 55,
+    "typical_synthetic_bytes": 381,
+    "typical_byte_div_four_estimate": 96,
+    "actual_tokenizer_count": null,
+    "estimate_is_token_measurement": false,
+    "max_generated_tokens": 64,
+    "likely_truncation_risk": true,
+    "minimum_response_reasoning_quality": "SEMANTICALLY_USELESS_NOT_AI_EVIDENCE",
+    "policy": "STRICT_REJECT_TRUNCATION_NO_CAP_INCREASE_NO_REMOVED_FIELDS"
+  },
+  "real_inference_count": 0,
+  "additional_cost_ntd": "0",
+  "buy_authorization": "NONE"
+}
