@@ -1,0 +1,170 @@
+{
+  "version": "target-validation-v1",
+  "mode": "SYNTHETIC_TEST_NOT_TARGET_EXECUTION",
+  "state": "REAL_NOT_RUN",
+  "copy_plan": {
+    "version": "target-validation-v1",
+    "state": "REAL_NOT_RUN",
+    "writes_performed": 0,
+    "root_mode": "0700",
+    "directory_mode": "0700",
+    "operations": [
+      {
+        "action": "COPY_REGULAR_THEN_VERIFY",
+        "source_relative": "fake-llama-cli",
+        "destination_relative": "fake-llama-cli",
+        "sha256": "03e932c2873932b6f029e44d59db086874c7e3e35d11ceedf41fe82ab3787115",
+        "bytes": 39,
+        "private_mode": "0500",
+        "role": "runtime",
+        "expectation": "UNKNOWN"
+      },
+      {
+        "action": "COPY_REGULAR_THEN_VERIFY",
+        "source_relative": "fake-model.gguf",
+        "destination_relative": "fake-model.gguf",
+        "sha256": "d67a38a9d36295dc6d6694278dc59e373a3577178b0dbe5352176155fad437c9",
+        "bytes": 39,
+        "private_mode": "0400",
+        "role": "model",
+        "expectation": "UNKNOWN"
+      }
+    ],
+    "holds": [
+      "DEPENDENCY_CLOSURE_UNVERIFIED",
+      "DESTINATION_ANCESTOR_WRITABLE",
+      "INDEPENDENT_EXPECTATION_MISSING",
+      "RESOLVED_ANCESTOR_WRITABLE",
+      "SOURCE_ANCESTOR_WRITABLE",
+      "TARGET_CONTAINMENT_UNVERIFIED"
+    ],
+    "dependency_inventory": "OWNER_DECLARED_NOT_COMPLETE_PROOF",
+    "source_paths": "LOCAL_ONLY_DO_NOT_PUBLISH_PRIVATE_PATHS",
+    "buy_authorization": "NONE"
+  },
+  "first_inference_plan": {
+    "version": "target-validation-v1",
+    "state": "REAL_NOT_RUN",
+    "scope": {
+      "manifest_sha256": "1dc87bdaf386fef10b60f0680c8a04f0cf895eeb599799267012f098747a7694",
+      "prompt_sha256": "3517e0e8898bfc5e4d66953f470f718850d7689b66de55c0687ad877332cea45",
+      "schema_sha256": "cb3fed921a1d27779710d3320ed8f2ade9a3c3ab4d6934cd807bbaa6bd2d486f",
+      "context": 2048,
+      "max_output_tokens": 64,
+      "threads": 2,
+      "cpu_only": true,
+      "wall_budget_seconds": 30,
+      "cleanup_allowance_seconds": 1,
+      "rlimit_as_bytes": 4294967296,
+      "rlimit_cpu_seconds": 30,
+      "rlimit_nofile": 32,
+      "rlimit_core": 0,
+      "rlimit_fsize": 0,
+      "processes": 1,
+      "required_private_cgroup": {
+        "memory_max_bytes": 3221225472,
+        "memory_swap_max_bytes": 0,
+        "cpu_max_vcpus": 1,
+        "nice": 10,
+        "status": "NOT_CONFIGURED_OR_VERIFIED"
+      },
+      "combined_output_bytes": 8192,
+      "environment": "033_ALLOWLIST_NO_SECRETS"
+    },
+    "scope_sha256": "f3c2dd801b5a827f74d0e315d13cf9b1172cabe8ab8675c350f14966de6045b2",
+    "argv_profile": [
+      "--offline",
+      "--model",
+      "/SYNTHETIC/model.gguf",
+      "--ctx-size",
+      "2048",
+      "--n-predict",
+      "64",
+      "--threads",
+      "2",
+      "--batch-size",
+      "128",
+      "--gpu-layers",
+      "0",
+      "--temp",
+      "0",
+      "--seed",
+      "0",
+      "--no-conversation",
+      "--no-display-prompt",
+      "--simple-io",
+      "--log-disable",
+      "--no-perf",
+      "--no-warmup",
+      "--json-schema",
+      "{\"additionalProperties\":false,\"properties\":{\"disposition\":{\"enum\":[\"SUPPORT\",\"REJECT\",\"ABSTAIN\"]},\"evidence_refs\":{\"items\":{\"const\":\"27cfaa41370e852469a1d46373e682e9a87cb66fffe16c8b455edafddac59118\"},\"maxItems\":1,\"minItems\":1,\"type\":\"array\"},\"hypothesis\":{\"maxLength\":600,\"minLength\":1,\"type\":\"string\"},\"invalidation\":{\"maxLength\":600,\"minLength\":1,\"type\":\"string\"},\"missing_information\":{\"items\":{\"maxLength\":200,\"minLength\":1,\"type\":\"string\"},\"maxItems\":8,\"type\":\"array\"},\"strongest_objection\":{\"maxLength\":600,\"minLength\":1,\"type\":\"string\"},\"version\":{\"const\":\"analyst-v1\"}},\"required\":[\"version\",\"hypothesis\",\"evidence_refs\",\"strongest_objection\",\"missing_information\",\"invalidation\",\"disposition\"],\"type\":\"object\"}",
+      "--file",
+      "/isolated/synthetic-prompt.txt"
+    ],
+    "containment": null,
+    "measurements": {
+      "latency_ns": null,
+      "peak_ram_bytes": null,
+      "output_valid": null,
+      "model_tokens": null
+    },
+    "holds": [
+      "SEPARATE_OWNER_GO_REQUIRED",
+      "INDEPENDENT_INTEGRITY_UNKNOWN",
+      "LICENSE_AND_COMPATIBILITY_UNKNOWN",
+      "TARGET_CONTAINMENT_UNVERIFIED",
+      "RECORDER_FRESHNESS_UNKNOWN",
+      "DESKTOP_ROOT_CAUSE_UNRESOLVED"
+    ],
+    "real_activation": "DISABLED",
+    "buy_authorization": "NONE"
+  },
+  "all_checks_claimed_still_disabled": {
+    "state": "REAL_NOT_RUN",
+    "assessment": "SIMULATED_ONLY",
+    "missing_checks": [],
+    "evidence_missing": false,
+    "real_activation": "DISABLED",
+    "buy_authorization": "NONE"
+  },
+  "negative_control_missing": {
+    "state": "REAL_NOT_RUN",
+    "assessment": "SIMULATED_ONLY",
+    "missing_checks": [
+      "parent_canary_positive"
+    ],
+    "evidence_missing": false,
+    "real_activation": "DISABLED",
+    "buy_authorization": "NONE"
+  },
+  "synthetic_backfill_snapshot": {
+    "state": "READ_ONLY_SNAPSHOT_METRICS_NOT_LIVE_SERVICE_HEALTH",
+    "rows_examined": 2,
+    "history_scope": "SNAPSHOT_ROWS_ONLY",
+    "stream_filter": "SYNTHETIC_BTC_USD",
+    "as_of": 1900000800,
+    "latest_recorded_at": 1900000795,
+    "latest_candle_close": 1899932400,
+    "ingest_age_seconds": 5,
+    "candle_age_seconds": 68400,
+    "freshness": "STALE",
+    "historical_candle_gaps": [
+      {
+        "after_close": 1899918000,
+        "before_close": 1899932400,
+        "missing_hours": 3
+      }
+    ],
+    "observed_recording_gaps": [],
+    "possible_delayed_or_backfilled_rows": 2,
+    "outage_cause": "NOT_ESTABLISHED",
+    "ingest_column_semantics": "OWNER_DECLARED_ACTUAL_INSERT_TIME_NOT_AUTHENTICATED",
+    "backfill_vs_outage": "HISTORY_GAPS_AND_INSERT_GAPS_ARE_DIFFERENT; NO AUTOMATIC_BACKFILL",
+    "database_writes": 0,
+    "service_operations": 0
+  },
+  "actual_model_inference_count": 0,
+  "target_service_operations": 0,
+  "additional_cost_ntd": "0",
+  "buy_authorization": "NONE"
+}
